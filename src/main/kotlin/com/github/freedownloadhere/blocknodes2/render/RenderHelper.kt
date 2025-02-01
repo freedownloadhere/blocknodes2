@@ -19,6 +19,16 @@ object RenderHelper {
         Vec3(0.0, 1.0, 1.0)
     )
 
+    data class Index(val i1 : Int, val i2 : Int, val i3 : Int, val i4 : Int)
+    private val cubeIndices = arrayOf(
+        Index(0, 1, 2, 3),
+        Index(4, 5, 6, 7),
+        Index(0, 1, 5, 4),
+        Index(1, 2, 6, 5),
+        Index(2, 3, 7, 6),
+        Index(3, 0, 4, 7)
+    )
+
     fun highlightBegin() {
         GL11.glPushMatrix()
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT)
@@ -50,22 +60,10 @@ object RenderHelper {
 
     fun drawCube(pos : BlockPos, color : Color) {
         GL11.glTranslated(pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble())
-
-        data class Index(val i1 : Int, val i2 : Int, val i3 : Int, val i4 : Int)
-        val indices = arrayOf(
-            Index(0, 1, 2, 3),
-            Index(4, 5, 6, 7),
-            Index(0, 1, 5, 4),
-            Index(1, 2, 6, 5),
-            Index(2, 3, 7, 6),
-            Index(3, 0, 4, 7)
-        )
-
         val tess = Tessellator.getInstance()
         val worldrenderer = tess.worldRenderer
-
         worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR)
-        for(quad in indices) {
+        for(quad in cubeIndices) {
             val p1 = cubeVertices[quad.i1]
             val p2 = cubeVertices[quad.i2]
             val p3 = cubeVertices[quad.i3]
@@ -76,7 +74,6 @@ object RenderHelper {
             worldrenderer.pos(p4.xCoord, p4.yCoord, p4.zCoord).color(color.red, color.green, color.blue, color.alpha).endVertex()
         }
         tess.draw()
-
         GL11.glTranslated(-pos.x.toDouble(), -pos.y.toDouble(), -pos.z.toDouble())
     }
 }

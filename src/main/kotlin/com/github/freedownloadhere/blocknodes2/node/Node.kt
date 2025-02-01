@@ -1,25 +1,34 @@
 package com.github.freedownloadhere.blocknodes2.node
 
+import com.github.freedownloadhere.blocknodes2.action.Actions
 import com.github.freedownloadhere.blocknodes2.render.RenderHelper
 import com.github.freedownloadhere.blocknodes2.util.ColorHelper
-import net.minecraft.entity.Entity
+import com.github.freedownloadhere.blocknodes2.util.PlayerHelper
+import net.minecraft.client.Minecraft
 import net.minecraft.util.AxisAlignedBB
 import net.minecraft.util.BlockPos
-import net.minecraft.util.Vec3
 
 class Node(
-    private val pos : BlockPos
+    private val pos : BlockPos,
+    val actionList : List<Actions>
 ) {
-    fun intersects(e : Entity) : Boolean {
-        val aabb1 = e.entityBoundingBox
+    var contactTime = 0
+        private set
+
+    fun update() {
+        val aabb1 = Minecraft.getMinecraft().thePlayer.entityBoundingBox
         val aabb2 = AxisAlignedBB(pos, pos.add(1, 1, 1))
-        return aabb1.intersectsWith(aabb2)
+        val intersect = aabb1.intersectsWith(aabb2)
+        contactTime = if(intersect) contactTime + 1 else 0
     }
 
-    fun render(observerPos : Vec3) {
+    fun render() {
         RenderHelper.highlightBegin()
-        RenderHelper.useAbsolutePos(observerPos)
-        RenderHelper.drawCube(pos, ColorHelper.TranslucentCyan.toColorObj())
+        RenderHelper.useAbsolutePos(PlayerHelper.getPlayerPosForRendering())
+        val color =
+            if(contactTime > 0) ColorHelper.TranslucentRed.toColorObj()
+            else ColorHelper.TranslucentCyan.toColorObj()
+        RenderHelper.drawCube(pos, color)
         RenderHelper.highlightEnd()
     }
 }
