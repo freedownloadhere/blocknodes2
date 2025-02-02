@@ -1,8 +1,8 @@
-package com.github.freedownloadhere.blocknodes2.action
+package com.github.freedownloadhere.blocknodes2.controls
 
 import net.minecraft.client.settings.KeyBinding
 
-object KeyBindHelper {
+object KeyInputHelper {
     private val toHold = mutableSetOf<Int>()
     private val toTap = mutableSetOf<Int>()
 

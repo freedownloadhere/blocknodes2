@@ -1,6 +1,6 @@
 package com.github.freedownloadhere.blocknodes2.node
 
-import com.github.freedownloadhere.blocknodes2.action.Actions
+import com.github.freedownloadhere.blocknodes2.action.NodeAction
 import com.github.freedownloadhere.blocknodes2.render.RenderHelper
 import com.github.freedownloadhere.blocknodes2.util.ColorHelper
 import com.github.freedownloadhere.blocknodes2.util.PlayerHelper
@@ -10,7 +10,7 @@ import net.minecraft.util.BlockPos
 
 class Node(
     private val pos : BlockPos,
-    val actionList : List<Actions>
+    val actionList : List<NodeAction>
 ) {
     var contactTime = 0
         private set
@@ -24,7 +24,7 @@ class Node(
 
     fun render() {
         RenderHelper.highlightBegin()
-        RenderHelper.useAbsolutePos(PlayerHelper.getPlayerPosForRendering())
+        RenderHelper.useAbsolutePos(PlayerHelper.renderPos())
         val color =
             if(contactTime > 0) ColorHelper.TranslucentRed.toColorObj()
             else ColorHelper.TranslucentCyan.toColorObj()

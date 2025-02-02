@@ -1,5 +1,7 @@
 package com.github.freedownloadhere.blocknodes2.render
 
+import com.github.freedownloadhere.blocknodes2.mixin.AccessorMinecraft
+import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import net.minecraft.util.BlockPos
@@ -28,6 +30,7 @@ object RenderHelper {
         Index(2, 3, 7, 6),
         Index(3, 0, 4, 7)
     )
+
 
     fun highlightBegin() {
         GL11.glPushMatrix()
