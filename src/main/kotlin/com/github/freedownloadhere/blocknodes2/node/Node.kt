@@ -26,8 +26,8 @@ class Node(
         RenderHelper.highlightBegin()
         RenderHelper.useAbsolutePos(PlayerHelper.renderPos())
         val color =
-            if(contactTime > 0) ColorHelper.TranslucentRed.toColorObj()
-            else ColorHelper.TranslucentCyan.toColorObj()
+            if(contactTime > 0) ColorHelper.NodeActive.toColorObj()
+            else ColorHelper.NodeInactive.toColorObj()
         RenderHelper.drawCube(pos, color)
         RenderHelper.highlightEnd()
     }
