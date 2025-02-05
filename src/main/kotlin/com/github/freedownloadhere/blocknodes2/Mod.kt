@@ -4,29 +4,22 @@ import com.github.freedownloadhere.blocknodes2.action.NodeActionHoldKey
 import com.github.freedownloadhere.blocknodes2.action.NodeActionLookAt
 import com.github.freedownloadhere.blocknodes2.action.NodeActionReleaseKey
 import com.github.freedownloadhere.blocknodes2.controls.KeyInputHelper
-import com.github.freedownloadhere.blocknodes2.gui.BlockNodesGui
 import com.github.freedownloadhere.blocknodes2.gui.GuiManager
-import com.github.freedownloadhere.blocknodes2.gui.TestGuiManager
 import com.github.freedownloadhere.blocknodes2.node.Node
 import com.github.freedownloadhere.blocknodes2.node.NodeScene
-import com.github.freedownloadhere.blocknodes2.util.ChatHelper
 import com.github.freedownloadhere.blocknodes2.util.KeybindingManager
 import net.minecraft.client.Minecraft
 import net.minecraft.client.settings.KeyBinding
 import net.minecraft.util.BlockPos
 import net.minecraft.util.Vec3
 import net.minecraftforge.client.event.DrawBlockHighlightEvent
-import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent
-import net.minecraftforge.client.event.MouseEvent
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
-import net.minecraftforge.fml.common.gameevent.InputEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import org.lwjgl.input.Keyboard
-import org.lwjgl.input.Mouse
 
 @Mod(modid = "blocknodes2", useMetadata = true)
 class Mod {
@@ -37,7 +30,7 @@ class Mod {
         MinecraftForge.EVENT_BUS.register(this)
         MinecraftForge.EVENT_BUS.register(KeybindingManager)
         KeybindingManager.addKey(KeyBinding("blocknodes2.togglegui", Keyboard.KEY_J, "blocknodes2.keys")) {
-            Minecraft.getMinecraft().displayGuiScreen(TestGuiManager)
+            Minecraft.getMinecraft().displayGuiScreen(GuiManager)
         }
         testScene.nodeList.add(Node(BlockPos(0, 4, 0), listOf(NodeActionHoldKey(Minecraft.getMinecraft().gameSettings.keyBindForward))))
         testScene.nodeList.add(Node(BlockPos(10, 4, 0), listOf(NodeActionReleaseKey(Minecraft.getMinecraft().gameSettings.keyBindForward))))
