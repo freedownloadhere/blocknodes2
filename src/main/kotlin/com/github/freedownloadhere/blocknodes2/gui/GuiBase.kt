@@ -6,9 +6,9 @@ import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import org.lwjgl.opengl.GL11
 
-class GuiBase(
-    var x : Double,
-    var y : Double,
+open class GuiBase(
+    protected var x : Double,
+    protected var y : Double,
     private var width : Double,
     private var height : Double
 ) {
@@ -20,14 +20,14 @@ class GuiBase(
         children.add(gui)
     }
 
-    fun renderUpdate(focusedGui : GuiBase?) {
-        draw(focusedGui)
+    fun renderUpdate() {
+        draw()
         for(child in children)
-            child.draw(focusedGui)
+            child.renderUpdate()
     }
 
-    private fun draw(focusedGui : GuiBase?) {
-        if(this == focusedGui)
+    protected open fun draw() {
+        if(this == GuiManager.focused)
             drawHL()
         else
             drawBorder()
@@ -88,11 +88,10 @@ class GuiBase(
             }
         }
 
-        clickedGui!!.mouseAction(mouseX, mouseY, button)
         return clickedGui
     }
 
-    private fun mouseAction(mouseX : Double, mouseY : Double, button : Int) {
+    fun mouseAction(mouseX : Double, mouseY : Double, button : Int) {
         if(button == 0)
             ChatHelper.send("Received LEFT click at $this")
         else

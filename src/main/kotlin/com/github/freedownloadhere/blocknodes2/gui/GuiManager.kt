@@ -5,10 +5,11 @@ import org.lwjgl.opengl.GL11
 
 object GuiManager : GuiScreen() {
     private val root = GuiBase(200.0, 200.0, 200.0, 100.0)
-    private var focused : GuiBase? = null
+    var focused : GuiBase? = null
+        private set
 
     init {
-        root.addChild(GuiBase(10.0, 10.0, 50.0, 50.0))
+        root.addChild(GuiText(10.0, 10.0, 100.0, 20.0, "Sample text"))
     }
 
     object DefaultConfig {
@@ -25,7 +26,7 @@ object GuiManager : GuiScreen() {
         GL11.glDisable(GL11.GL_TEXTURE_2D)
         GL11.glDisable(GL11.GL_LIGHTING)
 
-        root.renderUpdate(focused)
+        root.renderUpdate()
 
         GL11.glPopMatrix()
         GL11.glPopAttrib()
@@ -39,5 +40,6 @@ object GuiManager : GuiScreen() {
 
     override fun mouseClicked(mouseX: Int, mouseY: Int, mouseButton: Int) {
         focused = root.mouseClickedEvent(mouseX.toDouble(), mouseY.toDouble(), mouseButton)
+        focused?.mouseAction(mouseX.toDouble(), mouseY.toDouble(), mouseButton)
     }
 }
