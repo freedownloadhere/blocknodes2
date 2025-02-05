@@ -5,6 +5,7 @@ import com.github.freedownloadhere.blocknodes2.action.NodeActionLookAt
 import com.github.freedownloadhere.blocknodes2.action.NodeActionReleaseKey
 import com.github.freedownloadhere.blocknodes2.controls.KeyInputHelper
 import com.github.freedownloadhere.blocknodes2.gui.BlockNodesGui
+import com.github.freedownloadhere.blocknodes2.gui.Gui
 import com.github.freedownloadhere.blocknodes2.node.Node
 import com.github.freedownloadhere.blocknodes2.node.NodeScene
 import com.github.freedownloadhere.blocknodes2.util.KeybindingManager
@@ -13,6 +14,8 @@ import net.minecraft.client.settings.KeyBinding
 import net.minecraft.util.BlockPos
 import net.minecraft.util.Vec3
 import net.minecraftforge.client.event.DrawBlockHighlightEvent
+import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent
+import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
@@ -37,11 +40,16 @@ class Mod {
     }
 
     @SubscribeEvent
-    fun renderOverlay(e : DrawBlockHighlightEvent) {
+    fun highlightBlock(e : DrawBlockHighlightEvent) {
         if(Minecraft.getMinecraft().thePlayer == null) return
         if(Minecraft.getMinecraft().theWorld == null) return
 
         testScene.render()
+    }
+
+    @SubscribeEvent
+    fun renderOverlay(e : RenderGameOverlayEvent.Post) {
+        Gui.draw()
     }
 
     @SubscribeEvent
