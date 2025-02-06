@@ -21,6 +21,7 @@ class GuiText(
         val fr = Minecraft.getMinecraft().fontRendererObj
         val font = (fr as AccessorFontRenderer).fontLocation_blocknodes2
         val strWidth = fr.getStringWidth(str).toDouble()
+        val strHeight = fr.FONT_HEIGHT
 
         drawBorder()
         drawBG()
@@ -32,7 +33,7 @@ class GuiText(
         GL11.glPushMatrix()
         GL11.glLoadIdentity()
         GL11.glTranslated(x, y, 0.0)
-        GL11.glScaled(w / strWidth, w / strWidth, 1.0)
+        GL11.glScaled(w / strWidth, h / strHeight, 1.0)
 
         GL11.glBindTexture(
             GL11.GL_TEXTURE_2D,

@@ -15,10 +15,8 @@ class GuiButton(
 
     override fun finish() : Gui {
         text = GuiText(0.0, 0.0, w * 0.75, h * 0.75, "Button")
-            .centerIn(this)
-            .finish() as GuiText
-
         addChild(text)
+        text.centerIn(this)
 
         return this
     }

@@ -44,7 +44,7 @@ abstract class GuiInteractable(
     override fun setXY(newX: Double, newY: Double): Gui {
         super.setXY(newX, newY)
         for(child in children)
-            child.setXY(child.x + newX, child.y + newY)
+            child.setXY(child.x + x, child.y + y)
         return this
     }
 
