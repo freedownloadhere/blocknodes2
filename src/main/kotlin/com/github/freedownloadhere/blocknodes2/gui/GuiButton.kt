@@ -1,12 +1,24 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
-class GuiButton(
-    x: Double,
-    y: Double,
-    width: Double,
-    height: Double,
-    private val text : String
-) : GuiBase(x, y, width, height) {
+class GuiButton : GuiInteractable() {
+    private val text = GuiText()
+
+    init {
+        addChild(text)
+    }
+
+    override fun wh(newW: Double, newH: Double): GuiInteractable {
+        super.wh(newW, newH)
+        text.wh(newW, newH)
+        return this
+    }
+
+    override fun xy(newX: Double, newY: Double): GuiInteractable {
+        super.xy(newX, newY)
+        text.center(x + w / 2.0, y + h / 2.0)
+        return this
+    }
+
     override fun draw() {
         if(GuiManager.hovered == this)
             drawHL()
@@ -14,6 +26,5 @@ class GuiButton(
             drawBorder()
 
         drawBG()
-        drawText(text)
     }
 }

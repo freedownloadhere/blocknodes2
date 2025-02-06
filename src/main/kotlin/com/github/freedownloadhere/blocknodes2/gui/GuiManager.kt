@@ -2,34 +2,51 @@ package com.github.freedownloadhere.blocknodes2.gui
 
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
+import net.minecraft.util.ResourceLocation
 import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.GL11
 
 object GuiManager : GuiScreen() {
-    private val root = GuiBase(200.0, 200.0, 200.0, 100.0)
-    var focused : GuiBase? = null
-        private set
-    var hovered : GuiBase? = null
-        private set
-    private val mouseCoords = GuiText(10.0, 10.0, 100.0, 20.0, "Mouse coords: ")
+    private lateinit var root : GuiWindow
+    private lateinit var mouseCoords : GuiText
+    private lateinit var coolButton : GuiButton
 
     private var lastMouseX = -1;
     private var lastMouseY = -1;
 
-    init {
-        root.addChild(mouseCoords)
-        root.addChild(GuiButton(10.0, 30.0, 60.0, 20.0, "New button"))
-    }
+    var focused : GuiInteractable? = null
+        private set
+    var hovered : GuiInteractable? = null
+        private set
 
     object DefaultConfig {
         const val HL_THICKNESS = 1.0
         const val BORDER_THICKNESS = 1.0
+        val font = ResourceLocation("textures/font/ascii.png")
     }
 
     override fun initGui() {
         super.initGui()
         width = Minecraft.getMinecraft().displayWidth
         height = Minecraft.getMinecraft().displayHeight
+
+        root = GuiWindow()
+            .wh(1000.0, 800.0)
+            .center(width / 2.0, height / 2.0)
+                as GuiWindow
+
+        mouseCoords = GuiText("Mouse coords : $lastMouseX $lastMouseY")
+            .wh(100.0, 30.0)
+            .xy(10.0, 10.0)
+                as GuiText
+
+        coolButton = GuiButton()
+            .wh(100.0, 50.0)
+            .xy(10.0, 70.0)
+                as GuiButton
+
+        root.addChild(mouseCoords)
+        root.addChild(coolButton)
     }
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
@@ -70,12 +87,12 @@ object GuiManager : GuiScreen() {
         handleMouseHover(lastMouseOn)
     }
 
-    private fun handleMouseClick(lastMouseOn : GuiBase?, lastMouseButton : Int) {
+    private fun handleMouseClick(lastMouseOn : GuiInteractable?, lastMouseButton : Int) {
         focused = lastMouseOn
         focused?.onClick(lastMouseButton)
     }
 
-    private fun handleMouseHover(lastMouseOn : GuiBase?) {
+    private fun handleMouseHover(lastMouseOn : GuiInteractable?) {
         hovered = lastMouseOn
         hovered?.onHover()
     }
