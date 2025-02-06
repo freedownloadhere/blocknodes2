@@ -11,6 +11,14 @@ abstract class Gui {
     internal var w : Double = 100.0
     internal var h : Double = 100.0
 
+    enum class Direction {
+        Left, Right, Top, Bottom
+    }
+
+    open fun finish() : Gui {
+        return this
+    }
+
     open fun xy(newX : Double, newY : Double) : Gui {
         x = newX
         y = newY
@@ -29,6 +37,22 @@ abstract class Gui {
         return xy(xCenter - dw, yCenter - dh)
     }
 
+    open fun centerIn(parent : Gui) : Gui {
+        val xCenter = parent.x + parent.w / 2.0
+        val yCenter = parent.y + parent.h / 2.0
+        return center(xCenter, yCenter)
+    }
+
+    open fun snapTo(parent : Gui, type : Direction) : Gui {
+        when(type) {
+            Direction.Left -> x = parent.x
+            Direction.Right -> x = parent.x + parent.w - w
+            Direction.Top -> y = parent.y
+            Direction.Bottom -> y = parent.y + parent.h - h
+        }
+        return this
+    }
+
     open fun update() {
         draw()
     }
@@ -42,22 +66,22 @@ abstract class Gui {
         drawBG()
     }
 
-    protected fun drawBorder() {
+    protected fun drawBorder(col : ColorHelper = ColorHelper.GuiBorder) {
         val t = GuiManager.DefaultConfig.BORDER_THICKNESS
         GL11.glMatrixMode(GL11.GL_MODELVIEW)
         GL11.glPushMatrix()
         GL11.glTranslated(x - t, y - t, 0.0)
         GL11.glScaled(w + 2 * t, h + 2 * t, 1.0)
-        drawRect(ColorHelper.GuiDefaultBorder)
+        drawRect(col)
         GL11.glPopMatrix()
     }
 
-    protected fun drawBG() {
+    protected fun drawBG(col : ColorHelper = ColorHelper.GuiBGDark) {
         GL11.glMatrixMode(GL11.GL_MODELVIEW)
         GL11.glPushMatrix()
         GL11.glTranslated(x, y, 0.0)
         GL11.glScaled(w, h, 1.0)
-        drawRect(ColorHelper.GuiDefaultBG)
+        drawRect(col)
         GL11.glPopMatrix()
     }
 
@@ -68,7 +92,7 @@ abstract class Gui {
         GL11.glPushMatrix()
         GL11.glTranslated(x - t1 - t2, y - t1 - t2, 0.0)
         GL11.glScaled(w + 2 * (t1 + t2), h + 2 * (t1 + t2), 1.0)
-        drawRect(ColorHelper.GuiDefaultHL)
+        drawRect(ColorHelper.GuiHL)
         GL11.glPopMatrix()
     }
 

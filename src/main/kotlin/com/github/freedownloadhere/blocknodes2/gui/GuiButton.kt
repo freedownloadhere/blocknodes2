@@ -1,30 +1,32 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
+import com.github.freedownloadhere.blocknodes2.util.ColorHelper
+
 class GuiButton : GuiInteractable() {
     private val text = GuiText()
 
-    init {
-        addChild(text)
-    }
-
-    override fun wh(newW: Double, newH: Double): GuiInteractable {
-        super.wh(newW, newH)
-        text.wh(newW, newH)
+    fun text(s : String) : GuiButton {
+        text.text(s)
         return this
     }
 
-    override fun xy(newX: Double, newY: Double): GuiInteractable {
-        super.xy(newX, newY)
-        text.center(x + w / 2.0, y + h / 2.0)
+    override fun finish() : GuiButton {
+        text
+            .wh(w * 0.75, h * 0.75)
+            .centerIn(this)
+
+        addChild(text)
+
         return this
     }
 
     override fun draw() {
-        if(GuiManager.hovered == this)
-            drawHL()
-        else
-            drawBorder()
-
-        drawBG()
+        drawBorder()
+        drawBG(
+            if(GuiManager.hovered == this)
+                ColorHelper.GuiBGLight
+            else
+                ColorHelper.GuiBGDark
+        )
     }
 }

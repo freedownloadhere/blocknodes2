@@ -2,14 +2,14 @@ package com.github.freedownloadhere.blocknodes2.gui
 
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
-import net.minecraft.util.ResourceLocation
 import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.GL11
 
 object GuiManager : GuiScreen() {
-    private lateinit var root : GuiWindow
-    private lateinit var mouseCoords : GuiText
-    private lateinit var coolButton : GuiButton
+    private var root = GuiWindow()
+    private var mouseCoords = GuiText()
+    private var coolButton = GuiButton()
+    private var dropDown = GuiDropDown()
 
     private var lastMouseX = -1;
     private var lastMouseY = -1;
@@ -20,9 +20,8 @@ object GuiManager : GuiScreen() {
         private set
 
     object DefaultConfig {
-        const val HL_THICKNESS = 1.0
-        const val BORDER_THICKNESS = 1.0
-        val font = ResourceLocation("textures/font/ascii.png")
+        const val HL_THICKNESS = 4.0
+        const val BORDER_THICKNESS = 2.0
     }
 
     override fun initGui() {
@@ -33,20 +32,42 @@ object GuiManager : GuiScreen() {
         root = GuiWindow()
             .wh(1000.0, 800.0)
             .center(width / 2.0, height / 2.0)
-                as GuiWindow
+            .finish() as GuiWindow
 
-        mouseCoords = GuiText("Mouse coords : $lastMouseX $lastMouseY")
-            .wh(100.0, 30.0)
+        mouseCoords = GuiText()
+            .text("Mouse Coords : $lastMouseX $lastMouseY")
+            .wh(400.0, 30.0)
             .xy(10.0, 10.0)
-                as GuiText
+            .finish() as GuiText
 
         coolButton = GuiButton()
+            .text("Cool Button")
             .wh(100.0, 50.0)
-            .xy(10.0, 70.0)
-                as GuiButton
+            .xy(100.0, 100.0)
+            .finish() as GuiButton
 
-        root.addChild(mouseCoords)
+        dropDown = GuiDropDown()
+            .wh(800.0, 30.0)
+            .xy(0.0, 0.0)
+            .finish() as GuiDropDown
+
+        //root.addChild(mouseCoords)
         root.addChild(coolButton)
+        root.addChild(dropDown)
+        root.addChild(
+            GuiText()
+                .text("string 1")
+                .wh(100.0, 50.0)
+                .xy(10.0, 100.0)
+                .finish()
+        )
+        root.addChild(
+            GuiText()
+                .text("string 1")
+                .wh(100.0, 50.0)
+                .xy(10.0, 200.0)
+                .finish()
+        )
     }
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
@@ -66,7 +87,7 @@ object GuiManager : GuiScreen() {
         GL11.glDisable(GL11.GL_TEXTURE_2D)
         GL11.glDisable(GL11.GL_LIGHTING)
 
-        mouseCoords.text = "Mouse coords: $lastMouseX $lastMouseY"
+        mouseCoords.str = "Mouse coords: $lastMouseX $lastMouseY"
         root.update()
 
         GL11.glMatrixMode(GL11.GL_PROJECTION)

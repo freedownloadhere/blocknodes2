@@ -34,14 +34,9 @@ abstract class GuiInteractable : Gui() {
     }
 
     fun onClick(button : Int) {
-        if(button == 0)
-            ChatHelper.send("Received LEFT click at ${this::class.java}")
-        else
-            ChatHelper.send("Received RIGHT click at ${this::class.java}")
     }
 
     fun onHover() {
-        ChatHelper.send("Hovered on ${hovered!!::class.java}")
     }
 
     override fun xy(newX: Double, newY: Double): Gui {
