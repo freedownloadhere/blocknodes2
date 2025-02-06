@@ -1,17 +1,19 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
-import com.github.freedownloadhere.blocknodes2.util.ColorHelper
-import net.minecraft.client.Minecraft
-import org.lwjgl.opengl.GL11
-
-class GuiText(
+class GuiButton(
     x: Double,
     y: Double,
     width: Double,
     height: Double,
-    var text : String
+    private val text : String
 ) : GuiBase(x, y, width, height) {
     override fun draw() {
+        if(GuiManager.hovered == this)
+            drawHL()
+        else
+            drawBorder()
+
+        drawBG()
         drawText(text)
     }
 }

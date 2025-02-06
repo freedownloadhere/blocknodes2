@@ -46,11 +46,6 @@ class Mod {
     }
 
     @SubscribeEvent
-    fun renderOverlay(e : RenderGameOverlayEvent) {
-        //GuiManager.draw()
-    }
-
-    @SubscribeEvent
     fun onTick(e : TickEvent.ClientTickEvent) {
         if(e.phase != TickEvent.Phase.END) return
         if(Minecraft.getMinecraft().thePlayer == null) return

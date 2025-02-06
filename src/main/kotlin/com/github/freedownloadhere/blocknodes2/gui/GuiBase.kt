@@ -1,7 +1,9 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
+import com.github.freedownloadhere.blocknodes2.gui.GuiManager.hovered
 import com.github.freedownloadhere.blocknodes2.util.ChatHelper
 import com.github.freedownloadhere.blocknodes2.util.ColorHelper
+import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import org.lwjgl.opengl.GL11
@@ -20,10 +22,10 @@ open class GuiBase(
         children.add(gui)
     }
 
-    fun renderUpdate() {
+    open fun update() {
         draw()
         for(child in children)
-            child.renderUpdate()
+            child.update()
     }
 
     protected open fun draw() {
@@ -35,8 +37,9 @@ open class GuiBase(
         drawBG()
     }
 
-    private fun drawBorder() {
+    protected fun drawBorder() {
         val t = GuiManager.DefaultConfig.BORDER_THICKNESS
+        GL11.glMatrixMode(GL11.GL_MODELVIEW)
         GL11.glPushMatrix()
         GL11.glTranslated(x - t, y - t, 0.0)
         GL11.glScaled(width + 2 * t, height + 2 * t, 1.0)
@@ -44,7 +47,8 @@ open class GuiBase(
         GL11.glPopMatrix()
     }
 
-    private fun drawBG() {
+    protected fun drawBG() {
+        GL11.glMatrixMode(GL11.GL_MODELVIEW)
         GL11.glPushMatrix()
         GL11.glTranslated(x, y, 0.0)
         GL11.glScaled(width, height, 1.0)
@@ -52,9 +56,10 @@ open class GuiBase(
         GL11.glPopMatrix()
     }
 
-    private fun drawHL() {
+    protected fun drawHL() {
         val t1 = GuiManager.DefaultConfig.BORDER_THICKNESS
         val t2 = GuiManager.DefaultConfig.HL_THICKNESS
+        GL11.glMatrixMode(GL11.GL_MODELVIEW)
         GL11.glPushMatrix()
         GL11.glTranslated(x - t1 - t2, y - t1 - t2, 0.0)
         GL11.glScaled(width + 2 * (t1 + t2), height + 2 * (t1 + t2), 1.0)
@@ -62,7 +67,7 @@ open class GuiBase(
         GL11.glPopMatrix()
     }
 
-    private fun drawRect(col : ColorHelper) {
+    protected fun drawRect(col : ColorHelper) {
         val worldRenderer = Tessellator.getInstance().worldRenderer
         worldRenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR)
         worldRenderer.pos(0.0, 0.0, 0.0).color(col.r, col.g, col.b, col.a).endVertex()
@@ -72,7 +77,19 @@ open class GuiBase(
         Tessellator.getInstance().draw()
     }
 
-    fun mouseClickedEvent(mouseX : Double, mouseY : Double, button : Int) : GuiBase? {
+    protected fun drawText(text : String) {
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS)
+        GL11.glEnable(GL11.GL_TEXTURE_2D)
+        Minecraft.getMinecraft().fontRendererObj.drawString(
+            text,
+            x.toInt(),
+            y.toInt(),
+            ColorHelper.GuiDefaultBorder.toPackedARGB()
+        )
+        GL11.glPopAttrib()
+    }
+
+    fun getMouseOn(mouseX : Double, mouseY : Double) : GuiBase? {
         if(!(x <= mouseX && mouseX <= x + width))
             return null
 
@@ -81,7 +98,7 @@ open class GuiBase(
 
         var clickedGui : GuiBase? = this
         for(child in children) {
-            val gui = child.mouseClickedEvent(mouseX, mouseY, button)
+            val gui = child.getMouseOn(mouseX, mouseY)
             if(gui != null) {
                 clickedGui = gui
                 break
@@ -91,10 +108,14 @@ open class GuiBase(
         return clickedGui
     }
 
-    fun mouseAction(mouseX : Double, mouseY : Double, button : Int) {
+    open fun onClick(button : Int) {
         if(button == 0)
-            ChatHelper.send("Received LEFT click at $this")
+            ChatHelper.send("Received LEFT click at ${this::class.java}")
         else
-            ChatHelper.send("Received RIGHT click at $this")
+            ChatHelper.send("Received RIGHT click at ${this::class.java}")
+    }
+
+    open fun onHover() {
+        ChatHelper.send("Hovered on ${hovered!!::class.java}")
     }
 }
