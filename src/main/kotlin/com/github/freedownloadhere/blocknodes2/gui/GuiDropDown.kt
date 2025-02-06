@@ -1,22 +1,27 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
+import com.github.freedownloadhere.blocknodes2.util.ChatHelper
 import com.github.freedownloadhere.blocknodes2.util.ColorHelper
 
-class GuiDropDown : GuiInteractable() {
-    private val title = GuiText()
-    private val button = GuiButton()
+class GuiDropDown(
+    x: Double,
+    y: Double,
+    w: Double,
+    h: Double,
+    private val text : String
+) : GuiInteractable(x, y, w, h) {
+    private lateinit var title : GuiText
+    private lateinit var button: GuiButton
 
-    override fun finish() : GuiDropDown {
-        title
-            .wh(100.0, 30.0)
+    override fun finish() : Gui {
+        title = GuiText(0.0, 0.0, w / 2.0, h, text)
             .snapTo(this, Direction.Left)
-            .finish()
+            .finish() as GuiText
 
-        button
-            .xy(0.0, 0.0)
-            .wh(30.0, 30.0)
+        button = GuiButton(0.0, 0.0, w / 2.0, h)
+            { ChatHelper.send("Pressed Dropdown Button") }
             .snapTo(this, Direction.Right)
-            .finish()
+            .finish() as GuiButton
 
         addChild(title)
         addChild(button)

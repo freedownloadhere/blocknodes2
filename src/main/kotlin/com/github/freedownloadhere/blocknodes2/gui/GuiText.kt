@@ -1,13 +1,18 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
 import com.github.freedownloadhere.blocknodes2.mixin.AccessorFontRenderer
-import com.github.freedownloadhere.blocknodes2.util.ChatHelper
 import com.github.freedownloadhere.blocknodes2.util.ColorHelper
 import net.minecraft.client.Minecraft
 import org.lwjgl.opengl.GL11
 
-class GuiText(var str : String = "Text") : Gui() {
-    fun text(s : String) : GuiText {
+class GuiText(
+    x: Double,
+    y: Double,
+    w: Double,
+    h: Double,
+    private var str : String
+) : Gui(x, y, w, h) {
+    fun changeText(s : String) : GuiText {
         str = s
         return this
     }

@@ -5,12 +5,12 @@ import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import org.lwjgl.opengl.GL11
 
-abstract class Gui {
-    internal var x : Double = 0.0
-    internal var y : Double = 0.0
-    internal var w : Double = 100.0
-    internal var h : Double = 100.0
-
+abstract class Gui(
+    internal var x : Double,
+    internal var y : Double,
+    internal var w : Double,
+    internal var h : Double
+) {
     enum class Direction {
         Left, Right, Top, Bottom
     }
@@ -19,13 +19,13 @@ abstract class Gui {
         return this
     }
 
-    open fun xy(newX : Double, newY : Double) : Gui {
+    open fun setXY(newX : Double, newY : Double) : Gui {
         x = newX
         y = newY
         return this
     }
 
-    open fun wh(newW : Double, newH : Double) : Gui {
+    open fun setWH(newW : Double, newH : Double) : Gui {
         w = newW
         h = newH
         return this
@@ -34,7 +34,7 @@ abstract class Gui {
     open fun center(xCenter : Double, yCenter : Double) : Gui {
         val dw = w / 2.0
         val dh = h / 2.0
-        return xy(xCenter - dw, yCenter - dh)
+        return setXY(xCenter - dw, yCenter - dh)
     }
 
     open fun centerIn(parent : Gui) : Gui {
@@ -53,7 +53,7 @@ abstract class Gui {
         return this
     }
 
-    open fun update() {
+    open fun update(deltaTime : Long) {
         draw()
     }
 

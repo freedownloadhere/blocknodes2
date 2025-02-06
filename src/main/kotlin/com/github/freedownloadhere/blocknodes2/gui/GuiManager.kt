@@ -1,18 +1,20 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
+import com.github.freedownloadhere.blocknodes2.util.ChatHelper
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.GL11
+import java.time.Instant
 
 object GuiManager : GuiScreen() {
-    private var root = GuiWindow()
-    private var mouseCoords = GuiText()
-    private var coolButton = GuiButton()
-    private var dropDown = GuiDropDown()
+    private lateinit var root : GuiWindow
+    private lateinit var coolButton : GuiButton
+    private lateinit var dropDown : GuiDropDown
 
-    private var lastMouseX = -1;
-    private var lastMouseY = -1;
+    private var lastMouseX = -1
+    private var lastMouseY = -1
+    private var lastTime = 0L
 
     var focused : GuiInteractable? = null
         private set
@@ -28,49 +30,28 @@ object GuiManager : GuiScreen() {
         super.initGui()
         width = Minecraft.getMinecraft().displayWidth
         height = Minecraft.getMinecraft().displayHeight
+        lastTime = Instant.now().toEpochMilli()
 
-        root = GuiWindow()
-            .wh(1000.0, 800.0)
+        root = GuiWindow(0.0, 0.0, 1000.0, 800.0)
             .center(width / 2.0, height / 2.0)
             .finish() as GuiWindow
 
-        mouseCoords = GuiText()
-            .text("Mouse Coords : $lastMouseX $lastMouseY")
-            .wh(400.0, 30.0)
-            .xy(10.0, 10.0)
-            .finish() as GuiText
-
-        coolButton = GuiButton()
-            .text("Cool Button")
-            .wh(100.0, 50.0)
-            .xy(100.0, 100.0)
+        coolButton = GuiButton(100.0, 100.0, 100.0, 50.0)
+            { ChatHelper.send("Pressed Cool Button!!") }
             .finish() as GuiButton
 
-        dropDown = GuiDropDown()
-            .wh(800.0, 30.0)
-            .xy(0.0, 0.0)
+        dropDown = GuiDropDown(0.0, 0.0, 800.0, 30.0, "Title Bar")
             .finish() as GuiDropDown
 
-        //root.addChild(mouseCoords)
         root.addChild(coolButton)
         root.addChild(dropDown)
-        root.addChild(
-            GuiText()
-                .text("string 1")
-                .wh(100.0, 50.0)
-                .xy(10.0, 100.0)
-                .finish()
-        )
-        root.addChild(
-            GuiText()
-                .text("string 1")
-                .wh(100.0, 50.0)
-                .xy(10.0, 200.0)
-                .finish()
-        )
     }
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
+        val currTime = Instant.now().toEpochMilli()
+        val deltaTime = currTime - lastTime
+        lastTime = currTime
+
         drawDefaultBackground()
 
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS)
@@ -87,8 +68,7 @@ object GuiManager : GuiScreen() {
         GL11.glDisable(GL11.GL_TEXTURE_2D)
         GL11.glDisable(GL11.GL_LIGHTING)
 
-        mouseCoords.str = "Mouse coords: $lastMouseX $lastMouseY"
-        root.update()
+        root.update(deltaTime)
 
         GL11.glMatrixMode(GL11.GL_PROJECTION)
         GL11.glPopMatrix()

@@ -1,13 +1,15 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
-import com.github.freedownloadhere.blocknodes2.gui.GuiManager.hovered
-import com.github.freedownloadhere.blocknodes2.util.ChatHelper
-
-abstract class GuiInteractable : Gui() {
-    protected val children = mutableListOf<Gui>()
+abstract class GuiInteractable(
+    x: Double,
+    y: Double,
+    w: Double,
+    h: Double
+) : Gui(x, y, w, h) {
+    private val children = mutableListOf<Gui>()
 
     fun addChild(child : Gui) {
-        child.xy(x + child.x, y + child.y)
+        child.setXY(x + child.x, y + child.y)
         children.add(child)
     }
 
@@ -33,22 +35,22 @@ abstract class GuiInteractable : Gui() {
         return clickedGui
     }
 
-    fun onClick(button : Int) {
+    open fun onClick(button : Int) {
     }
 
-    fun onHover() {
+    open fun onHover() {
     }
 
-    override fun xy(newX: Double, newY: Double): Gui {
-        super.xy(newX, newY)
+    override fun setXY(newX: Double, newY: Double): Gui {
+        super.setXY(newX, newY)
         for(child in children)
-            child.xy(child.x + newX, child.y + newY)
+            child.setXY(child.x + newX, child.y + newY)
         return this
     }
 
-    override fun update() {
-        super.update()
+    override fun update(deltaTime : Long) {
+        super.update(deltaTime)
         for(child in children)
-            child.update()
+            child.update(deltaTime)
     }
 }
