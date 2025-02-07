@@ -1,16 +1,12 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
-abstract class GuiInteractable(
-    x: Double,
-    y: Double,
-    w: Double,
-    h: Double
-) : Gui(x, y, w, h) {
+abstract class GuiInteractable(x: Double, y: Double, w: Double, h: Double) : Gui(x, y, w, h) {
     private val children = mutableListOf<Gui>()
 
-    fun addChild(child : Gui) {
-        child.setXY(x + child.x, y + child.y)
+    fun addChild(child : Gui) : Gui {
+        child.moveBy(x, y)
         children.add(child)
+        return child
     }
 
     fun getMouseOn(mouseX : Double, mouseY : Double) : GuiInteractable? {
@@ -41,11 +37,16 @@ abstract class GuiInteractable(
     open fun onHover() {
     }
 
-    override fun setXY(newX: Double, newY: Double): Gui {
-        super.setXY(newX, newY)
+    override fun moveBy(dx: Double, dy: Double) {
+        super.moveBy(dx, dy)
         for(child in children)
-            child.setXY(child.x + x, child.y + y)
-        return this
+            child.moveBy(dx, dy)
+    }
+
+    override fun scaleBy(wMult : Double, hMult : Double) {
+        super.scaleBy(wMult, hMult)
+        for(child in children)
+            child.scaleBy(wMult, hMult)
     }
 
     override fun update(deltaTime : Long) {

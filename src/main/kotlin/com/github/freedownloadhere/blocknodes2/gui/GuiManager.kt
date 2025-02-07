@@ -1,6 +1,5 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
-import com.github.freedownloadhere.blocknodes2.util.ChatHelper
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 import org.lwjgl.input.Mouse
@@ -8,9 +7,7 @@ import org.lwjgl.opengl.GL11
 import java.time.Instant
 
 object GuiManager : GuiScreen() {
-    private lateinit var root : GuiWindow
-    private lateinit var coolButton : GuiButton
-    private lateinit var dropDown : GuiDropDown
+    private lateinit var root : GuiDropDown
 
     private var lastMouseX = -1
     private var lastMouseY = -1
@@ -32,19 +29,7 @@ object GuiManager : GuiScreen() {
         height = Minecraft.getMinecraft().displayHeight
         lastTime = Instant.now().toEpochMilli()
 
-        root = GuiWindow(0.0, 0.0, 1000.0, 800.0)
-            .center(width / 2.0, height / 2.0)
-            .finish() as GuiWindow
-
-        coolButton = GuiButton(100.0, 100.0, 100.0, 50.0)
-            { ChatHelper.send("Pressed Cool Button!!") }
-            .finish() as GuiButton
-
-        dropDown = GuiDropDown(0.0, 0.0, 800.0, 30.0, "Title Bar")
-            .finish() as GuiDropDown
-
-        root.addChild(coolButton)
-        root.addChild(dropDown)
+        root = GuiDropDown(100.0, 100.0, 500.0, 50.0, "Title Bar")
     }
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {

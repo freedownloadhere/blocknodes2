@@ -4,21 +4,18 @@ import com.github.freedownloadhere.blocknodes2.util.ColorHelper
 import kotlin.math.max
 
 class GuiButton(
-    x: Double,
-    y: Double,
-    w: Double,
-    h: Double,
-    private val callback : () -> Unit
+    x: Double, y: Double, w: Double, h: Double,
+    str : String,
+    private val callback : () -> Unit,
 ) : GuiInteractable(x, y, w, h) {
-    private lateinit var text : GuiText
+    private val text = GuiText(0.0, 0.0, w, h, str)
     private var clickCooldown = 0L
 
-    override fun finish() : Gui {
-        text = GuiText(0.0, 0.0, w * 0.75, h * 0.75, "Button")
+    init {
         addChild(text)
-        text.centerIn(this)
 
-        return this
+        text.scaleBy(0.75, 0.75)
+        text.centerIn(this)
     }
 
     override fun draw() {

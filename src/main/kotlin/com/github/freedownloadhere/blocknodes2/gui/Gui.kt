@@ -11,49 +11,68 @@ abstract class Gui(
     internal var w : Double,
     internal var h : Double
 ) {
+    private var toggled = true
+
     enum class Direction {
         Left, Right, Top, Bottom
+    }
+
+    open fun toggle() : Gui {
+        toggled = !toggled
+        return this
     }
 
     open fun finish() : Gui {
         return this
     }
 
-    open fun setXY(newX : Double, newY : Double) : Gui {
+    open fun setXY(newX : Double, newY : Double) {
         x = newX
         y = newY
-        return this
     }
 
-    open fun setWH(newW : Double, newH : Double) : Gui {
+    open fun setWH(newW : Double, newH : Double) {
         w = newW
         h = newH
-        return this
     }
 
-    open fun center(xCenter : Double, yCenter : Double) : Gui {
+    open fun moveBy(dx : Double, dy : Double) {
+        x += dx
+        y += dy
+    }
+
+    open fun scaleBy(wMult : Double, hMult : Double) {
+        w *= wMult
+        h *= hMult
+    }
+
+    open fun scaleBy(mult : Double) {
+        scaleBy(mult, mult)
+    }
+
+    open fun center(xCenter : Double, yCenter : Double) {
         val dw = w / 2.0
         val dh = h / 2.0
-        return setXY(xCenter - dw, yCenter - dh)
+        setXY(xCenter - dw, yCenter - dh)
     }
 
-    open fun centerIn(parent : Gui) : Gui {
+    open fun centerIn(parent : Gui) {
         val xCenter = parent.x + parent.w / 2.0
         val yCenter = parent.y + parent.h / 2.0
-        return center(xCenter, yCenter)
+        center(xCenter, yCenter)
     }
 
-    open fun snapTo(parent : Gui, type : Direction) : Gui {
+    open fun snapTo(parent : Gui, type : Direction) {
         when(type) {
             Direction.Left -> x = parent.x
             Direction.Right -> x = parent.x + parent.w - w
             Direction.Top -> y = parent.y
             Direction.Bottom -> y = parent.y + parent.h - h
         }
-        return this
     }
 
     open fun update(deltaTime : Long) {
+        if(!toggled) return
         draw()
     }
 

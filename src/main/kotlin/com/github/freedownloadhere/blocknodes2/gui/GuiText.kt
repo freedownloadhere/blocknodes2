@@ -6,25 +6,14 @@ import net.minecraft.client.Minecraft
 import org.lwjgl.opengl.GL11
 
 class GuiText(
-    x: Double,
-    y: Double,
-    w: Double,
-    h: Double,
-    private var str : String
+    x: Double, y: Double, w: Double, h: Double,
+    private val str : String
 ) : Gui(x, y, w, h) {
-    fun changeText(s : String) : GuiText {
-        str = s
-        return this
-    }
-
     override fun draw() {
         val fr = Minecraft.getMinecraft().fontRendererObj
         val font = (fr as AccessorFontRenderer).fontLocation_blocknodes2
         val strWidth = fr.getStringWidth(str).toDouble()
         val strHeight = fr.FONT_HEIGHT
-
-        drawBorder()
-        drawBG()
 
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS)
         GL11.glEnable(GL11.GL_TEXTURE_2D)
