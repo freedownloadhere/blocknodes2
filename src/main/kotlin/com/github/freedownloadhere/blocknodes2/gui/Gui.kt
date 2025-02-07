@@ -27,13 +27,11 @@ abstract class Gui(
     }
 
     open fun setXY(newX : Double, newY : Double) {
-        x = newX
-        y = newY
+        moveBy(newX - x, newY - y)
     }
 
     open fun setWH(newW : Double, newH : Double) {
-        w = newW
-        h = newH
+        scaleBy(newW / w, newH / h)
     }
 
     open fun moveBy(dx : Double, dy : Double) {
@@ -44,6 +42,9 @@ abstract class Gui(
     open fun scaleBy(wMult : Double, hMult : Double) {
         w *= wMult
         h *= hMult
+
+        x *= wMult
+        y *= hMult
     }
 
     open fun scaleBy(mult : Double) {
@@ -64,10 +65,10 @@ abstract class Gui(
 
     open fun snapTo(parent : Gui, type : Direction) {
         when(type) {
-            Direction.Left -> x = parent.x
-            Direction.Right -> x = parent.x + parent.w - w
-            Direction.Top -> y = parent.y
-            Direction.Bottom -> y = parent.y + parent.h - h
+            Direction.Left -> setXY(parent.x, y)
+            Direction.Right -> setXY(parent.x + parent.w - w, y)
+            Direction.Top -> setXY(x, parent.y)
+            Direction.Bottom -> setXY(x, parent.y + parent.h - h)
         }
     }
 

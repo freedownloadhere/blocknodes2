@@ -12,16 +12,15 @@ class GuiButton(
     private var clickCooldown = 0L
 
     init {
-        addChild(text)
-
-        text.scaleBy(0.75, 0.75)
+        text.scaleBy(0.75)
         text.centerIn(this)
+        addChild(text)
     }
 
     override fun draw() {
         drawBorder()
         drawBG(
-            if(GuiManager.hovered == this)
+            if(GuiManager.hovered == this && clickCooldown == 0L)
                 ColorHelper.GuiBGLight
             else
                 ColorHelper.GuiBGDark
@@ -31,7 +30,7 @@ class GuiButton(
     override fun onClick(button: Int) {
         if(button == 0 && clickCooldown == 0L) {
             callback()
-            clickCooldown = 500L
+            clickCooldown = 100L
         }
     }
 
