@@ -1,15 +1,20 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
-abstract class GuiInteractable(x: Double, y: Double, w: Double, h: Double) : Gui(x, y, w, h) {
+abstract class GuiInteractable : Gui() {
     private val children = mutableListOf<Gui>()
 
-    fun addChild(child : Gui) : Gui {
-        child.moveBy(x, y)
+    override fun postInit() { }
+
+    fun addChild(child : Gui) {
+        if(!child.initialized)
+            child.postInit()
         children.add(child)
-        return child
     }
 
     fun getMouseOn(mouseX : Double, mouseY : Double) : GuiInteractable? {
+        if(!toggled)
+            return null
+
         for(child in children) {
             if(child is GuiInteractable) {
                 val gui = child.getMouseOn(mouseX, mouseY)
@@ -25,11 +30,9 @@ abstract class GuiInteractable(x: Double, y: Double, w: Double, h: Double) : Gui
         return null
     }
 
-    open fun onClick(button : Int) {
-    }
+    open fun onClick(button : Int) { }
 
-    open fun onHover() {
-    }
+    open fun onHover() { }
 
     override fun toggle() {
         super.toggle()
@@ -37,16 +40,16 @@ abstract class GuiInteractable(x: Double, y: Double, w: Double, h: Double) : Gui
             child.toggle()
     }
 
-    override fun moveBy(dx: Double, dy: Double) {
-        super.moveBy(dx, dy)
+    override fun translate(dx: Double, dy: Double) {
+        super.translate(dx, dy)
         for(child in children)
-            child.moveBy(dx, dy)
+            child.translate(dx, dy)
     }
 
-    override fun scaleBy(wMult : Double, hMult : Double) {
-        super.scaleBy(wMult, hMult)
+    override fun scale(wMult : Double, hMult : Double) {
+        super.scale(wMult, hMult)
         for(child in children)
-            child.scaleBy(wMult, hMult)
+            child.scale(wMult, hMult)
     }
 
     override fun update(deltaTime : Long) {

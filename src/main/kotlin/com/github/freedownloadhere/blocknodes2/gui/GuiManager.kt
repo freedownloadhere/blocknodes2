@@ -29,7 +29,10 @@ object GuiManager : GuiScreen() {
         height = Minecraft.getMinecraft().displayHeight
         lastTime = Instant.now().toEpochMilli()
 
-        root = GuiDropDown(100.0, 100.0, 500.0, 50.0, "Title Bar")
+        root = GuiDropDown("Drop down example")
+        root.setWH(500.0, 50.0)
+        root.setXY(200.0, 100.0)
+        root.postInit()
     }
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {

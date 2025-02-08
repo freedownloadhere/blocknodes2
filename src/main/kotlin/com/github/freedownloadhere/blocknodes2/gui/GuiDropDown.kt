@@ -2,38 +2,45 @@ package com.github.freedownloadhere.blocknodes2.gui
 
 import com.github.freedownloadhere.blocknodes2.util.ChatHelper
 import com.github.freedownloadhere.blocknodes2.util.ColorHelper
-import kotlin.math.min
 
-class GuiDropDown(
-    x: Double, y: Double, w: Double, h: Double,
-    text : String
-) : GuiInteractable(x, y, w, h) {
-    private val contents = GuiWindow(0.0, 0.0, w, h)
-    private val title = GuiText(0.0, 0.0, text)
-    private val button = GuiButton(0.0, 0.0, h, h, "v") { contents.toggle() }
+class GuiDropDown(text : String) : GuiInteractable() {
+    private val contents = GuiWindow()
+    private val title = GuiText(text)
+    private val button = GuiButton("v") { contents.toggle() }
 
-    init {
-        contents.scaleBy(1.0, 5.0)
-        addChild(contents)
-        contents.moveBy(0.0, h + GuiManager.DefaultConfig.BORDER_THICKNESS)
-        contents.addChild(GuiButton(10.0, 10.0, 100.0, 50.0, "test") { ChatHelper.send("window button pressed") })
-        contents.addChild(GuiButton(10.0, 100.0, 100.0, 50.0, "longer text") { ChatHelper.send("big") })
+    override fun postInit() {
+        contents.setWH(w, h)
+        contents.scale(1.0, 5.0)
+        contents.placeRelativeTo(this)
+        contents.translate(0.0, h + GuiManager.DefaultConfig.BORDER_THICKNESS * 2.0)
 
-        title.fill(this)
-        title.scaleBy(0.5)
-        addChild(title)
+        val testbutton = GuiButton("test") { ChatHelper.send("window button pressed") }
+        testbutton.setWH(contents.w, contents.h)
+        testbutton.scale(0.25)
+        testbutton.placeRelativeTo(contents)
+
+        val testbutton2 = GuiButton("longer text") { ChatHelper.send("big") }
+        testbutton2.setWH(contents.w, contents.h)
+        testbutton2.scale(0.5, 0.25)
+        testbutton2.snapTo(contents, SnapDir.Bottom, 5.0)
+        testbutton2.snapTo(contents, SnapDir.Right, 5.0)
+
+        contents.addChild(testbutton)
+        contents.addChild(testbutton2)
+
+        title.expandIn(this)
+        title.scale(0.5)
         title.centerIn(this)
-        title.snapTo(this, Direction.Left, 10.0)
+        title.snapTo(this, SnapDir.Left, 10.0)
 
-        //button.setWH(h, h)
-        button.scaleBy(0.75)
-        addChild(button)
+        button.expandIn(this)
+        button.scale(0.75)
         button.centerIn(this)
-        button.snapTo(this, Direction.Right, 5.0)
-    }
+        button.snapTo(this, SnapDir.Right, 5.0)
 
-    override fun scaleBy(wMult: Double, hMult: Double) {
-        scaleBy(min(wMult, hMult))
+        addChild(contents)
+        addChild(title)
+        addChild(button)
     }
 
     override fun draw() {

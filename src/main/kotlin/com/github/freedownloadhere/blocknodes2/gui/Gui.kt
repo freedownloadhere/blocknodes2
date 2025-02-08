@@ -6,36 +6,46 @@ import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import org.lwjgl.opengl.GL11
 
-abstract class Gui(
-    internal var x : Double,
-    internal var y : Double,
-    internal var w : Double,
-    internal var h : Double
-) {
-    private var toggled = true
+abstract class Gui {
+    internal var x = 0.0
+    internal var y = 0.0
+    internal var w = 1.0
+    internal var h = 1.0
 
-    enum class Direction {
+    var toggled = true
+        private set
+
+    var initialized = false
+        private set
+
+    enum class SnapDir {
         Left, Right, Top, Bottom
     }
+
+    open fun postInit() { }
 
     open fun toggle() {
         toggled = !toggled
     }
 
     open fun setXY(newX : Double, newY : Double) {
-        moveBy(newX - x, newY - y)
+        translate(newX - x, newY - y)
     }
 
     open fun setWH(newW : Double, newH : Double) {
-        scaleBy(newW / w, newH / h)
+        scale(newW / w, newH / h)
     }
 
-    open fun moveBy(dx : Double, dy : Double) {
+    open fun translate(dx : Double, dy : Double) {
         x += dx
         y += dy
     }
 
-    open fun scaleBy(wMult : Double, hMult : Double) {
+    open fun placeRelativeTo(parent : Gui) {
+        translate(parent.x, parent.y)
+    }
+
+    open fun scale(wMult : Double, hMult : Double) {
         w *= wMult
         h *= hMult
 
@@ -43,8 +53,8 @@ abstract class Gui(
         y *= hMult
     }
 
-    open fun scaleBy(mult : Double) {
-        scaleBy(mult, mult)
+    open fun scale(mult : Double) {
+        scale(mult, mult)
     }
 
     open fun center(xCenter : Double, yCenter : Double) {
@@ -59,20 +69,20 @@ abstract class Gui(
         center(xCenter, yCenter)
     }
 
-    open fun snapTo(parent : Gui, type : Direction, padding : Double = 0.0) {
+    open fun snapTo(parent : Gui, type : SnapDir, padding : Double = 0.0) {
         when(type) {
-            Direction.Left -> setXY(parent.x + padding, y)
-            Direction.Right -> setXY(parent.x + parent.w - w - padding, y)
-            Direction.Top -> setXY(x, parent.y + padding)
-            Direction.Bottom -> setXY(x, parent.y + parent.h - h - padding)
+            SnapDir.Left -> setXY(parent.x + padding, y)
+            SnapDir.Right -> setXY(parent.x + parent.w - w - padding, y)
+            SnapDir.Top -> setXY(x, parent.y + padding)
+            SnapDir.Bottom -> setXY(x, parent.y + parent.h - h - padding)
         }
     }
 
-    open fun fill(parent : Gui) {
+    open fun expandIn(parent : Gui) {
         if(h * (parent.w / w) <= parent.h)
-            scaleBy(parent.w / w)
+            scale(parent.w / w)
         else
-            scaleBy(parent.h / h)
+            scale(parent.h / h)
     }
 
     open fun update(deltaTime : Long) {

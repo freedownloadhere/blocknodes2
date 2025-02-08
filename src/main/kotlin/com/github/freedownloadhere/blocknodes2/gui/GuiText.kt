@@ -5,15 +5,16 @@ import com.github.freedownloadhere.blocknodes2.util.ColorHelper
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
 import org.lwjgl.opengl.GL11
+import kotlin.math.min
 
-class GuiText(
-    x: Double, y: Double,
-    private val str : String
-) : Gui(
-    x, y,
-    Minecraft.getMinecraft().fontRendererObj.getStringWidth(str).toDouble(),
-    Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT.toDouble()
-) {
+class GuiText(private val str : String) : Gui() {
+    init {
+        w = Minecraft.getMinecraft().fontRendererObj.getStringWidth(str).toDouble()
+        h = Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT.toDouble()
+    }
+
+    override fun postInit() { }
+
     override fun draw() {
         val fr = Minecraft.getMinecraft().fontRendererObj
         val fontTex = (fr as AccessorFontRenderer).fontLocation_blocknodes2
@@ -37,5 +38,10 @@ class GuiText(
         GlStateManager.disableBlend()
         GlStateManager.disableTexture2D()
         GlStateManager.popMatrix()
+    }
+
+    override fun scale(wMult: Double, hMult: Double) {
+        val min = min(wMult, hMult)
+        super.scale(min, min)
     }
 }
