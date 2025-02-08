@@ -1,6 +1,7 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
 import com.github.freedownloadhere.blocknodes2.util.ColorHelper
+import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import org.lwjgl.opengl.GL11
@@ -88,32 +89,32 @@ abstract class Gui(
 
     protected fun drawBorder(col : ColorHelper = ColorHelper.GuiBorder) {
         val t = GuiManager.DefaultConfig.BORDER_THICKNESS
-        GL11.glMatrixMode(GL11.GL_MODELVIEW)
-        GL11.glPushMatrix()
-        GL11.glTranslated(x - t, y - t, 0.0)
-        GL11.glScaled(w + 2 * t, h + 2 * t, 1.0)
+        GlStateManager.matrixMode(GL11.GL_MODELVIEW)
+        GlStateManager.pushMatrix()
+        GlStateManager.translate(x - t, y - t, 0.0)
+        GlStateManager.scale(w + 2 * t, h + 2 * t, 1.0)
         drawRect(col)
-        GL11.glPopMatrix()
+        GlStateManager.popMatrix()
     }
 
     protected fun drawBG(col : ColorHelper = ColorHelper.GuiBGDark) {
-        GL11.glMatrixMode(GL11.GL_MODELVIEW)
-        GL11.glPushMatrix()
-        GL11.glTranslated(x, y, 0.0)
-        GL11.glScaled(w, h, 1.0)
+        GlStateManager.matrixMode(GL11.GL_MODELVIEW)
+        GlStateManager.pushMatrix()
+        GlStateManager.translate(x, y, 0.0)
+        GlStateManager.scale(w, h, 1.0)
         drawRect(col)
-        GL11.glPopMatrix()
+        GlStateManager.popMatrix()
     }
 
     protected fun drawHL() {
         val t1 = GuiManager.DefaultConfig.BORDER_THICKNESS
         val t2 = GuiManager.DefaultConfig.HL_THICKNESS
-        GL11.glMatrixMode(GL11.GL_MODELVIEW)
-        GL11.glPushMatrix()
-        GL11.glTranslated(x - t1 - t2, y - t1 - t2, 0.0)
-        GL11.glScaled(w + 2 * (t1 + t2), h + 2 * (t1 + t2), 1.0)
+        GlStateManager.matrixMode(GL11.GL_MODELVIEW)
+        GlStateManager.pushMatrix()
+        GlStateManager.translate(x - t1 - t2, y - t1 - t2, 0.0)
+        GlStateManager.scale(w + 2 * (t1 + t2), h + 2 * (t1 + t2), 1.0)
         drawRect(ColorHelper.GuiHL)
-        GL11.glPopMatrix()
+        GlStateManager.popMatrix()
     }
 
     private fun drawRect(col : ColorHelper) {

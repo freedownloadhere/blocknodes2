@@ -1,7 +1,6 @@
 package com.github.freedownloadhere.blocknodes2.render
 
-import com.github.freedownloadhere.blocknodes2.mixin.AccessorMinecraft
-import net.minecraft.client.Minecraft
+import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import net.minecraft.util.BlockPos
@@ -31,41 +30,34 @@ object RenderHelper {
         Index(3, 0, 4, 7)
     )
 
-
     fun highlightBegin() {
-        GL11.glPushMatrix()
-        GL11.glPushAttrib(GL11.GL_ENABLE_BIT)
-        GL11.glDisable(GL11.GL_LIGHTING)
-        GL11.glDisable(GL11.GL_TEXTURE_2D)
-        GL11.glDepthFunc(GL11.GL_ALWAYS)
-        GL11.glEnable(GL11.GL_BLEND)
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
+        GlStateManager.pushMatrix()
+        GlStateManager.disableLighting()
+        GlStateManager.disableTexture2D()
+        GlStateManager.depthFunc(GL11.GL_ALWAYS)
+        GlStateManager.enableBlend()
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
     }
 
     fun useAbsolutePos(observerPos : Vec3) {
-        GL11.glTranslated(-observerPos.xCoord, -observerPos.yCoord, -observerPos.zCoord)
-        val worldRenderer = Tessellator.getInstance().worldRenderer
+        GlStateManager.translate(-observerPos.xCoord, -observerPos.yCoord, -observerPos.zCoord)
     }
 
     fun highlightEnd() {
-        GL11.glPopAttrib()
-        GL11.glDepthFunc(GL11.GL_LEQUAL)
-        GL11.glPopMatrix()
-    }
-
-    fun drawLine(pos1 : Vec3, pos2 : Vec3, color : Color) {
-        val worldRenderer = Tessellator.getInstance().worldRenderer
-        worldRenderer.begin(GL11.GL_LINE, DefaultVertexFormats.POSITION_COLOR)
-        worldRenderer.pos(pos1.xCoord, pos1.yCoord, pos1.zCoord).color(color.red, color.green, color.blue, color.alpha).endVertex()
-        worldRenderer.pos(pos2.xCoord, pos2.yCoord, pos2.zCoord).color(color.red, color.green, color.blue, color.alpha).endVertex()
-        Tessellator.getInstance().draw()
+        GlStateManager.depthFunc(GL11.GL_LEQUAL)
+        GlStateManager.enableTexture2D()
+        GlStateManager.enableLighting()
+        GlStateManager.popMatrix()
     }
 
     fun drawCube(pos : BlockPos, color : Color) {
-        GL11.glTranslated(pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble())
+        GlStateManager.pushMatrix()
+        GlStateManager.translate(pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble())
+
         val tess = Tessellator.getInstance()
         val worldrenderer = tess.worldRenderer
         worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR)
+
         for(quad in cubeIndices) {
             val p1 = cubeVertices[quad.i1]
             val p2 = cubeVertices[quad.i2]
@@ -77,6 +69,7 @@ object RenderHelper {
             worldrenderer.pos(p4.xCoord, p4.yCoord, p4.zCoord).color(color.red, color.green, color.blue, color.alpha).endVertex()
         }
         tess.draw()
-        GL11.glTranslated(-pos.x.toDouble(), -pos.y.toDouble(), -pos.z.toDouble())
+
+        GlStateManager.popMatrix()
     }
 }

@@ -13,7 +13,11 @@ class NodeScene {
     }
 
     fun render() {
-        for(node in nodeList)
+        //var i = 1
+        for(node in nodeList) {
+            //println("===== rendering cube $i =====")
             node.render()
+            //i++
+        }
     }
 }

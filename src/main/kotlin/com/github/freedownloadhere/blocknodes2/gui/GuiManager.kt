@@ -2,6 +2,7 @@ package com.github.freedownloadhere.blocknodes2.gui
 
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
+import net.minecraft.client.renderer.GlStateManager
 import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.GL11
 import java.time.Instant
@@ -39,27 +40,27 @@ object GuiManager : GuiScreen() {
 
         drawDefaultBackground()
 
-        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS)
+        GlStateManager.matrixMode(GL11.GL_PROJECTION)
+        GlStateManager.pushMatrix()
+        GlStateManager.loadIdentity()
+        GlStateManager.ortho(0.0, width.toDouble(), height.toDouble(), 0.0, -1.0, 1.0)
 
-        GL11.glMatrixMode(GL11.GL_PROJECTION)
-        GL11.glPushMatrix()
-        GL11.glLoadIdentity()
-        GL11.glOrtho(0.0, width.toDouble(), height.toDouble(), 0.0, -1.0, 1.0)
+        GlStateManager.matrixMode(GL11.GL_MODELVIEW)
+        GlStateManager.pushMatrix()
+        GlStateManager.loadIdentity()
 
-        GL11.glMatrixMode(GL11.GL_MODELVIEW)
-        GL11.glPushMatrix()
-        GL11.glLoadIdentity()
-
-        GL11.glDisable(GL11.GL_TEXTURE_2D)
-        GL11.glDisable(GL11.GL_LIGHTING)
+        GlStateManager.disableTexture2D()
+        GlStateManager.disableLighting()
 
         root.update(deltaTime)
 
-        GL11.glMatrixMode(GL11.GL_PROJECTION)
-        GL11.glPopMatrix()
-        GL11.glMatrixMode(GL11.GL_MODELVIEW)
-        GL11.glPopMatrix()
-        GL11.glPopAttrib()
+        GlStateManager.enableLighting()
+        GlStateManager.enableTexture2D()
+
+        GlStateManager.matrixMode(GL11.GL_MODELVIEW)
+        GlStateManager.popMatrix()
+        GlStateManager.matrixMode(GL11.GL_PROJECTION)
+        GlStateManager.popMatrix()
     }
 
     override fun handleMouseInput() {
