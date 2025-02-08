@@ -1,5 +1,6 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
+import com.github.freedownloadhere.blocknodes2.util.ChatHelper
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.GlStateManager
@@ -30,9 +31,26 @@ object GuiManager : GuiScreen() {
         lastTime = Instant.now().toEpochMilli()
 
         root = GuiDropDown("Drop down example")
-        root.setWH(500.0, 50.0)
-        root.setXY(200.0, 100.0)
+        root.scaleSetWH(500.0, 30.0)
+        root.translateSetXY(500.0, 100.0)
         root.postInit()
+
+        val list = GuiList()
+        list.translateSnapTo(root.contents, Gui.SnapDir.Left, 10.0)
+        list.translateSnapTo(root.contents, Gui.SnapDir.Top, 10.0)
+        root.contents.addChild(list)
+
+        val button1 = GuiButton("Option one") { ChatHelper.send("Picked option one") }
+        button1.scaleSetWH(50.0, 30.0)
+        list.addChild(button1)
+
+        val button2 = GuiButton("Option two") { ChatHelper.send("Picked option two") }
+        button2.scaleSetWH(50.0, 30.0)
+        list.addChild(button2)
+
+        list.addChild(GuiText("text three"))
+        list.addChild(GuiText("text four"))
+        list.addChild(GuiText("text five"))
     }
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {

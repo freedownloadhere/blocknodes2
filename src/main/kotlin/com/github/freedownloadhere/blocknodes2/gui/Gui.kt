@@ -11,38 +11,77 @@ abstract class Gui {
     internal var y = 0.0
     internal var w = 1.0
     internal var h = 1.0
-
+    internal val children = mutableListOf<Gui>()
     var toggled = true
         private set
+    private var initialized = false
 
-    var initialized = false
-        private set
-
-    enum class SnapDir {
-        Left, Right, Top, Bottom
-    }
+    enum class SnapDir { Left, Right, Top, Bottom }
 
     open fun postInit() { }
 
     open fun toggle() {
         toggled = !toggled
+        if(toggled)
+            for(child in children)
+                child.enable()
+        else
+            for(child in children)
+                child.disable()
     }
 
-    open fun setXY(newX : Double, newY : Double) {
-        translate(newX - x, newY - y)
+    open fun addChild(child : Gui) {
+        if(!child.initialized)
+            child.postInit()
+        children.add(child)
     }
 
-    open fun setWH(newW : Double, newH : Double) {
-        scale(newW / w, newH / h)
+    open fun enable() {
+        toggled = true
+        for(child in children)
+            child.enable()
+    }
+
+    open fun disable() {
+        toggled = false
+        for(child in children)
+            child.disable()
     }
 
     open fun translate(dx : Double, dy : Double) {
         x += dx
         y += dy
+        for(child in children)
+            child.translate(dx, dy)
     }
 
-    open fun placeRelativeTo(parent : Gui) {
+    open fun translateSetXY(newX : Double, newY : Double) {
+        translate(newX - x, newY - y)
+    }
+
+    open fun translatePlaceRelativeTo(parent : Gui) {
         translate(parent.x, parent.y)
+    }
+
+    open fun translateCenter(xCenter : Double, yCenter : Double) {
+        val dw = w / 2.0
+        val dh = h / 2.0
+        translateSetXY(xCenter - dw, yCenter - dh)
+    }
+
+    open fun translateCenterIn(parent : Gui) {
+        val xCenter = parent.x + parent.w / 2.0
+        val yCenter = parent.y + parent.h / 2.0
+        translateCenter(xCenter, yCenter)
+    }
+
+    open fun translateSnapTo(parent : Gui, type : SnapDir, padding : Double = 0.0) {
+        when(type) {
+            SnapDir.Left -> translateSetXY(parent.x + padding, y)
+            SnapDir.Right -> translateSetXY(parent.x + parent.w - w - padding, y)
+            SnapDir.Top -> translateSetXY(x, parent.y + padding)
+            SnapDir.Bottom -> translateSetXY(x, parent.y + parent.h - h - padding)
+        }
     }
 
     open fun scale(wMult : Double, hMult : Double) {
@@ -51,34 +90,20 @@ abstract class Gui {
 
         x *= wMult
         y *= hMult
+
+        for(child in children)
+            child.scale(wMult, hMult)
     }
 
     open fun scale(mult : Double) {
         scale(mult, mult)
     }
 
-    open fun center(xCenter : Double, yCenter : Double) {
-        val dw = w / 2.0
-        val dh = h / 2.0
-        setXY(xCenter - dw, yCenter - dh)
+    open fun scaleSetWH(newW : Double, newH : Double) {
+        scale(newW / w, newH / h)
     }
 
-    open fun centerIn(parent : Gui) {
-        val xCenter = parent.x + parent.w / 2.0
-        val yCenter = parent.y + parent.h / 2.0
-        center(xCenter, yCenter)
-    }
-
-    open fun snapTo(parent : Gui, type : SnapDir, padding : Double = 0.0) {
-        when(type) {
-            SnapDir.Left -> setXY(parent.x + padding, y)
-            SnapDir.Right -> setXY(parent.x + parent.w - w - padding, y)
-            SnapDir.Top -> setXY(x, parent.y + padding)
-            SnapDir.Bottom -> setXY(x, parent.y + parent.h - h - padding)
-        }
-    }
-
-    open fun expandIn(parent : Gui) {
+    open fun scaleExpandIn(parent : Gui) {
         if(h * (parent.w / w) <= parent.h)
             scale(parent.w / w)
         else
@@ -88,6 +113,8 @@ abstract class Gui {
     open fun update(deltaTime : Long) {
         if(!toggled) return
         draw()
+        for(child in children)
+            child.update(deltaTime)
     }
 
     protected open fun draw() {
