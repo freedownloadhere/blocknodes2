@@ -8,13 +8,14 @@ class GuiButton(
     str : String,
     private val callback : () -> Unit,
 ) : GuiInteractable(x, y, w, h) {
-    private val text = GuiText(0.0, 0.0, w, h, str)
+    private val text = GuiText(0.0, 0.0, str)
     private var clickCooldown = 0L
 
     init {
+        text.fill(this)
         text.scaleBy(0.75)
-        text.centerIn(this)
         addChild(text)
+        text.centerIn(this)
     }
 
     override fun draw() {

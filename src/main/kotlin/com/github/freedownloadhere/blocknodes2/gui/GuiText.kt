@@ -7,14 +7,18 @@ import net.minecraft.client.renderer.GlStateManager
 import org.lwjgl.opengl.GL11
 
 class GuiText(
-    x: Double, y: Double, w: Double, h: Double,
+    x: Double, y: Double,
     private val str : String
-) : Gui(x, y, w, h) {
+) : Gui(
+    x, y,
+    Minecraft.getMinecraft().fontRendererObj.getStringWidth(str).toDouble(),
+    Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT.toDouble()
+) {
     override fun draw() {
         val fr = Minecraft.getMinecraft().fontRendererObj
         val fontTex = (fr as AccessorFontRenderer).fontLocation_blocknodes2
-        val strWidth = fr.getStringWidth(str).toDouble()
-        val strHeight = fr.FONT_HEIGHT
+        val strW = fr.getStringWidth(str).toDouble()
+        val strH = fr.FONT_HEIGHT
 
         GlStateManager.enableTexture2D()
         GlStateManager.enableBlend()
@@ -24,12 +28,14 @@ class GuiText(
         GlStateManager.pushMatrix()
         GlStateManager.loadIdentity()
         GlStateManager.translate(x, y, 0.0)
-        GlStateManager.scale(w / strWidth, h / strHeight, 1.0)
+        GlStateManager.scale(w / strW, h / strH, 1.0)
 
         Minecraft.getMinecraft().textureManager.bindTexture(fontTex)
 
-        fr.drawString(str, 0, 0, ColorHelper.White.toPackedARGB())
+        fr.drawStringWithShadow(str, 0.0f, 0.0f, ColorHelper.White.toPackedARGB())
 
+        GlStateManager.disableBlend()
+        GlStateManager.disableTexture2D()
         GlStateManager.popMatrix()
     }
 }

@@ -18,13 +18,8 @@ abstract class Gui(
         Left, Right, Top, Bottom
     }
 
-    open fun toggle() : Gui {
+    open fun toggle() {
         toggled = !toggled
-        return this
-    }
-
-    open fun finish() : Gui {
-        return this
     }
 
     open fun setXY(newX : Double, newY : Double) {
@@ -64,13 +59,20 @@ abstract class Gui(
         center(xCenter, yCenter)
     }
 
-    open fun snapTo(parent : Gui, type : Direction) {
+    open fun snapTo(parent : Gui, type : Direction, padding : Double = 0.0) {
         when(type) {
-            Direction.Left -> setXY(parent.x, y)
-            Direction.Right -> setXY(parent.x + parent.w - w, y)
-            Direction.Top -> setXY(x, parent.y)
-            Direction.Bottom -> setXY(x, parent.y + parent.h - h)
+            Direction.Left -> setXY(parent.x + padding, y)
+            Direction.Right -> setXY(parent.x + parent.w - w - padding, y)
+            Direction.Top -> setXY(x, parent.y + padding)
+            Direction.Bottom -> setXY(x, parent.y + parent.h - h - padding)
         }
+    }
+
+    open fun fill(parent : Gui) {
+        if(h * (parent.w / w) <= parent.h)
+            scaleBy(parent.w / w)
+        else
+            scaleBy(parent.h / h)
     }
 
     open fun update(deltaTime : Long) {
@@ -108,11 +110,10 @@ abstract class Gui(
 
     protected fun drawHL() {
         val t1 = GuiManager.DefaultConfig.BORDER_THICKNESS
-        val t2 = GuiManager.DefaultConfig.HL_THICKNESS
         GlStateManager.matrixMode(GL11.GL_MODELVIEW)
         GlStateManager.pushMatrix()
-        GlStateManager.translate(x - t1 - t2, y - t1 - t2, 0.0)
-        GlStateManager.scale(w + 2 * (t1 + t2), h + 2 * (t1 + t2), 1.0)
+        GlStateManager.translate(x - t1, y - t1, 0.0)
+        GlStateManager.scale(w + 2 * t1, h + 2 * t1, 1.0)
         drawRect(ColorHelper.GuiHL)
         GlStateManager.popMatrix()
     }

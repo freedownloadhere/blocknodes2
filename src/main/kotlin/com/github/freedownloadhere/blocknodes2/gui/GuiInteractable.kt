@@ -10,31 +10,31 @@ abstract class GuiInteractable(x: Double, y: Double, w: Double, h: Double) : Gui
     }
 
     fun getMouseOn(mouseX : Double, mouseY : Double) : GuiInteractable? {
-        if(!(x <= mouseX && mouseX <= x + w))
-            return null
-
-        if(!(y <= mouseY && mouseY <= y + h))
-            return null
-
-        var clickedGui : GuiInteractable? = this
-
         for(child in children) {
             if(child is GuiInteractable) {
                 val gui = child.getMouseOn(mouseX, mouseY)
-                if(gui != null) {
-                    clickedGui = gui
-                    break
-                }
+                if(gui != null)
+                    return gui
             }
         }
 
-        return clickedGui
+        if(x <= mouseX && mouseX <= x + w)
+            if(y <= mouseY && mouseY <= y + h)
+                return this
+
+        return null
     }
 
     open fun onClick(button : Int) {
     }
 
     open fun onHover() {
+    }
+
+    override fun toggle() {
+        super.toggle()
+        for(child in children)
+            child.toggle()
     }
 
     override fun moveBy(dx: Double, dy: Double) {

@@ -20,7 +20,6 @@ object GuiManager : GuiScreen() {
         private set
 
     object DefaultConfig {
-        const val HL_THICKNESS = 4.0
         const val BORDER_THICKNESS = 2.0
     }
 
