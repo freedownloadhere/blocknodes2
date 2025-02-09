@@ -1,9 +1,13 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
+import com.github.freedownloadhere.blocknodes2.node.Node
+import com.github.freedownloadhere.blocknodes2.node.NodeScene
 import com.github.freedownloadhere.blocknodes2.util.ChatHelper
+import com.github.freedownloadhere.blocknodes2.util.ModState
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.GlStateManager
+import net.minecraft.util.BlockPos
 import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.GL11
 import java.time.Instant
@@ -30,27 +34,43 @@ object GuiManager : GuiScreen() {
         height = Minecraft.getMinecraft().displayHeight
         lastTime = Instant.now().toEpochMilli()
 
-        root = GuiDropDown("Drop down example")
-        root.scaleSetWH(500.0, 30.0)
-        root.translateSetXY(500.0, 100.0)
+        root = GuiDropDown("Add new node")
+        root.scaleSetWH(120.0, 30.0)
+        root.translateSetXY(500.0, 300.0)
         root.postInit()
 
         val list = GuiList()
+        list.spacing = 10.0
+
+        val x = GuiTextBox()
+        x.scaleSetWH(100.0, 30.0)
+
+        val y = GuiTextBox()
+        y.scaleSetWH(100.0, 30.0)
+
+        val z = GuiTextBox()
+        z.scaleSetWH(100.0, 30.0)
+
+        val button = GuiButton("Add") {
+            val pos = BlockPos(
+                x.contents.trim().toInt(),
+                y.contents.trim().toInt(),
+                z.contents.trim().toInt()
+            )
+            ModState.loadedNodeScene.nodeList.add(Node(pos, listOf()))
+            ChatHelper.send("Added node at $pos")
+        }
+        button.scaleSetWH(100.0, 50.0)
+
+        list.addChild(x)
+        list.addChild(y)
+        list.addChild(z)
+        list.addChild(button)
         list.translateSnapTo(root.contents, Gui.SnapDir.Left, 10.0)
         list.translateSnapTo(root.contents, Gui.SnapDir.Top, 10.0)
+
+        root.contents.scaleSetWH(120.0, list.h)
         root.contents.addChild(list)
-
-        val button1 = GuiButton("Option one") { ChatHelper.send("Picked option one") }
-        button1.scaleSetWH(50.0, 30.0)
-        list.addChild(button1)
-
-        val button2 = GuiButton("Option two") { ChatHelper.send("Picked option two") }
-        button2.scaleSetWH(50.0, 30.0)
-        list.addChild(button2)
-
-        list.addChild(GuiText("text three"))
-        list.addChild(GuiText("text four"))
-        list.addChild(GuiText("text five"))
     }
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
@@ -92,6 +112,11 @@ object GuiManager : GuiScreen() {
         if(Mouse.getEventButtonState())
             handleMouseClick(lastMouseOn, Mouse.getEventButton())
         handleMouseHover(lastMouseOn)
+    }
+
+    override fun keyTyped(typedChar: Char, keyCode: Int) {
+        super.keyTyped(typedChar, keyCode)
+        focused?.onKeyTyped(typedChar, keyCode)
     }
 
     private fun handleMouseClick(lastMouseOn : GuiInteractable?, lastMouseButton : Int) {

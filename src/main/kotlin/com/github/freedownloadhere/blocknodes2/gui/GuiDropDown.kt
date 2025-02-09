@@ -8,6 +8,8 @@ class GuiDropDown(text : String) : GuiInteractable() {
     private val button = GuiButton("v") { contents.toggle() }
 
     override fun postInit() {
+        super.postInit()
+
         if(!this::contents.isInitialized) {
             contents = GuiWindow()
             contents.scaleSetWH(w, h)

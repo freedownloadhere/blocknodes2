@@ -22,5 +22,7 @@ abstract class GuiInteractable : Gui() {
 
     open fun onClick(button : Int) { }
 
+    open fun onKeyTyped(typedChar : Char, keyCode : Int) { }
+
     open fun onHover() { }
 }

@@ -18,7 +18,9 @@ abstract class Gui {
 
     enum class SnapDir { Left, Right, Top, Bottom }
 
-    open fun postInit() { }
+    open fun postInit() {
+        initialized = true
+    }
 
     open fun toggle() {
         toggled = !toggled
@@ -87,9 +89,6 @@ abstract class Gui {
     open fun scale(wMult : Double, hMult : Double) {
         w *= wMult
         h *= hMult
-
-        x *= wMult
-        y *= hMult
 
         for(child in children)
             child.scale(wMult, hMult)

@@ -7,13 +7,18 @@ import net.minecraft.client.renderer.GlStateManager
 import org.lwjgl.opengl.GL11
 import kotlin.math.min
 
-class GuiText(private val str : String) : Gui() {
+class GuiText(private var str : String) : Gui() {
     init {
         w = Minecraft.getMinecraft().fontRendererObj.getStringWidth(str).toDouble()
         h = Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT.toDouble()
     }
 
-    override fun postInit() { }
+    fun updateText(newStr : String) {
+        val oldW = Minecraft.getMinecraft().fontRendererObj.getStringWidth(str).toDouble()
+        val newW = Minecraft.getMinecraft().fontRendererObj.getStringWidth(newStr).toDouble()
+        str = newStr
+        w *= (newW / oldW)
+    }
 
     override fun draw() {
         val fr = Minecraft.getMinecraft().fontRendererObj

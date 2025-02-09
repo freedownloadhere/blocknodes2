@@ -8,10 +8,10 @@ class GuiButton(str : String, private val callback : () -> Unit) : GuiInteractab
     private var clickCooldown = 0L
 
     override fun postInit() {
+        super.postInit()
         displayedText.scaleExpandIn(this)
         displayedText.scale(0.75)
         displayedText.translateCenterIn(this)
-
         addChild(displayedText)
     }
 

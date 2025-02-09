@@ -6,8 +6,8 @@ import com.github.freedownloadhere.blocknodes2.action.NodeActionReleaseKey
 import com.github.freedownloadhere.blocknodes2.controls.KeyInputHelper
 import com.github.freedownloadhere.blocknodes2.gui.GuiManager
 import com.github.freedownloadhere.blocknodes2.node.Node
-import com.github.freedownloadhere.blocknodes2.node.NodeScene
 import com.github.freedownloadhere.blocknodes2.util.KeybindingManager
+import com.github.freedownloadhere.blocknodes2.util.ModState
 import net.minecraft.client.Minecraft
 import net.minecraft.client.settings.KeyBinding
 import net.minecraft.util.BlockPos
@@ -22,8 +22,6 @@ import org.lwjgl.input.Keyboard
 
 @Mod(modid = "blocknodes2", useMetadata = true)
 class Mod {
-    private val testScene = NodeScene()
-
     @Mod.EventHandler
     fun init(event: FMLInitializationEvent) {
         MinecraftForge.EVENT_BUS.register(this)
@@ -31,9 +29,9 @@ class Mod {
         KeybindingManager.addKey(KeyBinding("blocknodes2.togglegui", Keyboard.KEY_J, "blocknodes2.keys")) {
             Minecraft.getMinecraft().displayGuiScreen(GuiManager)
         }
-        testScene.nodeList.add(Node(BlockPos(0, 4, 0), listOf(NodeActionHoldKey(Minecraft.getMinecraft().gameSettings.keyBindForward))))
-        testScene.nodeList.add(Node(BlockPos(10, 4, 0), listOf(NodeActionReleaseKey(Minecraft.getMinecraft().gameSettings.keyBindForward))))
-        testScene.nodeList.add(Node(BlockPos(3, 4, 3), listOf(NodeActionLookAt(Vec3(0.0, 3.0, 0.0)))))
+        ModState.loadedNodeScene.nodeList.add(Node(BlockPos(0, 4, 0), listOf(NodeActionHoldKey(Minecraft.getMinecraft().gameSettings.keyBindForward))))
+        ModState.loadedNodeScene.nodeList.add(Node(BlockPos(10, 4, 0), listOf(NodeActionReleaseKey(Minecraft.getMinecraft().gameSettings.keyBindForward))))
+        ModState.loadedNodeScene.nodeList.add(Node(BlockPos(3, 4, 3), listOf(NodeActionLookAt(Vec3(0.0, 3.0, 0.0)))))
     }
 
     @SubscribeEvent
@@ -41,7 +39,7 @@ class Mod {
         if(Minecraft.getMinecraft().thePlayer == null) return
         if(Minecraft.getMinecraft().theWorld == null) return
 
-        testScene.render()
+        ModState.loadedNodeScene.render()
     }
 
     @SubscribeEvent
@@ -50,7 +48,7 @@ class Mod {
         if(Minecraft.getMinecraft().thePlayer == null) return
         if(Minecraft.getMinecraft().theWorld == null) return
 
-        testScene.update()
+        ModState.loadedNodeScene.update()
         KeyInputHelper.update()
     }
 }
