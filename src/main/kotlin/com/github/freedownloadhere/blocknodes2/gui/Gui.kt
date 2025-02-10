@@ -19,10 +19,9 @@ abstract class Gui {
     val flagList = GuiFlagList()
 
     enum class Flags(val v : Int) {
-        NoBG(1 shl 0),
-        NoBorder(1 shl 1),
-        ListHomogenousWidths(1 shl 2),
-        ListStaticSize(1 shl 3)
+        TransparentBG(1 shl 0),
+        ListHomogenousWidths(1 shl 1),
+        ListStaticSize(1 shl 2);
     }
 
     open fun toggle() {
@@ -109,6 +108,8 @@ abstract class Gui {
     }
 
     protected open fun draw() {
+        if(flagList.isActive(Flags.TransparentBG))
+            return
         if(this == GuiManager.focused)
             drawHL()
         else
