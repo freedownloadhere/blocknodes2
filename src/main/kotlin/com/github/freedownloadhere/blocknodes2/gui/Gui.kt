@@ -9,18 +9,14 @@ import org.lwjgl.opengl.GL11
 abstract class Gui {
     internal var x = 0.0
     internal var y = 0.0
-    internal var w = 1.0
-    internal var h = 1.0
+    internal var w = 0.0
+    internal var h = 0.0
     internal val children = mutableListOf<Gui>()
     var toggled = true
         private set
-    private var initialized = false
+    var bgColor = ColorHelper.GuiNeutral
 
     enum class SnapDir { Left, Right, Top, Bottom }
-
-    open fun postInit() {
-        initialized = true
-    }
 
     open fun toggle() {
         toggled = !toggled
@@ -32,10 +28,9 @@ abstract class Gui {
                 child.disable()
     }
 
-    open fun addChild(child : Gui) {
-        if(!child.initialized)
-            child.postInit()
+    open fun addChild(child : Gui) : Gui {
         children.add(child)
+        return child
     }
 
     open fun enable() {
@@ -57,7 +52,7 @@ abstract class Gui {
             child.translate(dx, dy)
     }
 
-    open fun translateSetXY(newX : Double, newY : Double) {
+    open fun setPosition(newX : Double, newY : Double) {
         translate(newX - x, newY - y)
     }
 
@@ -68,7 +63,7 @@ abstract class Gui {
     open fun translateCenter(xCenter : Double, yCenter : Double) {
         val dw = w / 2.0
         val dh = h / 2.0
-        translateSetXY(xCenter - dw, yCenter - dh)
+        setPosition(xCenter - dw, yCenter - dh)
     }
 
     open fun translateCenterIn(parent : Gui) {
@@ -79,10 +74,10 @@ abstract class Gui {
 
     open fun translateSnapTo(parent : Gui, type : SnapDir, padding : Double = 0.0) {
         when(type) {
-            SnapDir.Left -> translateSetXY(parent.x + padding, y)
-            SnapDir.Right -> translateSetXY(parent.x + parent.w - w - padding, y)
-            SnapDir.Top -> translateSetXY(x, parent.y + padding)
-            SnapDir.Bottom -> translateSetXY(x, parent.y + parent.h - h - padding)
+            SnapDir.Left -> setPosition(parent.x + padding, y)
+            SnapDir.Right -> setPosition(parent.x + parent.w - w - padding, y)
+            SnapDir.Top -> setPosition(x, parent.y + padding)
+            SnapDir.Bottom -> setPosition(x, parent.y + parent.h - h - padding)
         }
     }
 
@@ -98,17 +93,6 @@ abstract class Gui {
         scale(mult, mult)
     }
 
-    open fun scaleSetWH(newW : Double, newH : Double) {
-        scale(newW / w, newH / h)
-    }
-
-    open fun scaleExpandIn(parent : Gui) {
-        if(h * (parent.w / w) <= parent.h)
-            scale(parent.w / w)
-        else
-            scale(parent.h / h)
-    }
-
     open fun update(deltaTime : Long) {
         if(!toggled) return
         draw()
@@ -121,11 +105,10 @@ abstract class Gui {
             drawHL()
         else
             drawBorder()
-
-        drawBG()
+        drawBG(bgColor)
     }
 
-    protected fun drawBorder(col : ColorHelper = ColorHelper.GuiBorder) {
+    protected fun drawBorder(col : ColorHelper = ColorHelper.GuiNeutralLight) {
         val t = GuiManager.DefaultConfig.BORDER_THICKNESS
         GlStateManager.matrixMode(GL11.GL_MODELVIEW)
         GlStateManager.pushMatrix()
@@ -135,7 +118,7 @@ abstract class Gui {
         GlStateManager.popMatrix()
     }
 
-    protected fun drawBG(col : ColorHelper = ColorHelper.GuiBGDark) {
+    protected fun drawBG(col : ColorHelper = ColorHelper.GuiNeutral) {
         GlStateManager.matrixMode(GL11.GL_MODELVIEW)
         GlStateManager.pushMatrix()
         GlStateManager.translate(x, y, 0.0)
@@ -150,7 +133,7 @@ abstract class Gui {
         GlStateManager.pushMatrix()
         GlStateManager.translate(x - t1, y - t1, 0.0)
         GlStateManager.scale(w + 2 * t1, h + 2 * t1, 1.0)
-        drawRect(ColorHelper.GuiHL)
+        drawRect(ColorHelper.GuiPrimary)
         GlStateManager.popMatrix()
     }
 

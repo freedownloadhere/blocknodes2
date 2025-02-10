@@ -3,15 +3,14 @@ package com.github.freedownloadhere.blocknodes2.gui
 import com.github.freedownloadhere.blocknodes2.util.ColorHelper
 import kotlin.math.max
 
-class GuiButton(str : String, private val callback : () -> Unit) : GuiInteractable() {
+class GuiButton(
+    str : String,
+    private val callback : () -> Unit
+) : GuiList() {
     private val displayedText = GuiText(str)
     private var clickCooldown = 0L
 
-    override fun postInit() {
-        super.postInit()
-        displayedText.scaleExpandIn(this)
-        displayedText.scale(0.75)
-        displayedText.translateCenterIn(this)
+    init {
         addChild(displayedText)
     }
 
@@ -19,9 +18,9 @@ class GuiButton(str : String, private val callback : () -> Unit) : GuiInteractab
         drawBorder()
         drawBG(
             if(GuiManager.hovered == this && clickCooldown == 0L)
-                ColorHelper.GuiBGLight
+                ColorHelper.GuiNeutralLight
             else
-                ColorHelper.GuiBGDark
+                ColorHelper.GuiNeutral
         )
     }
 

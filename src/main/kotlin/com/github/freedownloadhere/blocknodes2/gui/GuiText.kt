@@ -9,15 +9,13 @@ import kotlin.math.min
 
 class GuiText(private var str : String) : Gui() {
     init {
-        w = Minecraft.getMinecraft().fontRendererObj.getStringWidth(str).toDouble()
-        h = Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT.toDouble()
+        updateText(str)
     }
 
     fun updateText(newStr : String) {
-        val oldW = Minecraft.getMinecraft().fontRendererObj.getStringWidth(str).toDouble()
-        val newW = Minecraft.getMinecraft().fontRendererObj.getStringWidth(newStr).toDouble()
         str = newStr
-        w *= (newW / oldW)
+        w = Minecraft.getMinecraft().fontRendererObj.getStringWidth(newStr).toDouble() * GuiManager.DefaultConfig.TEXT_SCALE
+        h = Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT.toDouble() * GuiManager.DefaultConfig.TEXT_SCALE
     }
 
     override fun draw() {

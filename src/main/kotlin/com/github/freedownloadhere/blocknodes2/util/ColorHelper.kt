@@ -4,11 +4,11 @@ import org.lwjgl.util.Color
 
 enum class ColorHelper(val r : Int, val g : Int, val b : Int, val a : Int) {
     White(255, 255, 255, 255),
-    GuiBGDarkest(30, 30, 30, 255),
-    GuiBGDark(50, 50, 50, 255),
-    GuiBGLight(70, 70, 70, 255),
-    GuiBorder(90, 90, 90, 255),
-    GuiHL(93, 43, 144, 255),
+    GuiNeutralDark(30, 30, 30, 255),
+    GuiNeutral(50, 50, 50, 255),
+    GuiNeutralLight(70, 70, 70, 255),
+    GuiPrimary(93, 43, 144, 255),
+
     NodeInactive(53, 193, 225, 60),
     NodeActive(225, 53, 107, 60);
 

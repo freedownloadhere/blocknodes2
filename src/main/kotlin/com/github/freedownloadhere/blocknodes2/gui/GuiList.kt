@@ -1,13 +1,32 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
-class GuiList : GuiInteractable() {
-    var spacing = 0.0
+import kotlin.math.max
 
-    override fun draw() { }
+open class GuiList(
+    private val vSpacing : Int = 10,
+    private val hSpacing : Int = 10
+) : GuiInteractable() {
+    override fun addChild(child: Gui) : Gui {
+        extendList(child)
+        return super.addChild(child)
+    }
 
-    override fun addChild(child: Gui) {
-        super.addChild(child)
-        child.translateSetXY(x, y + h)
-        h += child.h + spacing
+    override fun update(deltaTime: Long) {
+        updateSize()
+        super.update(deltaTime)
+    }
+
+    private fun updateSize() {
+        w = 0.0
+        h = 0.0
+        for(child in children)
+            extendList(child)
+    }
+
+    private fun extendList(elem : Gui) {
+        h = max(0.0, h - hSpacing)
+        elem.setPosition(x + vSpacing, y + h + hSpacing)
+        h += elem.h + 2 * hSpacing
+        w = max(w, elem.w + 2 * vSpacing)
     }
 }
