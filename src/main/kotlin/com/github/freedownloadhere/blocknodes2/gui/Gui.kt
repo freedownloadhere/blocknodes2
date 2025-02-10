@@ -1,6 +1,7 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
 import com.github.freedownloadhere.blocknodes2.util.ColorHelper
+import com.github.freedownloadhere.blocknodes2.util.GuiFlagList
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
@@ -15,8 +16,14 @@ abstract class Gui {
     var toggled = true
         private set
     var bgColor = ColorHelper.GuiNeutral
+    val flagList = GuiFlagList()
 
-    enum class SnapDir { Left, Right, Top, Bottom }
+    enum class Flags(val v : Int) {
+        NoBG(1 shl 0),
+        NoBorder(1 shl 1),
+        ListHomogenousWidths(1 shl 2),
+        ListStaticSize(1 shl 3)
+    }
 
     open fun toggle() {
         toggled = !toggled
@@ -72,6 +79,7 @@ abstract class Gui {
         translateCenter(xCenter, yCenter)
     }
 
+    enum class SnapDir { Left, Right, Top, Bottom }
     open fun translateSnapTo(parent : Gui, type : SnapDir, padding : Double = 0.0) {
         when(type) {
             SnapDir.Left -> setPosition(parent.x + padding, y)

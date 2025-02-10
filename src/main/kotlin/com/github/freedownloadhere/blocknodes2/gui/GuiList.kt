@@ -12,7 +12,8 @@ open class GuiList(
     }
 
     override fun update(deltaTime: Long) {
-        updateSize()
+        if(flagList.isNotActive(Flags.ListStaticSize))
+            updateSize()
         super.update(deltaTime)
     }
 
@@ -21,6 +22,10 @@ open class GuiList(
         h = 0.0
         for(child in children)
             extendList(child)
+
+        if(flagList.isActive(Flags.ListHomogenousWidths))
+            for(child in children)
+                child.w = w - 2 * vSpacing
     }
 
     private fun extendList(elem : Gui) {
