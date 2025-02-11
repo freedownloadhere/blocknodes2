@@ -1,13 +1,17 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
+import com.github.freedownloadhere.blocknodes2.util.ColorHelper
 import org.lwjgl.input.Keyboard
 import org.lwjgl.opengl.GL11
 
-class GuiTextBox : GuiList() {
-    private var contents : String = "Your text here"
-    private val guiText = GuiText(contents)
+class GuiTextBox(private val placeholder : String = "Type something...") : GuiList() {
+    var contents : String = ""
+        private set
+    private val guiText = GuiText(placeholder)
 
     init {
+        guiText.textCol = ColorHelper.GuiNeutralLight
+        bgColor = ColorHelper.GuiNeutralDark
         addChild(guiText)
     }
 
@@ -18,7 +22,14 @@ class GuiTextBox : GuiList() {
         else if(!typedChar.isISOControl())
             contents += typedChar
 
-        guiText.updateText("$contents ")
+        if(contents.isEmpty()) {
+            guiText.textCol = ColorHelper.GuiNeutralLight
+            guiText.updateText("$placeholder ")
+        }
+        else {
+            guiText.textCol = ColorHelper.White
+            guiText.updateText("$contents ")
+        }
     }
 
     override fun update(deltaTime: Long) {

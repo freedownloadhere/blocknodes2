@@ -8,6 +8,8 @@ import org.lwjgl.opengl.GL11
 import kotlin.math.min
 
 class GuiText(private var str : String) : Gui() {
+    var textCol = ColorHelper.White
+
     init {
         updateText(str)
     }
@@ -36,7 +38,7 @@ class GuiText(private var str : String) : Gui() {
 
         Minecraft.getMinecraft().textureManager.bindTexture(fontTex)
 
-        fr.drawStringWithShadow(str, 0.0f, 0.0f, ColorHelper.White.toPackedARGB())
+        fr.drawStringWithShadow(str, 0.0f, 0.0f, textCol.toPackedARGB())
 
         GlStateManager.disableBlend()
         GlStateManager.disableTexture2D()

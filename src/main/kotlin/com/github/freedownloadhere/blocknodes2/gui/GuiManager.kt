@@ -1,8 +1,12 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
+import com.github.freedownloadhere.blocknodes2.node.Node
+import com.github.freedownloadhere.blocknodes2.util.ChatHelper
+import com.github.freedownloadhere.blocknodes2.util.ModState
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.GlStateManager
+import net.minecraft.util.BlockPos
 import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.GL11
 import java.time.Instant
@@ -30,22 +34,20 @@ object GuiManager : GuiScreen() {
         height = Minecraft.getMinecraft().displayHeight
         lastTime = Instant.now().toEpochMilli()
 
-        root = GuiWindow("Epic window test")
+        root = GuiWindow("Add Node")
         root.setPosition(300.0, 200.0)
         with(root.contents) {
-            this.addChild(GuiText("Check out the list:"))
-
-            with(this.addChild(GuiList()) as GuiList) {
-                this.addChild(GuiText("Thing #1"))
-                this.addChild(GuiText("Thing #2"))
-                this.addChild(GuiText("Thing #3"))
-
-                with(this.addChild(GuiList()) as GuiList) {
-                    this.addChild(GuiText("This is a sample text to make gui big"))
-                    this.addChild(GuiButton("Activate") { })
-                    this.addChild(GuiButton("Foo bar") { })
-                }
-            }
+            this.addChild(GuiText("Input X, Y, Z below:"))
+            val list = this.addChild(GuiList()) as GuiList
+            val x = list.addChild(GuiTextBox("X Position")) as GuiTextBox
+            val y = list.addChild(GuiTextBox("Y Position")) as GuiTextBox
+            val z = list.addChild(GuiTextBox("Z Position")) as GuiTextBox
+            this.addChild(GuiButton("Add") {
+                val pos = BlockPos(x.contents.toInt(), y.contents.toInt(), z.contents.toInt())
+                val node = Node(pos, listOf())
+                ModState.loadedNodeScene.nodeList.add(node)
+                ChatHelper.send("Added new node at $pos")
+            })
         }
     }
 
