@@ -21,7 +21,12 @@ abstract class Gui {
     enum class Flags(val v : Int) {
         TransparentBG(1 shl 0),
         ListHomogenousWidths(1 shl 1),
-        ListStaticSize(1 shl 2);
+        ListStaticWidth(1 shl 2),
+        ListStaticHeight(1 shl 3),
+        ListStaticSize(ListStaticWidth.v or ListStaticHeight.v),
+
+        // specifically the parent. doesnt affect children
+        ShouldNotInteract(1 shl 4)
     }
 
     open fun toggle() {
@@ -49,6 +54,11 @@ abstract class Gui {
         toggled = false
         for(child in children)
             child.disable()
+    }
+
+    open fun setSize(newW : Double, newH : Double) {
+        w = newW
+        h = newH
     }
 
     open fun translate(dx : Double, dy : Double) {

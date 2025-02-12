@@ -19,10 +19,10 @@ class GuiFlagList {
     }
 
     fun isActive(flag : Gui.Flags) : Boolean {
-        return (flags and flag.v) != 0
+        return (flags and flag.v) == flag.v
     }
 
     fun isNotActive(flag : Gui.Flags) : Boolean {
-        return (flags and flag.v) == 0
+        return (flags and flag.v) != flag.v
     }
 }

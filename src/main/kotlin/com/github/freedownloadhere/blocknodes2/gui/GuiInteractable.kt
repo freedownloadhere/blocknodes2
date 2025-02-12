@@ -8,6 +8,8 @@ abstract class GuiInteractable : Gui() {
         for(child in children) {
             if(child is GuiInteractable) {
                 val gui = child.getMouseOn(mouseX, mouseY)
+                if(gui == child && child.flagList.isActive(Flags.ShouldNotInteract))
+                    continue
                 if(gui != null)
                     return gui
             }
@@ -25,4 +27,6 @@ abstract class GuiInteractable : Gui() {
     open fun onKeyTyped(typedChar : Char, keyCode : Int) { }
 
     open fun onHover() { }
+
+    open fun onScroll(d : Int) { }
 }
