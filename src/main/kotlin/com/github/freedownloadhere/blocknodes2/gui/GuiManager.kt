@@ -41,7 +41,9 @@ object GuiManager : GuiScreen() {
         with(root.contents) {
             with(this.addChild(GuiScrollableList(100, 300)) as GuiScrollableList) {
                 for(i in 1..10)
-                    this.contents.addChild(GuiButton("button $i") { })
+                    this.contents.addChild(GuiButton("button $i") {
+                        ChatHelper.send("Clicked button $i")
+                    })
             }
         }
     }

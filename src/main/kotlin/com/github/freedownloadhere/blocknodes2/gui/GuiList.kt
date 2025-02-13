@@ -3,9 +3,14 @@ package com.github.freedownloadhere.blocknodes2.gui
 import kotlin.math.max
 
 open class GuiList(
-    private var vSpacing : Int = 10,
-    private var hSpacing : Int = 10
+    vS : Int = 10,
+    hS : Int = 10
 ) : GuiInteractable() {
+    var vSpacing = vS
+        private set
+    var hSpacing = hS
+        private set
+
     fun setSpacing(newVSpacing : Int, newHSpacing : Int) {
         vSpacing = newVSpacing
         hSpacing = newHSpacing
