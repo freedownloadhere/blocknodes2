@@ -1,5 +1,7 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
+import com.github.freedownloadhere.blocknodes2.action.NodeAction
+import com.github.freedownloadhere.blocknodes2.action.NodeActionHoldKey
 import com.github.freedownloadhere.blocknodes2.node.Node
 import com.github.freedownloadhere.blocknodes2.util.ChatHelper
 import com.github.freedownloadhere.blocknodes2.util.ModState
@@ -39,12 +41,35 @@ object GuiManager : GuiScreen() {
         root = GuiWindow("Add Node")
         root.setPosition(300.0, 200.0)
         with(root.contents) {
-            with(this.addChild(GuiScrollableList(100, 300)) as GuiScrollableList) {
-                for(i in 1..10)
-                    this.contents.addChild(GuiButton("button $i") {
-                        ChatHelper.send("Clicked button $i")
-                    })
-            }
+            this.addChild(GuiText("Coordinates:"))
+            val xText = this.addChild(GuiTextBox("X Position")) as GuiTextBox
+            val yText = this.addChild(GuiTextBox("Y Position")) as GuiTextBox
+            val zText = this.addChild(GuiTextBox("Z Position")) as GuiTextBox
+            this.addChild(GuiText("Actions:"))
+            val list = mutableListOf<NodeAction>()
+            val actionListGui = this.addChild(GuiScrollableList(100, 200)) as GuiScrollableList
+            this.addChild(GuiButton("Add Walk Forward") {
+                list.add(NodeActionHoldKey(Minecraft.getMinecraft().gameSettings.keyBindForward))
+                actionListGui.contents.addChild(GuiText("Walk Forward"))
+            })
+            this.addChild(GuiButton("Add Walk Backward") {
+                list.add(NodeActionHoldKey(Minecraft.getMinecraft().gameSettings.keyBindBack))
+                actionListGui.contents.addChild(GuiText("Walk Backward"))
+            })
+            this.addChild(GuiButton("Add Walk Left") {
+                list.add(NodeActionHoldKey(Minecraft.getMinecraft().gameSettings.keyBindLeft))
+                actionListGui.contents.addChild(GuiText("Walk Left"))
+            })
+            this.addChild(GuiButton("Add") {
+                val pos = BlockPos(
+                    xText.contents.toInt(),
+                    yText.contents.toInt(),
+                    zText.contents.toInt()
+                )
+                val node = Node(pos, list)
+                ModState.loadedNodeScene.nodeList.add(node)
+                ChatHelper.send("Added node")
+            })
         }
     }
 
