@@ -38,29 +38,32 @@ object GuiManager : GuiScreen() {
         height = Minecraft.getMinecraft().displayHeight
         lastTime = Instant.now().toEpochMilli()
 
-        root = GuiWindow("Add Node")
-        root.setPosition(300.0, 200.0)
+        root = GuiWindow(300, 200, "Add Node")
+
         with(root.contents) {
-            this.addChild(GuiText("Coordinates:"))
-            val xText = this.addChild(GuiTextBox("X Position")) as GuiTextBox
-            val yText = this.addChild(GuiTextBox("Y Position")) as GuiTextBox
-            val zText = this.addChild(GuiTextBox("Z Position")) as GuiTextBox
-            this.addChild(GuiText("Actions:"))
+            newText("Coordinates:")
+            val xText = newTextBox("X Position")
+            val yText = newTextBox("Y Position")
+            val zText = newTextBox("Z Position")
+            newText("Actions:")
+
             val list = mutableListOf<NodeAction>()
-            val actionListGui = this.addChild(GuiScrollableList(100, 200)) as GuiScrollableList
-            this.addChild(GuiButton("Add Walk Forward") {
+            val actionListGui = newScrollableList(100, 200)
+
+            newButton("Add Walk Forward") {
                 list.add(NodeActionHoldKey(Minecraft.getMinecraft().gameSettings.keyBindForward))
                 actionListGui.contents.addChild(GuiText("Walk Forward"))
-            })
-            this.addChild(GuiButton("Add Walk Backward") {
+            }
+            newButton("Add Walk Backward") {
                 list.add(NodeActionHoldKey(Minecraft.getMinecraft().gameSettings.keyBindBack))
                 actionListGui.contents.addChild(GuiText("Walk Backward"))
-            })
-            this.addChild(GuiButton("Add Walk Left") {
+            }
+            newButton("Add Walk Left") {
                 list.add(NodeActionHoldKey(Minecraft.getMinecraft().gameSettings.keyBindLeft))
                 actionListGui.contents.addChild(GuiText("Walk Left"))
-            })
-            this.addChild(GuiButton("Add") {
+            }
+
+            newButton("Add") {
                 val pos = BlockPos(
                     xText.contents.toInt(),
                     yText.contents.toInt(),
@@ -69,7 +72,7 @@ object GuiManager : GuiScreen() {
                 val node = Node(pos, list)
                 ModState.loadedNodeScene.nodeList.add(node)
                 ChatHelper.send("Added node")
-            })
+            }
         }
     }
 

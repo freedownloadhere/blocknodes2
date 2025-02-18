@@ -6,7 +6,7 @@ open class GuiCroppedContainer(width : Int, height : Int) : GuiList() {
     init {
         w = width.toDouble()
         h = height.toDouble()
-        flagList.add(Flags.ListStaticHeight)
+        flagList.add(Flags.ListStaticSize)
     }
 
     override fun update(deltaTime: Long) {

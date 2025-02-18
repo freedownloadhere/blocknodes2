@@ -16,6 +16,35 @@ open class GuiList(
         hSpacing = newHSpacing
     }
 
+    // dont like this
+    // generics no work also?
+    // find better approach
+
+    fun newText(contents : String) : GuiText {
+        val gui = GuiText(contents)
+        addChild(gui)
+        return gui
+    }
+
+    fun newTextBox(placeholder : String) : GuiTextBox {
+        val gui = GuiTextBox(placeholder)
+        addChild(gui)
+        return gui
+    }
+
+    fun newButton(text : String, callback : () -> Unit) : GuiButton {
+        val gui = GuiButton(text, callback)
+        addChild(gui)
+        return gui
+    }
+
+    fun newScrollableList(width : Int, height : Int) : GuiScrollableList {
+        val gui = GuiScrollableList(width, height)
+        addChild(gui)
+        gui.setAlignment(gui.y)
+        return gui
+    }
+
     override fun addChild(child: Gui) : Gui {
         extendList(child)
         return super.addChild(child)
