@@ -5,8 +5,7 @@ import kotlin.math.min
 
 class GuiScrollableList(width : Int, height : Int) : GuiCroppedContainer(width, height) {
     val contents = GuiList()
-    private var displayY : Double = 0.0
-    private var originY : Double = 0.0
+    private var movedY : Double = 0.0
 
     init {
         addChild(contents)
@@ -14,17 +13,26 @@ class GuiScrollableList(width : Int, height : Int) : GuiCroppedContainer(width, 
         contents.flagList.add(Flags.TransparentBG)
     }
 
-    fun setAlignment(origin : Double) {
-        originY = origin
-        displayY = origin
+    fun updateAlignment() {
+        movedY = y
     }
 
     override fun onScroll(d: Int) {
         if(contents.h <= h)
             return
-        displayY += d
-        displayY = min(displayY, originY)
-        displayY = max(displayY, originY - contents.h + h)
-        contents.setPosition(contents.x, displayY)
+        movedY += d
+        movedY = min(movedY, y)
+        movedY = max(movedY, y - contents.h + h)
+        contents.setPosition(contents.x, movedY)
+    }
+
+    override fun update(deltaTime: Long) {
+        for(child in contents.children) {
+            if(child.y + child.h < y || child.y > y + h)
+                child.disable()
+            else
+                child.enable()
+        }
+        super.update(deltaTime)
     }
 }

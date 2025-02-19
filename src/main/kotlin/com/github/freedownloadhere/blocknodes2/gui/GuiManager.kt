@@ -1,20 +1,15 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
-import com.github.freedownloadhere.blocknodes2.action.NodeAction
-import com.github.freedownloadhere.blocknodes2.action.NodeActionHoldKey
-import com.github.freedownloadhere.blocknodes2.node.Node
 import com.github.freedownloadhere.blocknodes2.util.ChatHelper
-import com.github.freedownloadhere.blocknodes2.util.ModState
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.GlStateManager
-import net.minecraft.util.BlockPos
 import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.GL11
 import java.time.Instant
 
 object GuiManager : GuiScreen() {
-    private lateinit var root : GuiWindow
+    private lateinit var window : GuiWindow
 
     private var lastMouseX = -1
     private var lastMouseY = -1
@@ -38,42 +33,15 @@ object GuiManager : GuiScreen() {
         height = Minecraft.getMinecraft().displayHeight
         lastTime = Instant.now().toEpochMilli()
 
-        root = GuiWindow(300, 200, "Add Node")
-
-        with(root.contents) {
-            newText("Coordinates:")
-            val xText = newTextBox("X Position")
-            val yText = newTextBox("Y Position")
-            val zText = newTextBox("Z Position")
-            newText("Actions:")
-
-            val list = mutableListOf<NodeAction>()
-            val actionListGui = newScrollableList(100, 200)
-
-            newButton("Add Walk Forward") {
-                list.add(NodeActionHoldKey(Minecraft.getMinecraft().gameSettings.keyBindForward))
-                actionListGui.contents.addChild(GuiText("Walk Forward"))
-            }
-            newButton("Add Walk Backward") {
-                list.add(NodeActionHoldKey(Minecraft.getMinecraft().gameSettings.keyBindBack))
-                actionListGui.contents.addChild(GuiText("Walk Backward"))
-            }
-            newButton("Add Walk Left") {
-                list.add(NodeActionHoldKey(Minecraft.getMinecraft().gameSettings.keyBindLeft))
-                actionListGui.contents.addChild(GuiText("Walk Left"))
-            }
-
-            newButton("Add") {
-                val pos = BlockPos(
-                    xText.contents.toInt(),
-                    yText.contents.toInt(),
-                    zText.contents.toInt()
-                )
-                val node = Node(pos, list)
-                ModState.loadedNodeScene.nodeList.add(node)
-                ChatHelper.send("Added node")
-            }
-        }
+        window = GuiWindow(300, 200, "Scroll list test")
+        val list = window.contents.newScrollableList(400, 300)
+        list.contents.newText("This is a scrollable list")
+        for(i in 1..5)
+            list.contents.newButton("Button $i") { ChatHelper.send("Clicked button $i") }
+        list.contents.newText("I am just a text")
+        list.contents.newTextBox("Type something here")
+        for(i in 5..10)
+            list.contents.newButton("Button $i") { ChatHelper.send("Clicked button $i") }
     }
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
@@ -95,7 +63,7 @@ object GuiManager : GuiScreen() {
         GlStateManager.disableTexture2D()
         GlStateManager.disableLighting()
 
-        root.update(deltaTime)
+        window.update(deltaTime)
 
         GlStateManager.enableLighting()
         GlStateManager.enableTexture2D()
@@ -111,7 +79,7 @@ object GuiManager : GuiScreen() {
         lastMouseY = height - Mouse.getEventY() - 1
         lastDwheel = Mouse.getEventDWheel()
 
-        val lastMouseOn = root.getMouseOn(lastMouseX.toDouble(), lastMouseY.toDouble())
+        val lastMouseOn = window.getMouseOn(lastMouseX.toDouble(), lastMouseY.toDouble())
 
         if(Mouse.getEventButtonState())
             handleMouseClick(lastMouseOn, Mouse.getEventButton())

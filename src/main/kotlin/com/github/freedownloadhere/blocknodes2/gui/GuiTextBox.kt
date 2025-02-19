@@ -2,7 +2,6 @@ package com.github.freedownloadhere.blocknodes2.gui
 
 import com.github.freedownloadhere.blocknodes2.util.ColorHelper
 import org.lwjgl.input.Keyboard
-import org.lwjgl.opengl.GL11
 
 class GuiTextBox(private val placeholder : String = "Type something...") : GuiList() {
     var contents : String = ""
@@ -34,9 +33,9 @@ class GuiTextBox(private val placeholder : String = "Type something...") : GuiLi
 
     override fun update(deltaTime: Long) {
         draw()
-        GL11.glEnable(GL11.GL_SCISSOR_TEST)
-        GL11.glScissor(x.toInt(), GuiManager.height - y.toInt() - h.toInt(), w.toInt(), h.toInt())
+        //GL11.glEnable(GL11.GL_SCISSOR_TEST)
+        //GL11.glScissor(x.toInt(), GuiManager.height - y.toInt() - h.toInt(), w.toInt(), h.toInt())
         guiText.update(deltaTime)
-        GL11.glDisable(GL11.GL_SCISSOR_TEST)
+        //GL11.glDisable(GL11.GL_SCISSOR_TEST)
     }
 }

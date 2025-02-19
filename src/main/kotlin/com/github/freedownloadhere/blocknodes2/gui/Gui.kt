@@ -39,7 +39,7 @@ abstract class Gui {
                 child.disable()
     }
 
-    open fun addChild(child : Gui) : Gui {
+    protected open fun addChild(child : Gui) : Gui {
         children.add(child)
         return child
     }

@@ -41,7 +41,7 @@ open class GuiList(
     fun newScrollableList(width : Int, height : Int) : GuiScrollableList {
         val gui = GuiScrollableList(width, height)
         addChild(gui)
-        gui.setAlignment(gui.y)
+        gui.updateAlignment()
         return gui
     }
 
@@ -51,11 +51,11 @@ open class GuiList(
     }
 
     override fun update(deltaTime: Long) {
-        updateSize()
+        dynamicResize()
         super.update(deltaTime)
     }
 
-    private fun updateSize() {
+    private fun dynamicResize() {
         if(flagList.isActive(Flags.ListStaticSize))
             return
 
