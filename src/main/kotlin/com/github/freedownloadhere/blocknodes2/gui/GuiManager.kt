@@ -1,6 +1,6 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
-import com.github.freedownloadhere.blocknodes2.util.ChatHelper
+import com.github.freedownloadhere.blocknodes2.node.NodeSceneManager
 import com.github.freedownloadhere.blocknodes2.util.ScissorStack
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL11
 import java.time.Instant
 
 object GuiManager : GuiScreen() {
-    private lateinit var window : GuiWindow
+    lateinit var base : GuiInteractable
 
     private var lastMouseX = -1
     private var lastMouseY = -1
@@ -34,25 +34,14 @@ object GuiManager : GuiScreen() {
         height = Minecraft.getMinecraft().displayHeight
         lastTime = Instant.now().toEpochMilli()
 
-        window = GuiWindow(300, 200, "Scroll list test")
+        base = GuiInteractable()
+        base.flagList.add(Gui.Flags.TransparentBG)
+        base.x = 0.0
+        base.y = 0.0
+        base.w = width.toDouble()
+        base.h = height.toDouble()
 
-        val list = window.contents.newScrollableList(400, 300)
-        list.contents.newText("This is a scrollable list")
-        for(i in 1..5)
-            list.contents.newButton("Button $i") { ChatHelper.send("Clicked button $i") }
-        list.contents.newText("I am just a text")
-        list.contents.newTextBox("Type something here")
-        for(i in 5..10)
-            list.contents.newButton("Button $i") { ChatHelper.send("Clicked button $i") }
-
-        val list1 = list.contents.newScrollableList(400, 300)
-        list1.contents.newText("This is another scrollable list")
-        for(i in 1..5)
-            list1.contents.newButton("Button $i") { ChatHelper.send("Clicked another button $i") }
-        list1.contents.newText("I am just another text")
-        list1.contents.newTextBox("Type something else here")
-        for(i in 5..10)
-            list1.contents.newButton("Button $i") { ChatHelper.send("Clicked another button $i") }
+        base.addChild(NodeSceneManager.requestGui())
     }
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
@@ -75,7 +64,7 @@ object GuiManager : GuiScreen() {
         GlStateManager.disableLighting()
 
         ScissorStack.enable()
-        window.update(deltaTime)
+        base.update(deltaTime)
         ScissorStack.disable()
 
         GlStateManager.enableLighting()
@@ -92,7 +81,7 @@ object GuiManager : GuiScreen() {
         lastMouseY = height - Mouse.getEventY() - 1
         lastDwheel = Mouse.getEventDWheel()
 
-        val lastMouseOn = window.getMouseOn(lastMouseX.toDouble(), lastMouseY.toDouble())
+        val lastMouseOn = base.getMouseOn(lastMouseX.toDouble(), lastMouseY.toDouble())
 
         if(Mouse.getEventButtonState())
             handleMouseClick(lastMouseOn, Mouse.getEventButton())

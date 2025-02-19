@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import org.lwjgl.opengl.GL11
 
-abstract class Gui {
+open class Gui {
     internal var x = 0.0
     internal var y = 0.0
     internal var w = 0.0
@@ -39,7 +39,7 @@ abstract class Gui {
                 child.disable()
     }
 
-    protected open fun addChild(child : Gui) : Gui {
+    open fun addChild(child : Gui) : Gui {
         children.add(child)
         return child
     }

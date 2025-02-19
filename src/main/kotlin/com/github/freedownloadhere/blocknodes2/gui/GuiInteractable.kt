@@ -1,6 +1,6 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
-abstract class GuiInteractable : Gui() {
+open class GuiInteractable : Gui() {
     fun getMouseOn(mouseX : Double, mouseY : Double) : GuiInteractable? {
         if(!toggled)
             return null

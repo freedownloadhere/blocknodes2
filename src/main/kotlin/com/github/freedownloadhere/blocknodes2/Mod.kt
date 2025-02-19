@@ -6,8 +6,8 @@ import com.github.freedownloadhere.blocknodes2.action.NodeActionReleaseKey
 import com.github.freedownloadhere.blocknodes2.controls.KeyInputHelper
 import com.github.freedownloadhere.blocknodes2.gui.GuiManager
 import com.github.freedownloadhere.blocknodes2.node.Node
+import com.github.freedownloadhere.blocknodes2.node.NodeSceneManager
 import com.github.freedownloadhere.blocknodes2.util.KeybindingManager
-import com.github.freedownloadhere.blocknodes2.util.ModState
 import net.minecraft.client.Minecraft
 import net.minecraft.client.settings.KeyBinding
 import net.minecraft.util.BlockPos
@@ -29,9 +29,6 @@ class Mod {
         KeybindingManager.addKey(KeyBinding("blocknodes2.togglegui", Keyboard.KEY_J, "blocknodes2.keys")) {
             Minecraft.getMinecraft().displayGuiScreen(GuiManager)
         }
-        ModState.loadedNodeScene.nodeList.add(Node(BlockPos(0, 4, 0), listOf(NodeActionHoldKey(Minecraft.getMinecraft().gameSettings.keyBindForward))))
-        ModState.loadedNodeScene.nodeList.add(Node(BlockPos(10, 4, 0), listOf(NodeActionReleaseKey(Minecraft.getMinecraft().gameSettings.keyBindForward))))
-        ModState.loadedNodeScene.nodeList.add(Node(BlockPos(3, 4, 3), listOf(NodeActionLookAt(Vec3(0.0, 3.0, 0.0)))))
     }
 
     @SubscribeEvent
@@ -39,7 +36,7 @@ class Mod {
         if(Minecraft.getMinecraft().thePlayer == null) return
         if(Minecraft.getMinecraft().theWorld == null) return
 
-        ModState.loadedNodeScene.render()
+        NodeSceneManager.loadedScene?.render()
     }
 
     @SubscribeEvent
@@ -48,7 +45,7 @@ class Mod {
         if(Minecraft.getMinecraft().thePlayer == null) return
         if(Minecraft.getMinecraft().theWorld == null) return
 
-        ModState.loadedNodeScene.update()
+        NodeSceneManager.loadedScene?.update()
         KeyInputHelper.update()
     }
 }
