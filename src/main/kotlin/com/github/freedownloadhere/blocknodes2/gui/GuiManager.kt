@@ -1,6 +1,7 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
 import com.github.freedownloadhere.blocknodes2.util.ChatHelper
+import com.github.freedownloadhere.blocknodes2.util.ScissorStack
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.GlStateManager
@@ -34,6 +35,7 @@ object GuiManager : GuiScreen() {
         lastTime = Instant.now().toEpochMilli()
 
         window = GuiWindow(300, 200, "Scroll list test")
+
         val list = window.contents.newScrollableList(400, 300)
         list.contents.newText("This is a scrollable list")
         for(i in 1..5)
@@ -42,6 +44,15 @@ object GuiManager : GuiScreen() {
         list.contents.newTextBox("Type something here")
         for(i in 5..10)
             list.contents.newButton("Button $i") { ChatHelper.send("Clicked button $i") }
+
+        val list1 = list.contents.newScrollableList(400, 300)
+        list1.contents.newText("This is another scrollable list")
+        for(i in 1..5)
+            list1.contents.newButton("Button $i") { ChatHelper.send("Clicked another button $i") }
+        list1.contents.newText("I am just another text")
+        list1.contents.newTextBox("Type something else here")
+        for(i in 5..10)
+            list1.contents.newButton("Button $i") { ChatHelper.send("Clicked another button $i") }
     }
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
@@ -63,7 +74,9 @@ object GuiManager : GuiScreen() {
         GlStateManager.disableTexture2D()
         GlStateManager.disableLighting()
 
+        ScissorStack.enable()
         window.update(deltaTime)
+        ScissorStack.disable()
 
         GlStateManager.enableLighting()
         GlStateManager.enableTexture2D()
