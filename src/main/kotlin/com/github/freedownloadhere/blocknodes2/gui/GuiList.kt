@@ -6,7 +6,7 @@ import kotlin.reflect.KMutableProperty0
 open class GuiList(
     vS : Int = 10,
     hS : Int = 10
-) : GuiInteractable() {
+) : GuiInteractable(), IGuiDrawable {
     var vSpacing = vS
         private set
     var hSpacing = hS
@@ -82,5 +82,9 @@ open class GuiList(
         }
         if(flagList.isNotActive(Flags.ListStaticWidth))
             w = max(w, elem.w + 2 * vSpacing)
+    }
+
+    override fun draw() {
+        GuiRenderer.drawBasicBG(this)
     }
 }

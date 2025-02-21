@@ -15,8 +15,4 @@ open class GuiCroppedContainer(width : Int, height : Int) : GuiList(0, 0) {
         super.update(deltaTime)
         ScissorStack.pop()
     }
-
-    override fun draw() {
-        super.draw()
-    }
 }

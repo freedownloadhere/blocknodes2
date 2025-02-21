@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
 import org.lwjgl.opengl.GL11
 
-class GuiText(private var str : String) : Gui() {
+class GuiText(private var str : String) : Gui(), IGuiDrawable {
     var textCol = ColorHelper.White
 
     init {

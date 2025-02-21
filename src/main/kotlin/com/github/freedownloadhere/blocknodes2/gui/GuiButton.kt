@@ -6,22 +6,12 @@ import kotlin.math.max
 class GuiButton(
     str : String,
     private val callback : () -> Unit
-) : GuiList() {
+) : GuiList(), IGuiDrawable {
     private val displayedText = GuiText(str)
     private var clickCooldown = 0L
 
     init {
         addChild(displayedText)
-    }
-
-    override fun draw() {
-        drawBorder()
-        drawBG(
-            if(GuiManager.hovered == this && clickCooldown == 0L)
-                ColorHelper.GuiNeutralLight
-            else
-                ColorHelper.GuiNeutral
-        )
     }
 
     override fun onClick(button: Int) {
@@ -34,5 +24,13 @@ class GuiButton(
     override fun update(deltaTime: Long) {
         clickCooldown = max(0L, clickCooldown - deltaTime)
         super.update(deltaTime)
+    }
+
+    override fun draw() {
+        val bgCol =
+            if(GuiManager.hovered == this && clickCooldown == 0L) ColorHelper.GuiNeutralLight
+            else ColorHelper.GuiNeutral
+        GuiRenderer.drawBorder(this)
+        GuiRenderer.drawBG(this, bgCol)
     }
 }

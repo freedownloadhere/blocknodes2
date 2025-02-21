@@ -1,8 +1,6 @@
 package com.github.freedownloadhere.blocknodes2.node
 
 import com.github.freedownloadhere.blocknodes2.gui.EzGui
-import com.github.freedownloadhere.blocknodes2.gui.GuiManager
-import com.github.freedownloadhere.blocknodes2.gui.GuiWindow
 import com.github.freedownloadhere.blocknodes2.util.ChatHelper
 
 object NodeSceneManager {
