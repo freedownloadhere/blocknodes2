@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import org.lwjgl.opengl.GL11
+import kotlin.math.abs
 
 open class Gui {
     internal var x = 0.0
@@ -20,7 +21,6 @@ open class Gui {
 
     enum class Flags(val v : Int) {
         TransparentBG(1 shl 0),
-        ListHomogenousWidths(1 shl 1),
         ListStaticWidth(1 shl 2),
         ListStaticHeight(1 shl 3),
         ListStaticSize(ListStaticWidth.v or ListStaticHeight.v),
@@ -56,11 +56,6 @@ open class Gui {
             child.disable()
     }
 
-    open fun setSize(newW : Double, newH : Double) {
-        w = newW
-        h = newH
-    }
-
     open fun translate(dx : Double, dy : Double) {
         x += dx
         y += dy
@@ -70,10 +65,6 @@ open class Gui {
 
     open fun setPosition(newX : Double, newY : Double) {
         translate(newX - x, newY - y)
-    }
-
-    open fun translatePlaceRelativeTo(parent : Gui) {
-        translate(parent.x, parent.y)
     }
 
     open fun translateCenter(xCenter : Double, yCenter : Double) {
@@ -88,26 +79,12 @@ open class Gui {
         translateCenter(xCenter, yCenter)
     }
 
-    enum class SnapDir { Left, Right, Top, Bottom }
-    open fun translateSnapTo(parent : Gui, type : SnapDir, padding : Double = 0.0) {
-        when(type) {
-            SnapDir.Left -> setPosition(parent.x + padding, y)
-            SnapDir.Right -> setPosition(parent.x + parent.w - w - padding, y)
-            SnapDir.Top -> setPosition(x, parent.y + padding)
-            SnapDir.Bottom -> setPosition(x, parent.y + parent.h - h - padding)
-        }
-    }
-
-    open fun scale(wMult : Double, hMult : Double) {
-        w *= wMult
-        h *= hMult
-
-        for(child in children)
-            child.scale(wMult, hMult)
-    }
-
-    open fun scale(mult : Double) {
-        scale(mult, mult)
+    open fun extendToFill(x1 : Double, y1 : Double, x2 : Double, y2 : Double, scaleMult : Double = 1.0) {
+        val dx = abs(x2 - x1)
+        val dy = abs(y2 - y1)
+        val sfactor = if(h * (dx / w) > dy) dy / h else dx / w
+        w *= sfactor * scaleMult
+        h *= sfactor * scaleMult
     }
 
     open fun update(deltaTime : Long) {

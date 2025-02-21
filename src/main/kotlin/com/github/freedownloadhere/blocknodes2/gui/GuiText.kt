@@ -5,7 +5,6 @@ import com.github.freedownloadhere.blocknodes2.util.ColorHelper
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
 import org.lwjgl.opengl.GL11
-import kotlin.math.min
 
 class GuiText(private var str : String) : Gui() {
     var textCol = ColorHelper.White
@@ -43,10 +42,5 @@ class GuiText(private var str : String) : Gui() {
         GlStateManager.disableBlend()
         GlStateManager.disableTexture2D()
         GlStateManager.popMatrix()
-    }
-
-    override fun scale(wMult: Double, hMult: Double) {
-        val min = min(wMult, hMult)
-        super.scale(min, min)
     }
 }

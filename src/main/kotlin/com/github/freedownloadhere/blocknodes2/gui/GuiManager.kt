@@ -1,6 +1,6 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
-import com.github.freedownloadhere.blocknodes2.node.NodeSceneManager
+import com.github.freedownloadhere.blocknodes2.util.ChatHelper
 import com.github.freedownloadhere.blocknodes2.util.ScissorStack
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL11
 import java.time.Instant
 
 object GuiManager : GuiScreen() {
-    lateinit var base : GuiInteractable
+    var base : GuiWindow? = null
 
     private var lastMouseX = -1
     private var lastMouseY = -1
@@ -34,14 +34,15 @@ object GuiManager : GuiScreen() {
         height = Minecraft.getMinecraft().displayHeight
         lastTime = Instant.now().toEpochMilli()
 
-        base = GuiInteractable()
-        base.flagList.add(Gui.Flags.TransparentBG)
-        base.x = 0.0
-        base.y = 0.0
-        base.w = width.toDouble()
-        base.h = height.toDouble()
-
-        base.addChild(NodeSceneManager.requestGui())
+        EzGui.beginWindow("Hello world")
+        EzGui.text("testing text")
+        EzGui.text("testing text 2")
+        EzGui.button("button test") { ChatHelper.send("Clicked button") }
+        EzGui.beginList()
+            for(i in 1..10)
+                EzGui.text("list test $i")
+        EzGui.endList()
+        EzGui.endWindow()
     }
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
@@ -64,7 +65,7 @@ object GuiManager : GuiScreen() {
         GlStateManager.disableLighting()
 
         ScissorStack.enable()
-        base.update(deltaTime)
+        base?.update(deltaTime)
         ScissorStack.disable()
 
         GlStateManager.enableLighting()
@@ -81,7 +82,7 @@ object GuiManager : GuiScreen() {
         lastMouseY = height - Mouse.getEventY() - 1
         lastDwheel = Mouse.getEventDWheel()
 
-        val lastMouseOn = base.getMouseOn(lastMouseX.toDouble(), lastMouseY.toDouble())
+        val lastMouseOn = base?.getMouseOn(lastMouseX.toDouble(), lastMouseY.toDouble())
 
         if(Mouse.getEventButtonState())
             handleMouseClick(lastMouseOn, Mouse.getEventButton())

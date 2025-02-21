@@ -3,23 +3,9 @@ package com.github.freedownloadhere.blocknodes2.gui
 import kotlin.math.max
 
 open class GuiList(
-    vS : Int = 10,
-    hS : Int = 10
+    private val xSmult : Double = 0.3,
+    private val ySmult : Double = 0.3,
 ) : GuiInteractable() {
-    var vSpacing = vS
-        private set
-    var hSpacing = hS
-        private set
-
-    fun setSpacing(newVSpacing : Int, newHSpacing : Int) {
-        vSpacing = newVSpacing
-        hSpacing = newHSpacing
-    }
-
-    // dont like this
-    // generics no work also?
-    // find better approach
-
     fun newText(contents : String) : GuiText {
         val gui = GuiText(contents)
         addChild(gui)
@@ -66,20 +52,17 @@ open class GuiList(
         
         for(child in children)
             extendList(child)
-
-        if(flagList.isNotActive(Flags.ListStaticWidth))
-        if(flagList.isActive(Flags.ListHomogenousWidths))
-            for(child in children)
-                child.w = w - 2 * vSpacing
     }
 
     private fun extendList(elem : Gui) {
+        val xSpacing = w * xSmult
+        val ySpacing = h * ySmult
         if(flagList.isNotActive(Flags.ListStaticHeight)) {
-            h = max(0.0, h - hSpacing)
-            elem.setPosition(x + vSpacing, y + h + hSpacing)
-            h += elem.h + 2 * hSpacing
+            h = max(0.0, h - ySpacing)
+            elem.setPosition(x + ySpacing, y + h + ySpacing)
+            h += elem.h + 2 * ySpacing
         }
         if(flagList.isNotActive(Flags.ListStaticWidth))
-            w = max(w, elem.w + 2 * vSpacing)
+            w = max(w, elem.w + 2 * xSpacing)
     }
 }
