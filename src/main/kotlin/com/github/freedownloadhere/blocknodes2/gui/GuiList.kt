@@ -1,19 +1,34 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
 import kotlin.math.max
+import kotlin.reflect.KMutableProperty0
 
 open class GuiList(
-    private val xSmult : Double = 0.3,
-    private val ySmult : Double = 0.3,
+    vS : Int = 10,
+    hS : Int = 10
 ) : GuiInteractable() {
+    var vSpacing = vS
+        private set
+    var hSpacing = hS
+        private set
+
+    fun setSpacing(newVSpacing : Int, newHSpacing : Int) {
+        vSpacing = newVSpacing
+        hSpacing = newHSpacing
+    }
+
+    // dont like this
+    // generics no work also?
+    // find better approach
+
     fun newText(contents : String) : GuiText {
         val gui = GuiText(contents)
         addChild(gui)
         return gui
     }
 
-    fun newTextBox(placeholder : String) : GuiTextBox {
-        val gui = GuiTextBox(placeholder)
+    fun newTextBox(contents : KMutableProperty0<String>, placeholder : String) : GuiTextBox {
+        val gui = GuiTextBox(contents, placeholder)
         addChild(gui)
         return gui
     }
@@ -41,7 +56,7 @@ open class GuiList(
         super.update(deltaTime)
     }
 
-    private fun dynamicResize() {
+    fun dynamicResize() {
         if(flagList.isActive(Flags.ListStaticSize))
             return
 
@@ -52,17 +67,20 @@ open class GuiList(
         
         for(child in children)
             extendList(child)
+
+        if(flagList.isNotActive(Flags.ListStaticWidth) && flagList.isActive(Flags.ListAllEqualWidths))
+            for(child in children)
+                if(child !is GuiText)
+                    child.w = w - 2 * vSpacing
     }
 
     private fun extendList(elem : Gui) {
-        val xSpacing = w * xSmult
-        val ySpacing = h * ySmult
         if(flagList.isNotActive(Flags.ListStaticHeight)) {
-            h = max(0.0, h - ySpacing)
-            elem.setPosition(x + ySpacing, y + h + ySpacing)
-            h += elem.h + 2 * ySpacing
+            h = max(0.0, h - hSpacing)
+            elem.setPosition(x + vSpacing, y + h + hSpacing)
+            h += elem.h + 2 * hSpacing
         }
         if(flagList.isNotActive(Flags.ListStaticWidth))
-            w = max(w, elem.w + 2 * xSpacing)
+            w = max(w, elem.w + 2 * vSpacing)
     }
 }

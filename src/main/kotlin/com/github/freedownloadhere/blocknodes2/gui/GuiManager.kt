@@ -1,6 +1,6 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
-import com.github.freedownloadhere.blocknodes2.util.ChatHelper
+import com.github.freedownloadhere.blocknodes2.node.NodeSceneManager
 import com.github.freedownloadhere.blocknodes2.util.ScissorStack
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
@@ -33,16 +33,7 @@ object GuiManager : GuiScreen() {
         width = Minecraft.getMinecraft().displayWidth
         height = Minecraft.getMinecraft().displayHeight
         lastTime = Instant.now().toEpochMilli()
-
-        EzGui.beginWindow("Hello world")
-        EzGui.text("testing text")
-        EzGui.text("testing text 2")
-        EzGui.button("button test") { ChatHelper.send("Clicked button") }
-        EzGui.beginList()
-            for(i in 1..10)
-                EzGui.text("list test $i")
-        EzGui.endList()
-        EzGui.endWindow()
+        NodeSceneManager.loadGui()
     }
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {

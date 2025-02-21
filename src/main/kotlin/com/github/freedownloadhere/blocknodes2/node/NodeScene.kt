@@ -1,9 +1,8 @@
 package com.github.freedownloadhere.blocknodes2.node
 
-class NodeScene {
-    val name = "Unnamed"
+class NodeScene(val name : String = "Untitled Scene") {
     private val contactTimeForAction = 1
-    val nodeList = mutableListOf<Node>()
+    private val nodeList = mutableListOf<Node>()
 
     fun update() {
         for(node in nodeList) {
@@ -14,11 +13,7 @@ class NodeScene {
     }
 
     fun render() {
-        //var i = 1
-        for(node in nodeList) {
-            //println("===== rendering cube $i =====")
+        for(node in nodeList)
             node.render()
-            //i++
-        }
     }
 }

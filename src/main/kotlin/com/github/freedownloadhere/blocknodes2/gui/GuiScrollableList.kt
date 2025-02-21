@@ -35,4 +35,9 @@ class GuiScrollableList(width : Int, height : Int) : GuiCroppedContainer(width, 
         }
         super.update(deltaTime)
     }
+
+    override fun translate(dx: Double, dy: Double) {
+        super.translate(dx, dy)
+        movedY += dy
+    }
 }

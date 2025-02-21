@@ -1,50 +1,57 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
-import java.util.*
+import java.util.Stack
+import kotlin.reflect.KMutableProperty0
 
 object EzGui {
     private var window : GuiWindow? = null
-    private var editStack = Stack<GuiList>()
+    private val editStack = Stack<GuiList>()
 
-    fun beginWindow(title : String = "Window") {
-        val guiW = GuiManager.width.toDouble()
-        val guiH = GuiManager.height.toDouble()
+    fun beginWindow(title : String) {
+        assert(editStack.empty())
         window = GuiWindow(0, 0, title)
-        window!!.extendToFill(0.0, 0.0, guiW, guiH, 0.8)
-        window!!.translateCenter(guiW * 0.5, guiH * 0.5)
-        editStack.push(window!!.contents)
+        editStack.push(window!!.contents.contents)
     }
 
     fun endWindow() {
+        assert(window != null)
         assert(editStack.isNotEmpty())
+        GuiManager.base = window!!
+        val screenW = GuiManager.width.toDouble()
+        val screenH = GuiManager.height.toDouble()
+        window!!.dynamicResize()
+        window!!.translateCenter(screenW / 2.0, screenH / 2.0)
         editStack.pop()
         assert(editStack.empty())
-        GuiManager.base = window
-    }
-
-    fun text(contents : String) {
-        assert(editStack.isNotEmpty())
-        editStack.peek().newText(contents)
-    }
-
-    fun textBox(placeholder : String = "Text Box") {
-        assert(editStack.isNotEmpty())
-        editStack.peek().newTextBox(placeholder)
-    }
-
-    fun button(contents : String, callback : () -> Unit) {
-        assert(editStack.isNotEmpty())
-        editStack.peek().newButton(contents, callback)
     }
 
     fun beginList() {
         assert(editStack.isNotEmpty())
-        val last = editStack.peek()
-        editStack.push(last.newScrollableList(100, 100).contents)
+        val top = editStack.peek()
+        val newTop = top.newScrollableList(200, 400)
+        editStack.push(newTop.contents)
     }
 
     fun endList() {
         assert(editStack.isNotEmpty())
         editStack.pop()
+    }
+
+    fun text(s : String) {
+        assert(editStack.isNotEmpty())
+        val top = editStack.peek()
+        top.newText(s)
+    }
+
+    fun button(s : String, callback : () -> Unit) {
+        assert(editStack.isNotEmpty())
+        val top = editStack.peek()
+        top.newButton(s, callback)
+    }
+
+    fun textBox(contents : KMutableProperty0<String>, placeholder : String) {
+        assert(editStack.isNotEmpty())
+        val top = editStack.peek()
+        top.newTextBox(contents, placeholder)
     }
 }
