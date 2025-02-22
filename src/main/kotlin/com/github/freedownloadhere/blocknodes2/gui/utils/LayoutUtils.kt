@@ -1,22 +1,31 @@
 package com.github.freedownloadhere.blocknodes2.gui.utils
 
 import com.github.freedownloadhere.blocknodes2.gui.Gui
-import com.github.freedownloadhere.blocknodes2.gui.interfaces.IGuiParent
+import com.github.freedownloadhere.blocknodes2.gui.interfaces.IParent
+import com.github.freedownloadhere.blocknodes2.gui.interfaces.ISpecialTranslate
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
-object GuiLayout {
+object LayoutUtils {
+    /**
+     * Places all the elements in the GUI in a list-like fashion.
+     * @param gui The GUI whose children are to be ordered;
+     * @param xS Spacing between elements on X axis;
+     * @param yS Spacing between elements on Y axis;
+     * @return The added height of all the elements (plus spacing).
+     */
+    fun list(gui : Gui, xS : Double, yS : Double, startH : Double = gui.y) : Double {
+        if(gui !is IParent)
+            return Double.NaN
 
-    fun list(gui : Gui, xS : Double, yS : Double) {
-        if(gui !is IGuiParent)
-            return
-
-        var placementH = gui.y + yS
+        var finalH = startH + yS
         for(child in gui.children) {
-            GuiTranslation.setPosition(child, gui.x + xS, placementH)
-            placementH += child.h + yS
+            setPosition(child, gui.x + xS, finalH)
+            finalH += child.h + yS
         }
+
+        return finalH - startH
     }
 
     fun scaleInRectangle(gui : Gui, x1 : Double, y1 : Double, x2 : Double, y2 : Double, paddingMult : Double = 1.0) {
@@ -48,7 +57,7 @@ object GuiLayout {
      * ```
      */
     fun heightScaling(gui : Gui, height : Double, scaleMults : Array<Double>) {
-        if(gui !is IGuiParent)
+        if(gui !is IParent)
             return
         var i = 0
         for(child in gui.children) {
@@ -59,14 +68,14 @@ object GuiLayout {
     }
 
     fun makeChildrenSameWidth(gui : Gui, width : Double) {
-        if(gui !is IGuiParent)
+        if(gui !is IParent)
             return
         for(child in gui.children)
             child.w = width
     }
 
     fun stretchToFitChildren(gui : Gui, padding : Double) {
-        if(gui !is IGuiParent)
+        if(gui !is IParent)
             return
 
         var x1 = Double.MAX_VALUE
@@ -85,5 +94,19 @@ object GuiLayout {
         gui.y = y1 - padding
         gui.w = (x2 - x1) + padding
         gui.h = (y2 - y1) + padding
+    }
+
+    private fun setPosition(gui : Gui, newX : Double, newY : Double) {
+        translate(gui, newX - gui.x, newY - gui.y)
+    }
+
+    private fun translate(gui : Gui, dx : Double, dy : Double) {
+        if(gui is ISpecialTranslate)
+            gui.doSpecialTranslate(dx, dy)
+        gui.x += dx
+        gui.y += dy
+        if(gui is IParent)
+            for(child in gui.children)
+                translate(child, dx, dy)
     }
 }

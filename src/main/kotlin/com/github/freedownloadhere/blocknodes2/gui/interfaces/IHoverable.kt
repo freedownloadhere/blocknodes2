@@ -1,6 +1,6 @@
 package com.github.freedownloadhere.blocknodes2.gui.interfaces
 
-interface IGuiHoverable : IGuiInteractable {
+interface IHoverable : IInteractable {
     fun onHoverStart()
     fun onHoverStop()
 }

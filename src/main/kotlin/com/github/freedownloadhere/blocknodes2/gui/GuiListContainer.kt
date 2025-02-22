@@ -1,20 +1,48 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
-import com.github.freedownloadhere.blocknodes2.gui.interfaces.IGuiDrawable
-import com.github.freedownloadhere.blocknodes2.gui.interfaces.IGuiOrdered
-import com.github.freedownloadhere.blocknodes2.gui.interfaces.IGuiParentExtendable
-import com.github.freedownloadhere.blocknodes2.gui.utils.GuiLayout
-import com.github.freedownloadhere.blocknodes2.gui.utils.GuiManager
+import com.github.freedownloadhere.blocknodes2.gui.interfaces.*
+import com.github.freedownloadhere.blocknodes2.gui.utils.LayoutUtils
+import com.github.freedownloadhere.blocknodes2.gui.utils.Manager
 import com.github.freedownloadhere.blocknodes2.util.ColorHelper
+import kotlin.math.max
+import kotlin.math.min
 
-class GuiListContainer : Gui(), IGuiDrawable, IGuiOrdered, IGuiParentExtendable {
+class GuiListContainer
+    : Gui(), IScrollable, IDrawable, ILayout, IParentVariadic, ISpecialTranslate
+{
+    private var start = 0.0
+    private var listHeight = 0.0
+
     override var baseColor = ColorHelper.GuiNeutral
-    override fun draw() { GuiManager.renderer.drawBasicBG(this) }
     override val children = mutableListOf<Gui>()
-    override fun addChild(child: Gui) {
-        children.add(child)
+
+    override fun addChild(child: Gui) { children.add(child) }
+
+    override fun applyLayout() { listHeight = LayoutUtils.list(this, 10.0, 10.0, start) }
+
+    override fun doSpecialTranslate(dx: Double, dy: Double) { start += dy }
+
+    override fun draw() {
+        Manager.renderer.scissorStack.push(this)
+        Manager.renderer.drawBasicBG(this)
+        Manager.renderer.scissorStack.pop()
     }
-    override fun applyOrdering() {
-        GuiLayout.list(this, 10.0, 10.0)
+
+    override fun onScroll(d: Int) {
+        if(listHeight <= h)
+            return
+        start += d
+        start = min(start, y)
+        start = max(start, y - listHeight + h)
+    }
+
+    override fun update(deltaTime: Long) {
+        for(child in children) {
+            if(child.y + child.h <= y || child.y >= y + h)
+                child.disable()
+            else
+                child.enable()
+        }
+        super.update(deltaTime)
     }
 }

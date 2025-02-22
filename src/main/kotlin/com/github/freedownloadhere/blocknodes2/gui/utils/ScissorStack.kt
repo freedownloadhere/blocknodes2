@@ -1,13 +1,12 @@
-package com.github.freedownloadhere.blocknodes2.util
+package com.github.freedownloadhere.blocknodes2.gui.utils
 
 import com.github.freedownloadhere.blocknodes2.gui.Gui
-import com.github.freedownloadhere.blocknodes2.gui.utils.GuiManager
 import org.lwjgl.opengl.GL11
 import java.util.Stack
 import kotlin.math.max
 import kotlin.math.min
 
-object ScissorStack {
+class ScissorStack {
     data class ScissorData(
         var x1 : Int,
         var y1 : Int,
@@ -22,6 +21,7 @@ object ScissorStack {
 
         if(stk.empty()) {
             stk.push(a)
+            apply()
             return
         }
 
@@ -32,12 +32,16 @@ object ScissorStack {
             return
         }
 
-        stk.push(ScissorData(
+        stk.push(
+            ScissorData(
             max(a.x1, b.x1),
             max(a.y1, b.y1),
             min(a.x2, b.x2),
             min(a.y2, b.y2)
-        ))
+        )
+        )
+
+        apply()
     }
 
     fun pop() {
@@ -46,23 +50,26 @@ object ScissorStack {
             apply()
     }
 
-    fun apply() {
-        val thickness = GuiManager.DefaultConfig.BORDER_THICKNESS.toInt()
-        val top = stk.peek()
-        GL11.glScissor(
-            top.x1 - thickness,
-            GuiManager.height - thickness - top.y2,
-            (top.x2 - top.x1) + 2 * thickness,
-            (top.y2 - top.y1) + 2 * thickness
-        )
-    }
-
     fun disable() {
         GL11.glDisable(GL11.GL_SCISSOR_TEST)
     }
 
     fun enable() {
         GL11.glEnable(GL11.GL_SCISSOR_TEST)
-        GL11.glScissor(0, 0, GuiManager.width, GuiManager.height)
+        GL11.glScissor(0, 0, Manager.width, Manager.height)
+    }
+
+    /**
+     * everything should be applied by the stack push / pop
+     */
+    private fun apply() {
+        val thickness = Manager.DefaultConfig.BORDER_THICKNESS.toInt()
+        val top = stk.peek()
+        GL11.glScissor(
+            top.x1 - thickness,
+            Manager.height - thickness - top.y2,
+            (top.x2 - top.x1) + 2 * thickness,
+            (top.y2 - top.y1) + 2 * thickness
+        )
     }
 }

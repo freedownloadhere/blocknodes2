@@ -1,21 +1,22 @@
 package com.github.freedownloadhere.blocknodes2.gui.utils
 
 import com.github.freedownloadhere.blocknodes2.gui.Gui
-import com.github.freedownloadhere.blocknodes2.gui.interfaces.IGuiDrawable
-import com.github.freedownloadhere.blocknodes2.gui.utils.GuiManager.height
-import com.github.freedownloadhere.blocknodes2.gui.utils.GuiManager.width
+import com.github.freedownloadhere.blocknodes2.gui.interfaces.IDrawable
+import com.github.freedownloadhere.blocknodes2.gui.utils.Manager.height
+import com.github.freedownloadhere.blocknodes2.gui.utils.Manager.width
 import com.github.freedownloadhere.blocknodes2.util.ColorHelper
-import com.github.freedownloadhere.blocknodes2.util.ScissorStack
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import org.lwjgl.opengl.GL11
 
-class GuiRenderer {
+class Renderer {
+    val scissorStack = ScissorStack()
+
     fun drawBasicBG(gui : Gui) {
-        if(gui !is IGuiDrawable)
+        if(gui !is IDrawable)
             return
-        if(gui == GuiManager.interactionManager.focused)
+        if(gui == Manager.interactionManager.focused)
             drawHL(gui)
         else
             drawBorder(gui)
@@ -23,7 +24,7 @@ class GuiRenderer {
     }
 
     fun drawBorder(gui : Gui, col : ColorHelper = ColorHelper.GuiNeutralLight) {
-        val t = GuiManager.DefaultConfig.BORDER_THICKNESS
+        val t = Manager.DefaultConfig.BORDER_THICKNESS
         GlStateManager.matrixMode(GL11.GL_MODELVIEW)
         GlStateManager.pushMatrix()
         GlStateManager.translate(gui.x - t, gui.y - t, 0.0)
@@ -42,7 +43,7 @@ class GuiRenderer {
     }
 
     fun drawHL(gui : Gui) {
-        val t1 = GuiManager.DefaultConfig.BORDER_THICKNESS
+        val t1 = Manager.DefaultConfig.BORDER_THICKNESS
         GlStateManager.matrixMode(GL11.GL_MODELVIEW)
         GlStateManager.pushMatrix()
         GlStateManager.translate(gui.x - t1, gui.y - t1, 0.0)
@@ -64,11 +65,11 @@ class GuiRenderer {
         GlStateManager.disableTexture2D()
         GlStateManager.disableLighting()
 
-        ScissorStack.enable()
+        scissorStack.enable()
     }
 
     fun endGuiState() {
-        ScissorStack.disable()
+        scissorStack.disable()
 
         GlStateManager.enableLighting()
         GlStateManager.enableTexture2D()

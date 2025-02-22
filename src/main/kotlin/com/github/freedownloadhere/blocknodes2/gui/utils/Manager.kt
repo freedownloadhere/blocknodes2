@@ -5,13 +5,13 @@ import com.github.freedownloadhere.blocknodes2.gui.GuiWindow
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 
-object GuiManager : GuiScreen() {
+object Manager : GuiScreen() {
     private var base : Gui? = null
-    private lateinit var timeManager : GuiTimeManager
-    private lateinit var inputManager : GuiInputManager
-    lateinit var interactionManager : GuiInteractionManager
+    private lateinit var timeUtil : TimeUtil
+    private lateinit var inputManager : InputManager
+    lateinit var interactionManager : InteractionManager
         private set
-    lateinit var renderer : GuiRenderer
+    lateinit var renderer : Renderer
         private set
 
     object DefaultConfig {
@@ -24,14 +24,14 @@ object GuiManager : GuiScreen() {
         width = Minecraft.getMinecraft().displayWidth
         height = Minecraft.getMinecraft().displayHeight
         base = GuiWindow("Window Title")
-        timeManager = GuiTimeManager()
-        inputManager = GuiInputManager()
-        interactionManager = GuiInteractionManager(inputManager, base)
-        renderer = GuiRenderer()
+        timeUtil = TimeUtil()
+        inputManager = InputManager()
+        interactionManager = InteractionManager(inputManager, base)
+        renderer = Renderer()
     }
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
-        val deltaTime = timeManager.newDeltaTime()
+        val deltaTime = timeUtil.newDeltaTime()
 
         drawDefaultBackground()
         renderer.beginGuiState()

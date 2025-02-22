@@ -1,5 +1,5 @@
 package com.github.freedownloadhere.blocknodes2.gui.interfaces
 
-interface IGuiScrollable : IGuiInteractable {
+interface IScrollable : IInteractable {
     fun onScroll(d : Int)
 }

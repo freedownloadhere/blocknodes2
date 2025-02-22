@@ -1,9 +1,9 @@
 package com.github.freedownloadhere.blocknodes2.gui.utils
 
-import com.github.freedownloadhere.blocknodes2.gui.utils.GuiManager.height
+import com.github.freedownloadhere.blocknodes2.gui.utils.Manager.height
 import org.lwjgl.input.Mouse
 
-class GuiInputManager {
+class InputManager {
     var lastMouseX = -1
         private set
     var lastMouseY = -1

@@ -1,7 +1,7 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
-import com.github.freedownloadhere.blocknodes2.gui.interfaces.IGuiDrawable
-import com.github.freedownloadhere.blocknodes2.gui.utils.GuiManager
+import com.github.freedownloadhere.blocknodes2.gui.interfaces.IDrawable
+import com.github.freedownloadhere.blocknodes2.gui.utils.Manager
 import com.github.freedownloadhere.blocknodes2.mixin.AccessorFontRenderer
 import com.github.freedownloadhere.blocknodes2.util.ColorHelper
 import net.minecraft.client.Minecraft
@@ -9,14 +9,14 @@ import net.minecraft.client.renderer.GlStateManager
 import org.lwjgl.opengl.GL11
 
 class GuiText(private var str : String)
-    : Gui(), IGuiDrawable
+    : Gui(), IDrawable
 {
     init { updateText(str) }
 
     private fun updateText(newStr : String) {
         str = newStr
-        w = Minecraft.getMinecraft().fontRendererObj.getStringWidth(newStr).toDouble() * GuiManager.DefaultConfig.TEXT_SCALE
-        h = Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT.toDouble() * GuiManager.DefaultConfig.TEXT_SCALE
+        w = Minecraft.getMinecraft().fontRendererObj.getStringWidth(newStr).toDouble() * Manager.DefaultConfig.TEXT_SCALE
+        h = Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT.toDouble() * Manager.DefaultConfig.TEXT_SCALE
     }
 
     override var baseColor = ColorHelper.White

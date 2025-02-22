@@ -1,7 +1,7 @@
 package com.github.freedownloadhere.blocknodes2
 
 import com.github.freedownloadhere.blocknodes2.controls.KeyInputHelper
-import com.github.freedownloadhere.blocknodes2.gui.utils.GuiManager
+import com.github.freedownloadhere.blocknodes2.gui.utils.Manager
 import com.github.freedownloadhere.blocknodes2.node.NodeSceneManager
 import com.github.freedownloadhere.blocknodes2.util.KeybindingManager
 import net.minecraft.client.Minecraft
@@ -21,7 +21,7 @@ class Mod {
         MinecraftForge.EVENT_BUS.register(this)
         MinecraftForge.EVENT_BUS.register(KeybindingManager)
         KeybindingManager.addKey(KeyBinding("blocknodes2.togglegui", Keyboard.KEY_J, "blocknodes2.keys")) {
-            Minecraft.getMinecraft().displayGuiScreen(GuiManager)
+            Minecraft.getMinecraft().displayGuiScreen(Manager)
         }
     }
 

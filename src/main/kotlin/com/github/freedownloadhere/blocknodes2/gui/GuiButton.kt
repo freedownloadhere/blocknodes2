@@ -1,8 +1,8 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
 import com.github.freedownloadhere.blocknodes2.gui.interfaces.*
-import com.github.freedownloadhere.blocknodes2.gui.utils.GuiLayout
-import com.github.freedownloadhere.blocknodes2.gui.utils.GuiManager
+import com.github.freedownloadhere.blocknodes2.gui.utils.LayoutUtils
+import com.github.freedownloadhere.blocknodes2.gui.utils.Manager
 import com.github.freedownloadhere.blocknodes2.util.ColorHelper
 import kotlin.math.max
 
@@ -12,7 +12,7 @@ import kotlin.math.max
  *  @param callback Function which is called when the button is clicked.
  */
 class GuiButton(string : String, private val callback : () -> Unit)
-    : Gui(), IGuiClickable, IGuiHoverable, IGuiParent, IGuiOrdered, IGuiDrawable
+    : Gui(), IClickable, IHoverable, IParent, ILayout, IDrawable
 {
     private var clickCooldown = 0L
 
@@ -25,10 +25,10 @@ class GuiButton(string : String, private val callback : () -> Unit)
 
     override var baseColor = ColorHelper.GuiNeutral
 
-    override fun draw() { GuiManager.renderer.drawBasicBG(this) }
+    override fun draw() { Manager.renderer.drawBasicBG(this) }
 
-    override fun applyOrdering() {
-        GuiLayout.stretchToFitChildren(this, 10.0)
+    override fun applyLayout() {
+        LayoutUtils.stretchToFitChildren(this, 10.0)
     }
 
     override fun onClick(button: Int) {

@@ -1,8 +1,8 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
-import com.github.freedownloadhere.blocknodes2.gui.interfaces.IGuiDrawable
-import com.github.freedownloadhere.blocknodes2.gui.interfaces.IGuiOrdered
-import com.github.freedownloadhere.blocknodes2.gui.interfaces.IGuiParent
+import com.github.freedownloadhere.blocknodes2.gui.interfaces.IDrawable
+import com.github.freedownloadhere.blocknodes2.gui.interfaces.ILayout
+import com.github.freedownloadhere.blocknodes2.gui.interfaces.IParent
 
 abstract class Gui {
     internal var x = 0.0
@@ -15,18 +15,18 @@ abstract class Gui {
 
     open fun update(deltaTime : Long) {
         if(!toggled) return
-        if(this is IGuiOrdered)
-            applyOrdering()
-        if(this is IGuiDrawable)
+        if(this is ILayout)
+            applyLayout()
+        if(this is IDrawable)
             draw()
-        if(this is IGuiParent)
+        if(this is IParent)
             for(child in children)
                 child.update(deltaTime)
     }
 
     open fun toggle() {
         toggled = !toggled
-        if(this !is IGuiParent)
+        if(this !is IParent)
             return
 
         if(toggled)
@@ -39,14 +39,14 @@ abstract class Gui {
 
     open fun enable() {
         toggled = true
-        if(this is IGuiParent)
+        if(this is IParent)
             for(child in children)
                 child.enable()
     }
 
     open fun disable() {
         toggled = false
-        if(this is IGuiParent)
+        if(this is IParent)
             for(child in children)
                 child.disable()
     }
