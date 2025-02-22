@@ -1,24 +1,25 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
+import com.github.freedownloadhere.blocknodes2.gui.interfaces.IGuiDrawable
+import com.github.freedownloadhere.blocknodes2.gui.utils.GuiManager
 import com.github.freedownloadhere.blocknodes2.mixin.AccessorFontRenderer
 import com.github.freedownloadhere.blocknodes2.util.ColorHelper
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
 import org.lwjgl.opengl.GL11
 
-class GuiText(private var str : String) : Gui(), IGuiDrawable {
-    var textCol = ColorHelper.White
+class GuiText(private var str : String)
+    : Gui(), IGuiDrawable
+{
+    init { updateText(str) }
 
-    init {
-        updateText(str)
-    }
-
-    fun updateText(newStr : String) {
+    private fun updateText(newStr : String) {
         str = newStr
         w = Minecraft.getMinecraft().fontRendererObj.getStringWidth(newStr).toDouble() * GuiManager.DefaultConfig.TEXT_SCALE
         h = Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT.toDouble() * GuiManager.DefaultConfig.TEXT_SCALE
     }
 
+    override var baseColor = ColorHelper.White
     override fun draw() {
         val fr = Minecraft.getMinecraft().fontRendererObj
         val fontTex = (fr as AccessorFontRenderer).fontLocation_blocknodes2
@@ -37,7 +38,7 @@ class GuiText(private var str : String) : Gui(), IGuiDrawable {
 
         Minecraft.getMinecraft().textureManager.bindTexture(fontTex)
 
-        fr.drawStringWithShadow(str, 0.0f, 0.0f, textCol.toPackedARGB())
+        fr.drawStringWithShadow(str, 0.0f, 0.0f, baseColor.toPackedARGB())
 
         GlStateManager.disableBlend()
         GlStateManager.disableTexture2D()

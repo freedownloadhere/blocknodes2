@@ -1,21 +1,25 @@
-package com.github.freedownloadhere.blocknodes2.gui
+package com.github.freedownloadhere.blocknodes2.gui.utils
 
-import com.github.freedownloadhere.blocknodes2.gui.Gui.Flags
+import com.github.freedownloadhere.blocknodes2.gui.Gui
+import com.github.freedownloadhere.blocknodes2.gui.interfaces.IGuiDrawable
+import com.github.freedownloadhere.blocknodes2.gui.utils.GuiManager.height
+import com.github.freedownloadhere.blocknodes2.gui.utils.GuiManager.width
 import com.github.freedownloadhere.blocknodes2.util.ColorHelper
+import com.github.freedownloadhere.blocknodes2.util.ScissorStack
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import org.lwjgl.opengl.GL11
 
-object GuiRenderer {
+class GuiRenderer {
     fun drawBasicBG(gui : Gui) {
-        if(gui.flagList.isActive(Flags.TransparentBG))
+        if(gui !is IGuiDrawable)
             return
-        if(gui == GuiManager.focused)
+        if(gui == GuiManager.interactionManager.focused)
             drawHL(gui)
         else
             drawBorder(gui)
-        drawBG(gui, gui.bgColor)
+        drawBG(gui, gui.baseColor)
     }
 
     fun drawBorder(gui : Gui, col : ColorHelper = ColorHelper.GuiNeutralLight) {
@@ -44,6 +48,34 @@ object GuiRenderer {
         GlStateManager.translate(gui.x - t1, gui.y - t1, 0.0)
         GlStateManager.scale(gui.w + 2 * t1, gui.h + 2 * t1, 1.0)
         drawRect(ColorHelper.GuiPrimary)
+        GlStateManager.popMatrix()
+    }
+
+    fun beginGuiState() {
+        GlStateManager.matrixMode(GL11.GL_PROJECTION)
+        GlStateManager.pushMatrix()
+        GlStateManager.loadIdentity()
+        GlStateManager.ortho(0.0, width.toDouble(), height.toDouble(), 0.0, -1.0, 1.0)
+
+        GlStateManager.matrixMode(GL11.GL_MODELVIEW)
+        GlStateManager.pushMatrix()
+        GlStateManager.loadIdentity()
+
+        GlStateManager.disableTexture2D()
+        GlStateManager.disableLighting()
+
+        ScissorStack.enable()
+    }
+
+    fun endGuiState() {
+        ScissorStack.disable()
+
+        GlStateManager.enableLighting()
+        GlStateManager.enableTexture2D()
+
+        GlStateManager.matrixMode(GL11.GL_MODELVIEW)
+        GlStateManager.popMatrix()
+        GlStateManager.matrixMode(GL11.GL_PROJECTION)
         GlStateManager.popMatrix()
     }
 

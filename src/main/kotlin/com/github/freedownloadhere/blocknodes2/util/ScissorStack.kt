@@ -1,7 +1,7 @@
 package com.github.freedownloadhere.blocknodes2.util
 
 import com.github.freedownloadhere.blocknodes2.gui.Gui
-import com.github.freedownloadhere.blocknodes2.gui.GuiManager
+import com.github.freedownloadhere.blocknodes2.gui.utils.GuiManager
 import org.lwjgl.opengl.GL11
 import java.util.Stack
 import kotlin.math.max
