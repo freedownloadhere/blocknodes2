@@ -5,15 +5,14 @@ import com.github.freedownloadhere.blocknodes2.gui.interfaces.IGuiParent
 import com.github.freedownloadhere.blocknodes2.gui.utils.GuiLayout
 import com.github.freedownloadhere.blocknodes2.gui.utils.GuiManager
 import com.github.freedownloadhere.blocknodes2.util.ChatHelper
-import com.github.freedownloadhere.blocknodes2.util.ColorHelper
 
 class GuiWindow(title : String) : Gui(), IGuiParent, IGuiOrdered {
     override val children : List<Gui>
 
     init {
-        val titleBar = GuiContainedText(title)
-        titleBar.baseColor = ColorHelper.GuiNeutralDark
+        val titleBar = GuiTitleBar(title)
         val actualContents = GuiListContainer()
+
         actualContents.addChild(GuiButton("wow") { ChatHelper.send("clicked") })
         children = listOf(titleBar, actualContents)
     }
@@ -25,5 +24,6 @@ class GuiWindow(title : String) : Gui(), IGuiParent, IGuiOrdered {
         GuiLayout.heightScaling(this, h, arrayOf(0.1, 0.9))
         GuiLayout.list(this, 0.0, 0.0)
         GuiLayout.makeChildrenSameWidth(this, w)
+        GuiLayout.centerInRectangle(this, 0.0, 0.0, baseW, baseH)
     }
 }

@@ -7,6 +7,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 object GuiLayout {
+
     fun list(gui : Gui, xS : Double, yS : Double) {
         if(gui !is IGuiParent)
             return
@@ -26,6 +27,12 @@ object GuiLayout {
         gui.h *= sf * paddingMult
     }
 
+    fun centerInRectangle(gui : Gui, x1 : Double, y1 : Double, x2 : Double, y2 : Double) {
+        val cX = 0.5 * (x1 + x2)
+        val cY = 0.5 * (y1 + y2)
+        gui.x = cX - 0.5 * gui.w
+        gui.y = cY - 0.5 * gui.h
+    }
 
     /**
      * Scales the first length(scaleMults) children of a GUI.

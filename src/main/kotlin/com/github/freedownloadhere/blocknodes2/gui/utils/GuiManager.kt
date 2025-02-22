@@ -23,7 +23,7 @@ object GuiManager : GuiScreen() {
         super.initGui()
         width = Minecraft.getMinecraft().displayWidth
         height = Minecraft.getMinecraft().displayHeight
-        base = GuiWindow("test")
+        base = GuiWindow("Window Title")
         timeManager = GuiTimeManager()
         inputManager = GuiInputManager()
         interactionManager = GuiInteractionManager(inputManager, base)
