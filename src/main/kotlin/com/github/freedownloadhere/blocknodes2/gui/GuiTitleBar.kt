@@ -13,7 +13,8 @@ class GuiTitleBar(title : String) : Gui(), IDrawable, ILayout, IParent {
 
     override fun draw() { Manager.renderer.drawBasicBG(this) }
     override fun applyLayout() {
-        LayoutUtils.scaleInRectangle(children.first(), x, y, x + w, y + h, 0.5)
-        LayoutUtils.centerInRectangle(children.first(), x, y, x + w, y + h)
+        val rect = LayoutUtils.Rectangle(this)
+        LayoutUtils.scaleIn(children.first(), rect, 0.5)
+        LayoutUtils.centerIn(children.first(), rect)
     }
 }

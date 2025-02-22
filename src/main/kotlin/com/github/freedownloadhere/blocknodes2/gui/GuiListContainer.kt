@@ -18,7 +18,7 @@ class GuiListContainer
 
     override fun addChild(child: Gui) { children.add(child) }
 
-    override fun applyLayout() { listHeight = LayoutUtils.list(this, 10.0, 10.0, start) }
+    override fun applyLayout() { listHeight = LayoutUtils.list(this, 0.025, 0.025, start) }
 
     override fun doSpecialTranslate(dx: Double, dy: Double) { start += dy }
 

@@ -3,21 +3,51 @@ package com.github.freedownloadhere.blocknodes2.gui.utils
 import com.github.freedownloadhere.blocknodes2.gui.Gui
 import com.github.freedownloadhere.blocknodes2.gui.interfaces.IParent
 import com.github.freedownloadhere.blocknodes2.gui.interfaces.ISpecialTranslate
-import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
+/**
+ * All `LayoutUtils` function calls begin with a `gui` parameter.
+ *
+ * This is the GUI that will be affected (or whose children will be affected) in the operation.
+ */
 object LayoutUtils {
+    class Rectangle(
+        val x1 : Double,
+        val y1 : Double,
+        val x2 : Double,
+        val y2 : Double
+    ) {
+        constructor(gui : Gui) : this(gui.x, gui.y, gui.x + gui.w, gui.y + gui.h)
+
+        val w : Double
+            get() = x2 - x1
+        val h : Double
+            get() = y2 - y1
+        val centerX : Double
+            get() = 0.5 * (x1 + x2)
+        val centerY : Double
+            get() = 0.5 * (y1 + y2)
+
+        companion object {
+            val wholeScreen : Rectangle
+                get() = Rectangle(0.0, 0.0, Manager.width.toDouble(), Manager.height.toDouble())
+        }
+    }
+
     /**
      * Places all the elements in the GUI in a list-like fashion.
      * @param gui The GUI whose children are to be ordered;
-     * @param xS Spacing between elements on X axis;
-     * @param yS Spacing between elements on Y axis;
+     * @param xSscale Spacing between elements on X axis when multiplied by `gui.w`;
+     * @param ySscale Spacing between elements on Y axis when multiplied by `gui.h`;
      * @return The added height of all the elements (plus spacing).
      */
-    fun list(gui : Gui, xS : Double, yS : Double, startH : Double = gui.y) : Double {
+    fun list(gui : Gui, xSscale : Double, ySscale : Double, startH : Double = gui.y) : Double {
         if(gui !is IParent)
             return Double.NaN
+
+        val xS = xSscale * gui.w
+        val yS = ySscale * gui.h
 
         var finalH = startH + yS
         for(child in gui.children) {
@@ -28,19 +58,21 @@ object LayoutUtils {
         return finalH - startH
     }
 
-    fun scaleInRectangle(gui : Gui, x1 : Double, y1 : Double, x2 : Double, y2 : Double, paddingMult : Double = 1.0) {
-        val dx = abs(x2 - x1)
-        val dy = abs(y2 - y1)
-        val sf = if(gui.h * (dx / gui.w) > dy) dy / gui.h else dx / gui.w
-        gui.w *= sf * paddingMult
-        gui.h *= sf * paddingMult
+    fun scaleIn(gui : Gui, rect : Rectangle, paddingMult : Double = 1.0) {
+        val sf = if(gui.h * (rect.w / gui.w) > rect.h) rect.h / gui.h else rect.w / gui.w
+        scale(gui, sf * paddingMult)
     }
 
-    fun centerInRectangle(gui : Gui, x1 : Double, y1 : Double, x2 : Double, y2 : Double) {
-        val cX = 0.5 * (x1 + x2)
-        val cY = 0.5 * (y1 + y2)
-        gui.x = cX - 0.5 * gui.w
-        gui.y = cY - 0.5 * gui.h
+    fun scaleHeightTo(gui : Gui, newH : Double) {
+        scale(gui, newH / gui.h)
+    }
+
+    fun scaleWidthTo(gui : Gui, newW : Double) {
+        scale(gui, newW / gui.w)
+    }
+
+    fun centerIn(gui : Gui, rect : Rectangle) {
+        setPosition(gui, rect.centerX - 0.5 * gui.w, rect.centerY - 0.5 * gui.h)
     }
 
     /**
@@ -108,5 +140,10 @@ object LayoutUtils {
         if(gui is IParent)
             for(child in gui.children)
                 translate(child, dx, dy)
+    }
+
+    private fun scale(gui : Gui, scaleMult : Double) {
+        gui.w *= scaleMult
+        gui.h *= scaleMult
     }
 }
