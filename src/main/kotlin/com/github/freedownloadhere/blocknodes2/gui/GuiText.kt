@@ -15,8 +15,9 @@ class GuiText(private var str : String)
 
     private fun updateText(newStr : String) {
         str = newStr
-        w = Minecraft.getMinecraft().fontRendererObj.getStringWidth(newStr).toDouble() * Manager.DefaultConfig.TEXT_SCALE
-        h = Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT.toDouble() * Manager.DefaultConfig.TEXT_SCALE
+        val fr = Minecraft.getMinecraft().fontRendererObj
+        w = fr.getStringWidth(str).toDouble() * Manager.config.textScale
+        h = fr.FONT_HEIGHT.toDouble() * Manager.config.textScale
     }
 
     override var baseColor = ColorHelper.White

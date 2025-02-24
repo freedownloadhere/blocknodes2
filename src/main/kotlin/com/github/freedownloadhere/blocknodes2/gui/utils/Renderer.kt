@@ -24,7 +24,7 @@ class Renderer {
     }
 
     fun drawBorder(gui : Gui, col : ColorHelper = ColorHelper.GuiNeutralLight) {
-        val t = Manager.DefaultConfig.BORDER_THICKNESS
+        val t = Manager.config.borderThickness
         GlStateManager.matrixMode(GL11.GL_MODELVIEW)
         GlStateManager.pushMatrix()
         GlStateManager.translate(gui.x - t, gui.y - t, 0.0)
@@ -43,7 +43,7 @@ class Renderer {
     }
 
     fun drawHL(gui : Gui) {
-        val t1 = Manager.DefaultConfig.BORDER_THICKNESS
+        val t1 = Manager.config.borderThickness
         GlStateManager.matrixMode(GL11.GL_MODELVIEW)
         GlStateManager.pushMatrix()
         GlStateManager.translate(gui.x - t1, gui.y - t1, 0.0)

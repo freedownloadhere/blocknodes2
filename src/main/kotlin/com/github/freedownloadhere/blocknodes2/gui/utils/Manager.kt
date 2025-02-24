@@ -13,16 +13,14 @@ object Manager : GuiScreen() {
         private set
     lateinit var renderer : Renderer
         private set
-
-    object DefaultConfig {
-        const val BORDER_THICKNESS = 2.0
-        const val TEXT_SCALE = 2.0
-    }
+    lateinit var config : Config
+        private set
 
     override fun initGui() {
         super.initGui()
         width = Minecraft.getMinecraft().displayWidth
         height = Minecraft.getMinecraft().displayHeight
+        config = Config()
         base = GuiWindow("Window Title")
         timeUtil = TimeUtil()
         inputManager = InputManager()

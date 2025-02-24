@@ -75,37 +75,6 @@ object LayoutUtils {
         setPosition(gui, rect.centerX - 0.5 * gui.w, rect.centerY - 0.5 * gui.h)
     }
 
-    /**
-     * Scales the first length(scaleMults) children of a GUI.
-     *
-     * Usage example:
-     *
-     * ```
-     * height = 100.0, scaleMults = { 0.3, 1.2, 0.8 }
-     *
-     * child #1 : h becomes 100.0 * 0.3 = 30.0;
-     * child #2 : h becomes 100.0 * 1.2 = 120.0;
-     * child #3 : h becomes 100.0 * 0.8 = 80.0.
-     * ```
-     */
-    fun heightScaling(gui : Gui, height : Double, scaleMults : Array<Double>) {
-        if(gui !is IParent)
-            return
-        var i = 0
-        for(child in gui.children) {
-            if(i >= scaleMults.size) break
-            child.h = height * scaleMults[i]
-            i++
-        }
-    }
-
-    fun makeChildrenSameWidth(gui : Gui, width : Double) {
-        if(gui !is IParent)
-            return
-        for(child in gui.children)
-            child.w = width
-    }
-
     fun stretchToFitChildren(gui : Gui, padding : Double) {
         if(gui !is IParent)
             return

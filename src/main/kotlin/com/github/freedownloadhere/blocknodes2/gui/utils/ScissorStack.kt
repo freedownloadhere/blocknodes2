@@ -63,7 +63,7 @@ class ScissorStack {
      * everything should be applied by the stack push / pop
      */
     private fun apply() {
-        val thickness = Manager.DefaultConfig.BORDER_THICKNESS.toInt()
+        val thickness = Manager.config.borderThickness.toInt()
         val top = stk.peek()
         GL11.glScissor(
             top.x1 - thickness,

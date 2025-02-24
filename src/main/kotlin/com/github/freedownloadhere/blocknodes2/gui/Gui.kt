@@ -15,6 +15,7 @@ abstract class Gui {
 
     open fun update(deltaTime : Long) {
         if(!toggled) return
+        // maybe dont every frame
         if(this is ILayout)
             applyLayout()
         if(this is IDrawable)
