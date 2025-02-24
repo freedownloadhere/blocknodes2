@@ -1,10 +1,12 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
-import com.github.freedownloadhere.blocknodes2.gui.interfaces.ILayout
+import com.github.freedownloadhere.blocknodes2.gui.interfaces.ILayoutPre
 import com.github.freedownloadhere.blocknodes2.gui.interfaces.IParent
 import com.github.freedownloadhere.blocknodes2.gui.utils.LayoutUtils
 
-class GuiWindow(title : String) : Gui(), IParent, ILayout {
+class GuiWindow(title : String)
+    : Gui(), IParent, ILayoutPre
+{
     override val children = listOf<Gui>(
         GuiTitleBar(title),
         GuiListContainer()
@@ -12,15 +14,10 @@ class GuiWindow(title : String) : Gui(), IParent, ILayout {
 
     private val titleBar : GuiTitleBar
         get() = children[0] as GuiTitleBar
-    private val contents : GuiListContainer
+    val contents : GuiListContainer
         get() = children[1] as GuiListContainer
 
-    init {
-        for(i in 1..50)
-            contents.addChild(GuiText("This is a sample text. $i"))
-    }
-
-    override fun applyLayout() {
+    override fun applyLayoutPre() {
         LayoutUtils.scaleIn(this, LayoutUtils.Rectangle.wholeScreen, 0.9)
 
         LayoutUtils.scaleHeightTo(titleBar, 0.1 * h)

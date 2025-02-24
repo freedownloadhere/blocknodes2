@@ -1,8 +1,10 @@
 package com.github.freedownloadhere.blocknodes2.gui.utils
 
 import com.github.freedownloadhere.blocknodes2.gui.Gui
+import com.github.freedownloadhere.blocknodes2.gui.GuiText
 import com.github.freedownloadhere.blocknodes2.gui.interfaces.IParent
 import com.github.freedownloadhere.blocknodes2.gui.interfaces.ISpecialTranslate
+import net.minecraft.client.Minecraft
 import kotlin.math.max
 import kotlin.math.min
 
@@ -13,10 +15,10 @@ import kotlin.math.min
  */
 object LayoutUtils {
     class Rectangle(
-        val x1 : Double,
-        val y1 : Double,
-        val x2 : Double,
-        val y2 : Double
+        private var x1 : Double,
+        private var y1 : Double,
+        private var x2 : Double,
+        private var y2 : Double
     ) {
         constructor(gui : Gui) : this(gui.x, gui.y, gui.x + gui.w, gui.y + gui.h)
 
@@ -32,6 +34,14 @@ object LayoutUtils {
         companion object {
             val wholeScreen : Rectangle
                 get() = Rectangle(0.0, 0.0, Manager.width.toDouble(), Manager.height.toDouble())
+        }
+
+        fun shrink(eachSideBy : Double) : Rectangle {
+            x1 += eachSideBy
+            y1 += eachSideBy
+            x2 -= eachSideBy
+            y2 -= eachSideBy
+            return this
         }
     }
 
@@ -56,6 +66,27 @@ object LayoutUtils {
         }
 
         return finalH - startH
+    }
+
+    fun wordWrap(gui : GuiText, rect : Rectangle) : List<String> {
+        val fr = Minecraft.getMinecraft().fontRendererObj
+        val scaleMultX = gui.w / fr.getStringWidth(gui.str)
+        val strList = mutableListOf<String>()
+
+        var width = 0.0
+        val buffer = StringBuilder()
+        for(c in gui.str) {
+            width += fr.getCharWidth(c) * scaleMultX
+            if(width > rect.w) {
+                width = 0.0
+                val newRow = buffer.toString()
+                strList.add(newRow)
+                buffer.clear()
+            }
+            buffer.append(c)
+        }
+
+        return strList
     }
 
     fun scaleIn(gui : Gui, rect : Rectangle, paddingMult : Double = 1.0) {
@@ -97,6 +128,11 @@ object LayoutUtils {
         gui.h = (y2 - y1) + padding
     }
 
+    fun scale(gui : Gui, scaleMult : Double) {
+        gui.w *= scaleMult
+        gui.h *= scaleMult
+    }
+
     private fun setPosition(gui : Gui, newX : Double, newY : Double) {
         translate(gui, newX - gui.x, newY - gui.y)
     }
@@ -109,10 +145,5 @@ object LayoutUtils {
         if(gui is IParent)
             for(child in gui.children)
                 translate(child, dx, dy)
-    }
-
-    private fun scale(gui : Gui, scaleMult : Double) {
-        gui.w *= scaleMult
-        gui.h *= scaleMult
     }
 }

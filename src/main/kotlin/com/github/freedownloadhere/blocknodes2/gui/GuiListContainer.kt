@@ -8,7 +8,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 class GuiListContainer
-    : Gui(), IScrollable, IDrawable, ILayout, IParentVariadic, ISpecialTranslate
+    : Gui(), IScrollable, IDrawable, ILayoutPost, IParentVariadic, ISpecialTranslate
 {
     private var start = 0.0
     private var listHeight = 0.0
@@ -18,7 +18,7 @@ class GuiListContainer
 
     override fun addChild(child: Gui) { children.add(child) }
 
-    override fun applyLayout() { listHeight = LayoutUtils.list(this, 0.025, 0.025, start) }
+    override fun applyLayoutPost() { listHeight = LayoutUtils.list(this, 0.025, 0.025, start) }
 
     override fun doSpecialTranslate(dx: Double, dy: Double) { start += dy }
 

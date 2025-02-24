@@ -12,7 +12,7 @@ import kotlin.math.max
  *  @param callback Function which is called when the button is clicked.
  */
 class GuiButton(string : String, private val callback : () -> Unit)
-    : Gui(), IClickable, IHoverable, IParent, ILayout, IDrawable
+    : Gui(), IClickable, IHoverable, IParent, ILayoutPost, IDrawable
 {
     private var clickCooldown = 0L
 
@@ -27,7 +27,7 @@ class GuiButton(string : String, private val callback : () -> Unit)
 
     override fun draw() { Manager.renderer.drawBasicBG(this) }
 
-    override fun applyLayout() {
+    override fun applyLayoutPost() {
         LayoutUtils.stretchToFitChildren(this, 10.0)
     }
 

@@ -4,7 +4,9 @@ import com.github.freedownloadhere.blocknodes2.gui.Gui
 import com.github.freedownloadhere.blocknodes2.gui.interfaces.IDrawable
 import com.github.freedownloadhere.blocknodes2.gui.utils.Manager.height
 import com.github.freedownloadhere.blocknodes2.gui.utils.Manager.width
+import com.github.freedownloadhere.blocknodes2.mixin.AccessorFontRenderer
 import com.github.freedownloadhere.blocknodes2.util.ColorHelper
+import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
@@ -77,6 +79,27 @@ class Renderer {
         GlStateManager.matrixMode(GL11.GL_MODELVIEW)
         GlStateManager.popMatrix()
         GlStateManager.matrixMode(GL11.GL_PROJECTION)
+        GlStateManager.popMatrix()
+    }
+
+    fun beginTextState() {
+        val fr = Minecraft.getMinecraft().fontRendererObj
+        val fontTex = (fr as AccessorFontRenderer).fontLocation_blocknodes2
+
+        GlStateManager.enableTexture2D()
+        GlStateManager.enableBlend()
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
+
+        GlStateManager.matrixMode(GL11.GL_MODELVIEW)
+        GlStateManager.pushMatrix()
+        GlStateManager.loadIdentity()
+
+        Minecraft.getMinecraft().textureManager.bindTexture(fontTex)
+    }
+
+    fun endTextState() {
+        GlStateManager.disableBlend()
+        GlStateManager.disableTexture2D()
         GlStateManager.popMatrix()
     }
 

@@ -1,8 +1,6 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
-import com.github.freedownloadhere.blocknodes2.gui.interfaces.IDrawable
-import com.github.freedownloadhere.blocknodes2.gui.interfaces.ILayout
-import com.github.freedownloadhere.blocknodes2.gui.interfaces.IParent
+import com.github.freedownloadhere.blocknodes2.gui.interfaces.*
 
 abstract class Gui {
     internal var x = 0.0
@@ -16,13 +14,15 @@ abstract class Gui {
     open fun update(deltaTime : Long) {
         if(!toggled) return
         // maybe dont every frame
-        if(this is ILayout)
-            applyLayout()
+        if(this is ILayoutPre)
+            applyLayoutPre()
         if(this is IDrawable)
             draw()
         if(this is IParent)
             for(child in children)
                 child.update(deltaTime)
+        if(this is ILayoutPost)
+            applyLayoutPost()
     }
 
     open fun toggle() {

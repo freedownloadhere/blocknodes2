@@ -1,7 +1,6 @@
 package com.github.freedownloadhere.blocknodes2.gui.utils
 
 import com.github.freedownloadhere.blocknodes2.gui.Gui
-import com.github.freedownloadhere.blocknodes2.gui.GuiWindow
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 
@@ -21,7 +20,11 @@ object Manager : GuiScreen() {
         width = Minecraft.getMinecraft().displayWidth
         height = Minecraft.getMinecraft().displayHeight
         config = Config()
-        base = GuiWindow("Window Title")
+        val testParagraph = { var str = ""; for(i in 1..100) str += "Lorem Ipsum Dolor Sit Amet "; str }
+        base = WindowBuilder("Fdh epic gui test")
+            .newHeader("This is a header")
+            .newParagraph(testParagraph())
+            .finish()
         timeUtil = TimeUtil()
         inputManager = InputManager()
         interactionManager = InteractionManager(inputManager, base)
