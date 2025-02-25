@@ -23,8 +23,10 @@ object Manager : GuiScreen() {
         config = Config()
         val testParagraph = { var str = ""; for(i in 1..100) str += "Lorem Ipsum Dolor Sit Amet "; str }
         base = WindowBuilder("Fdh epic gui test")
-            .newHeader("This is a header")
-            .newParagraph(testParagraph())
+                .beginList()
+                    .newHeader("This is a header")
+                    .newParagraph(testParagraph())
+                .endList()
             .finish()
         timeUtil = TimeUtil()
         inputManager = InputManager()
