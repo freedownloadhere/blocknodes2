@@ -1,11 +1,12 @@
 package com.github.freedownloadhere.blocknodes2.gui.utils
 
 import com.github.freedownloadhere.blocknodes2.gui.Gui
+import com.github.freedownloadhere.blocknodes2.gui.GuiWindow
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 
 object Manager : GuiScreen() {
-    private var base : Gui? = null
+    private var base : GuiWindow? = null
     private lateinit var timeUtil : TimeUtil
     private lateinit var inputManager : InputManager
     lateinit var interactionManager : InteractionManager
@@ -36,6 +37,7 @@ object Manager : GuiScreen() {
 
         drawDefaultBackground()
         renderer.beginGuiState()
+        base?.applyLayout()
         base?.update(deltaTime)
         renderer.endGuiState()
     }

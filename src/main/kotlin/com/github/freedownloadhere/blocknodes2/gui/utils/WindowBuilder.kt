@@ -8,7 +8,9 @@ class WindowBuilder(title : String) {
     private val window = GuiWindow(title)
     private val editStack = Stack<Gui>()
 
-    init { editStack.push(window.contents) }
+    init {
+        editStack.push(window.contents)
+    }
 
     fun beginList() : WindowBuilder {
         val gui = GuiListContainer()
@@ -17,9 +19,8 @@ class WindowBuilder(title : String) {
     }
 
     fun endList() : WindowBuilder {
-        val top = editStack.peek()
+        val top = editStack.pop()
         assert(top is GuiListContainer)
-        editStack.pop()
         return this
     }
 
@@ -43,6 +44,7 @@ class WindowBuilder(title : String) {
         assert(editStack.size == 1)
         editStack.pop()
         assert(editStack.empty())
+        window.applyLayout()
         return window
     }
 }

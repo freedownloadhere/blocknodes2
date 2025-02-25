@@ -28,7 +28,7 @@ class GuiButton(string : String, private val callback : () -> Unit)
     override fun draw() { Manager.renderer.drawBasicBG(this) }
 
     override fun applyLayoutPost() {
-        LayoutUtils.stretchToFitChildren(this, 10.0)
+        LayoutUtils.stretchToFit(this, 10.0)
     }
 
     override fun onClick(button: Int) {

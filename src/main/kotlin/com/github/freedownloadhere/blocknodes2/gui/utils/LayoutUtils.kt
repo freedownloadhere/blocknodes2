@@ -1,7 +1,6 @@
 package com.github.freedownloadhere.blocknodes2.gui.utils
 
 import com.github.freedownloadhere.blocknodes2.gui.Gui
-import com.github.freedownloadhere.blocknodes2.gui.GuiText
 import com.github.freedownloadhere.blocknodes2.gui.interfaces.IParent
 import com.github.freedownloadhere.blocknodes2.gui.interfaces.ISpecialTranslate
 import net.minecraft.client.Minecraft
@@ -68,27 +67,6 @@ object LayoutUtils {
         return finalH - startH
     }
 
-    fun wordWrap(gui : GuiText, rect : Rectangle) : List<String> {
-        val fr = Minecraft.getMinecraft().fontRendererObj
-        val scaleMultX = gui.w / fr.getStringWidth(gui.str)
-        val strList = mutableListOf<String>()
-
-        var width = 0.0
-        val buffer = StringBuilder()
-        for(c in gui.str) {
-            width += fr.getCharWidth(c) * scaleMultX
-            if(width > rect.w) {
-                width = 0.0
-                val newRow = buffer.toString()
-                strList.add(newRow)
-                buffer.clear()
-            }
-            buffer.append(c)
-        }
-
-        return strList
-    }
-
     fun scaleIn(gui : Gui, rect : Rectangle, paddingMult : Double = 1.0) {
         val sf = if(gui.h * (rect.w / gui.w) > rect.h) rect.h / gui.h else rect.w / gui.w
         scale(gui, sf * paddingMult)
@@ -106,7 +84,7 @@ object LayoutUtils {
         setPosition(gui, rect.centerX - 0.5 * gui.w, rect.centerY - 0.5 * gui.h)
     }
 
-    fun stretchToFitChildren(gui : Gui, padding : Double) {
+    fun stretchToFit(gui : Gui, padding : Double) {
         if(gui !is IParent)
             return
 
@@ -126,6 +104,16 @@ object LayoutUtils {
         gui.y = y1 - padding
         gui.w = (x2 - x1) + padding
         gui.h = (y2 - y1) + padding
+    }
+
+    fun stretchToFit(gui : Gui, rows : List<String>, scaleMult : Double = 1.0) {
+        val fr = Minecraft.getMinecraft().fontRendererObj
+        gui.w = 0.0
+        gui.h = 0.0
+        for(row in rows) {
+            gui.w = max(gui.w, fr.getStringWidth(row).toDouble() * scaleMult)
+            gui.h += fr.FONT_HEIGHT * scaleMult
+        }
     }
 
     fun scale(gui : Gui, scaleMult : Double) {
