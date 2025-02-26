@@ -17,8 +17,6 @@ class GuiListContainer
     override var baseColor = ColorHelper.GuiNeutral
     override val children = mutableListOf<Gui>()
 
-    override fun addChild(child: Gui) { children.add(child) }
-
     override var applyLayoutPost = {
         val listScale = Manager.config.listSpacingScale
         listHeight = LayoutUtils.list(this, listScale, listScale, start)

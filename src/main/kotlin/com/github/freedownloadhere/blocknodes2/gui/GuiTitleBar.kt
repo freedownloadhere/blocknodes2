@@ -13,7 +13,7 @@ class GuiTitleBar(title : String)
     override var baseColor = ColorHelper.GuiNeutralDark
     override val children = listOf(GuiText(title))
 
-    override val applyLayoutPre = {
+    override var applyLayoutPre = {
         val rect = LayoutUtils.Rectangle(this)
         LayoutUtils.scaleIn(children.first(), rect, 0.5)
         LayoutUtils.centerIn(children.first(), rect)

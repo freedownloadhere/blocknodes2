@@ -17,7 +17,7 @@ class GuiWindow(title : String)
     val contents : GuiListContainer
         get() = children[1] as GuiListContainer
 
-    override val applyLayoutPre = {
+    override var applyLayoutPre = {
         LayoutUtils.scaleIn(this, LayoutUtils.Rectangle.wholeScreen, 0.9)
 
         LayoutUtils.scaleHeightTo(titleBar, 0.1 * h)

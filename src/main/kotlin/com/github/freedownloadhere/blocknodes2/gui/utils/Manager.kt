@@ -39,7 +39,6 @@ object Manager : GuiScreen() {
 
         drawDefaultBackground()
         renderer.beginGuiState()
-        base?.applyLayout()
         base?.update(deltaTime)
         renderer.endGuiState()
     }
