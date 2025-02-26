@@ -17,13 +17,6 @@ open class GuiText(str : String)
         updateText(str)
     }
 
-    protected fun updateText(newStr : String) {
-        str = newStr
-        val fr = Minecraft.getMinecraft().fontRendererObj
-        w = fr.getStringWidth(str).toDouble()
-        h = fr.FONT_HEIGHT.toDouble()
-    }
-
     override var baseColor = ColorHelper.White
     override fun draw() {
         Manager.renderer.beginTextState()
@@ -36,5 +29,12 @@ open class GuiText(str : String)
         fr.drawStringWithShadow(str, 0.0f, 0.0f, baseColor.toPackedARGB())
 
         Manager.renderer.endTextState()
+    }
+
+    private fun updateText(newStr : String) {
+        str = newStr
+        val fr = Minecraft.getMinecraft().fontRendererObj
+        w = fr.getStringWidth(str).toDouble()
+        h = fr.FONT_HEIGHT.toDouble()
     }
 }

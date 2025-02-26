@@ -10,4 +10,4 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
 
 class GuiParagraph(str : String, parent : Gui)
-    : GuiTextWrap(str, parent, 1.0), ILayoutPre, IDrawable
+    : GuiTextWrap(str, parent, 1.0)

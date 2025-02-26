@@ -1,6 +1,7 @@
 package com.github.freedownloadhere.blocknodes2.gui.utils
 
 import com.github.freedownloadhere.blocknodes2.gui.Gui
+import com.github.freedownloadhere.blocknodes2.gui.interfaces.IListLayout
 import com.github.freedownloadhere.blocknodes2.gui.interfaces.IParent
 import com.github.freedownloadhere.blocknodes2.gui.interfaces.ISpecialTranslate
 import net.minecraft.client.Minecraft
@@ -65,6 +66,11 @@ object LayoutUtils {
         }
 
         return finalH - startH
+    }
+
+    fun setAspectRatio(gui : Gui, aspectRatio : Double) {
+        gui.w = aspectRatio
+        gui.h = 1.0
     }
 
     fun scaleIn(gui : Gui, rect : Rectangle, paddingMult : Double = 1.0) {

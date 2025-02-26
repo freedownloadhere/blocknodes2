@@ -3,6 +3,7 @@ package com.github.freedownloadhere.blocknodes2.gui
 import com.github.freedownloadhere.blocknodes2.gui.interfaces.*
 import com.github.freedownloadhere.blocknodes2.gui.utils.LayoutUtils
 import com.github.freedownloadhere.blocknodes2.gui.utils.Manager
+import com.github.freedownloadhere.blocknodes2.gui.utils.TextUtils
 import com.github.freedownloadhere.blocknodes2.util.ColorHelper
 import kotlin.math.max
 import kotlin.math.min
@@ -18,7 +19,10 @@ class GuiListContainer
 
     override fun addChild(child: Gui) { children.add(child) }
 
-    override fun applyLayoutPost() { listHeight = LayoutUtils.list(this, 0.025, 0.025, start) }
+    override var applyLayoutPost = {
+        val listScale = Manager.config.listSpacingScale
+        listHeight = LayoutUtils.list(this, listScale, listScale, start)
+    }
 
     override fun doSpecialTranslate(dx: Double, dy: Double) { start += dy }
 

@@ -10,9 +10,11 @@ class WindowBuilder(title : String) {
 
     init {
         editStack.push(window.contents)
+        window.applyLayoutPre()
     }
 
     fun beginList() : WindowBuilder {
+        val top = editStack.peek()
         val gui = GuiListContainer()
         editStack.push(gui)
         return this
@@ -21,22 +23,21 @@ class WindowBuilder(title : String) {
     fun endList() : WindowBuilder {
         val top = editStack.pop()
         assert(top is GuiListContainer)
+        (top as GuiListContainer).applyLayoutPost()
         return this
     }
 
     fun newHeader(str : String) : WindowBuilder {
         val top = editStack.peek()
-        assert(top is IParentVariadic)
-        val gui = GuiHeader(str, top)
-        (top as IParentVariadic).addChild(gui)
+        assert(top is GuiListContainer)
+        (top as GuiListContainer).addHeader(str)
         return this
     }
 
     fun newParagraph(str : String) : WindowBuilder {
         val top = editStack.peek()
-        assert(top is IParentVariadic)
-        val gui = GuiParagraph(str, top)
-        (top as IParentVariadic).addChild(gui)
+        assert(top is GuiListContainer)
+        (top as GuiListContainer).addParagraph(str)
         return this
     }
 
@@ -44,7 +45,6 @@ class WindowBuilder(title : String) {
         assert(editStack.size == 1)
         editStack.pop()
         assert(editStack.empty())
-        window.applyLayout()
         return window
     }
 }
