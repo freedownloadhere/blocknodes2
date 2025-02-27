@@ -16,12 +16,13 @@ open class GuiTextWrap(
     : Gui(), IDrawable, ILayoutPre
 {
     private var rows = listOf<String>()
+    private val ts = scaleMult * Manager.config.textScale
 
     override fun applyLayoutPre() {
         rows = TextUtils.wordWrap(str, parent, scaleMult)
         h = 0.0
         for(row in rows)
-            h += Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT * scaleMult
+            h += Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT * ts
     }
 
     override var baseColor = ColorHelper.White
@@ -33,10 +34,10 @@ open class GuiTextWrap(
         for(row in rows) {
             GlStateManager.pushMatrix()
             GlStateManager.translate(x, renderY, 0.0)
-            GlStateManager.scale(scaleMult, scaleMult, 1.0)
+            GlStateManager.scale(ts, ts, 1.0)
             fr.drawStringWithShadow(row, 0.0f, 0.0f, baseColor.toPackedARGB())
             GlStateManager.popMatrix()
-            renderY += fontHeight * scaleMult
+            renderY += fontHeight * ts
         }
         Manager.renderer.endTextState()
     }

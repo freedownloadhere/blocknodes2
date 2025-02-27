@@ -34,11 +34,11 @@ class ScissorStack {
 
         stk.push(
             ScissorData(
-            max(a.x1, b.x1),
-            max(a.y1, b.y1),
-            min(a.x2, b.x2),
-            min(a.y2, b.y2)
-        )
+                max(a.x1, b.x1),
+                max(a.y1, b.y1),
+                min(a.x2, b.x2),
+                min(a.y2, b.y2)
+            )
         )
 
         apply()

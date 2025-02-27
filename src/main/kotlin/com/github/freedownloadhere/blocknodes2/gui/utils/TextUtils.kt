@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft
 object TextUtils {
     fun wordWrap(str : String, parent : Gui, scaleMult : Double = 1.0) : List<String> {
         val fr = Minecraft.getMinecraft().fontRendererObj
+        val ts = scaleMult * Manager.config.textScale
         val strList = mutableListOf<String>()
         val rect = LayoutUtils.Rectangle(parent)
         if(parent is GuiListContainer)
@@ -15,14 +16,15 @@ object TextUtils {
         var width = 0.0
         val buffer = StringBuilder()
         for(c in str) {
-            width += fr.getCharWidth(c) * scaleMult
-            if(width > rect.w) {
+            val chw = fr.getCharWidth(c) * ts
+            if(width + chw > rect.w) {
                 width = 0.0
                 val newRow = buffer.toString()
                 strList.add(newRow)
                 buffer.clear()
             }
             buffer.append(c)
+            width += fr.getCharWidth(c) * ts
         }
 
         if(buffer.isNotBlank()) {

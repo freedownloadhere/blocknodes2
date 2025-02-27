@@ -35,9 +35,7 @@ class GuiListContainer
     override fun doSpecialTranslate(dx: Double, dy: Double) { start += dy }
 
     override fun draw() {
-        Manager.renderer.scissorStack.push(this)
         Manager.renderer.drawBasicBG(this)
-        Manager.renderer.scissorStack.pop()
     }
 
     override fun onScroll(d: Int) {
@@ -49,6 +47,7 @@ class GuiListContainer
     }
 
     override fun update(deltaTime: Long) {
+        Manager.renderer.scissorStack.push(this)
         for(child in children) {
             if(child.y + child.h <= y || child.y >= y + h)
                 child.disable()
@@ -56,5 +55,6 @@ class GuiListContainer
                 child.enable()
         }
         super.update(deltaTime)
+        Manager.renderer.scissorStack.pop()
     }
 }

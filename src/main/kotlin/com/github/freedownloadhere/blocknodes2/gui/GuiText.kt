@@ -34,7 +34,7 @@ open class GuiText(str : String)
     private fun updateText(newStr : String) {
         str = newStr
         val fr = Minecraft.getMinecraft().fontRendererObj
-        w = fr.getStringWidth(str).toDouble()
-        h = fr.FONT_HEIGHT.toDouble()
+        w = fr.getStringWidth(str).toDouble() * Manager.config.textScale
+        h = fr.FONT_HEIGHT.toDouble() * Manager.config.textScale
     }
 }
