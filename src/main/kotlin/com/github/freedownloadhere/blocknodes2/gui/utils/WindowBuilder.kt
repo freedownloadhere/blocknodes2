@@ -1,7 +1,7 @@
 package com.github.freedownloadhere.blocknodes2.gui.utils
 
 import com.github.freedownloadhere.blocknodes2.gui.*
-import com.github.freedownloadhere.blocknodes2.gui.interfaces.IParentVariadic
+import com.github.freedownloadhere.blocknodes2.gui.interfaces.IParentExtendable
 import java.util.*
 
 class WindowBuilder(title : String) {
@@ -10,7 +10,6 @@ class WindowBuilder(title : String) {
 
     init {
         editStack.push(window.contents)
-        window.applyLayoutPre()
     }
 
     fun beginList() : WindowBuilder {
@@ -22,7 +21,8 @@ class WindowBuilder(title : String) {
     }
 
     fun endList() : WindowBuilder {
-        editStack.pop()
+        val top = editStack.pop()
+        top.applyLayoutPost()
         return this
     }
 

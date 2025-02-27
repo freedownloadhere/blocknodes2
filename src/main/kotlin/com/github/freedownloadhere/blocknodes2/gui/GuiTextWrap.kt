@@ -1,6 +1,7 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
 import com.github.freedownloadhere.blocknodes2.gui.interfaces.IDrawable
+import com.github.freedownloadhere.blocknodes2.gui.interfaces.ILayoutPre
 import com.github.freedownloadhere.blocknodes2.gui.utils.Manager
 import com.github.freedownloadhere.blocknodes2.gui.utils.TextUtils
 import com.github.freedownloadhere.blocknodes2.util.ColorHelper
@@ -8,13 +9,20 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
 
 open class GuiTextWrap(
-    str : String,
-    parent : Gui,
+    private val str : String,
+    private val parent : Gui,
     private val scaleMult : Double = 1.0
 )
-    : Gui(), IDrawable
+    : Gui(), IDrawable, ILayoutPre
 {
-    private var rows = TextUtils.wordWrap(str, parent, scaleMult)
+    private var rows = listOf<String>()
+
+    override fun applyLayoutPre() {
+        rows = TextUtils.wordWrap(str, parent, scaleMult)
+        h = 0.0
+        for(row in rows)
+            h += Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT * scaleMult
+    }
 
     override var baseColor = ColorHelper.White
     override fun draw() {

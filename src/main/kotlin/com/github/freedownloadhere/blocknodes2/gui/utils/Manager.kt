@@ -1,6 +1,5 @@
 package com.github.freedownloadhere.blocknodes2.gui.utils
 
-import com.github.freedownloadhere.blocknodes2.gui.Gui
 import com.github.freedownloadhere.blocknodes2.gui.GuiWindow
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
@@ -23,8 +22,14 @@ object Manager : GuiScreen() {
         config = Config()
         val testParagraph = { var str = ""; for(i in 1..100) str += "Lorem Ipsum Dolor Sit Amet "; str }
         base = WindowBuilder("Fdh epic gui test")
+                .newHeader("This is the window list")
                 .beginList()
-                    .newHeader("This is a header")
+                    .newHeader("This is a sublist")
+                    .newParagraph(testParagraph())
+                    .beginList()
+                        .newHeader("Another sublist of the sublist")
+                        .newParagraph(testParagraph())
+                    .endList()
                     .newParagraph(testParagraph())
                 .endList()
             .finish()
@@ -39,6 +44,7 @@ object Manager : GuiScreen() {
 
         drawDefaultBackground()
         renderer.beginGuiState()
+        base?.applyLayout()
         base?.update(deltaTime)
         renderer.endGuiState()
     }

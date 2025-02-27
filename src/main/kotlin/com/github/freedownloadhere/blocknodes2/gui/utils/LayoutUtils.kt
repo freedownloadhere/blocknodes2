@@ -36,6 +36,19 @@ object LayoutUtils {
                 get() = Rectangle(0.0, 0.0, Manager.width.toDouble(), Manager.height.toDouble())
         }
 
+        fun scaleCentered(scaleMult : Double) : Rectangle {
+            val cx = centerX
+            val cy = centerY
+            val dx = 0.5 * (x2 - x1)
+            val dy = 0.5 * (y2 - y1)
+            val sm = 1.0 - 2.0 * scaleMult
+            x1 = cx - dx * sm
+            x2 = cx + dx * sm
+            y1 = cy - dy * sm
+            y2 = cy + dy * sm
+            return this
+        }
+
         fun shrink(eachSideBy : Double) : Rectangle {
             x1 += eachSideBy
             y1 += eachSideBy

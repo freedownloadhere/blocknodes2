@@ -10,7 +10,7 @@ object TextUtils {
         val strList = mutableListOf<String>()
         val rect = LayoutUtils.Rectangle(parent)
         if(parent is GuiListContainer)
-            rect.shrink(parent.h * Manager.config.listSpacingScale)
+            rect.scaleCentered(Manager.config.listSpacingScale)
 
         var width = 0.0
         val buffer = StringBuilder()
@@ -23,6 +23,11 @@ object TextUtils {
                 buffer.clear()
             }
             buffer.append(c)
+        }
+
+        if(buffer.isNotBlank()) {
+            val newRow = buffer.toString()
+            strList.add(newRow)
         }
 
         return strList
