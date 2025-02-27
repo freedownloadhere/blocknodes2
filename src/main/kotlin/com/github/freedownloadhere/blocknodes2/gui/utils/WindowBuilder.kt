@@ -1,7 +1,6 @@
 package com.github.freedownloadhere.blocknodes2.gui.utils
 
 import com.github.freedownloadhere.blocknodes2.gui.*
-import com.github.freedownloadhere.blocknodes2.gui.interfaces.IParentExtendable
 import java.util.*
 
 class WindowBuilder(title : String) {
@@ -36,6 +35,13 @@ class WindowBuilder(title : String) {
     fun newParagraph(str : String) : WindowBuilder {
         val top = editStack.peek()
         val gui = GuiParagraph(str, top)
+        top.addChild(gui)
+        return this
+    }
+
+    fun newButton(str : String, callback : () -> Unit) : WindowBuilder {
+        val top = editStack.peek()
+        val gui = GuiTextButton(str, callback)
         top.addChild(gui)
         return this
     }

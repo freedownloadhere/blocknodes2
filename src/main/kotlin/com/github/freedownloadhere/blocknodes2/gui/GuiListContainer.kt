@@ -6,7 +6,6 @@ import com.github.freedownloadhere.blocknodes2.gui.utils.Manager
 import com.github.freedownloadhere.blocknodes2.util.ColorHelper
 import kotlin.math.max
 import kotlin.math.min
-import kotlin.reflect.KClass
 
 class GuiListContainer
     : Gui(), IScrollable, IDrawable, ILayoutPre, ILayoutPost, IParentExtendable, ISpecialTranslate
@@ -23,6 +22,10 @@ class GuiListContainer
                 GuiListContainer::class -> {
                     LayoutUtils.setAspectRatio(child, 2.0)
                     LayoutUtils.scaleIn(child, LayoutUtils.Rectangle(this).scaleCentered(Manager.config.listSpacingScale))
+                }
+                GuiButton::class -> {
+                    LayoutUtils.setAspectRatio(child, 2.0)
+                    LayoutUtils.scaleHeightTo(child, 0.1 * h)
                 }
             }
     }

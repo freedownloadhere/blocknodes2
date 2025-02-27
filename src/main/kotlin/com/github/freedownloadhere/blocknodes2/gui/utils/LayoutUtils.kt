@@ -1,7 +1,6 @@
 package com.github.freedownloadhere.blocknodes2.gui.utils
 
 import com.github.freedownloadhere.blocknodes2.gui.Gui
-import com.github.freedownloadhere.blocknodes2.gui.interfaces.IListLayout
 import com.github.freedownloadhere.blocknodes2.gui.interfaces.IParent
 import com.github.freedownloadhere.blocknodes2.gui.interfaces.ISpecialTranslate
 import net.minecraft.client.Minecraft
@@ -103,9 +102,11 @@ object LayoutUtils {
         setPosition(gui, rect.centerX - 0.5 * gui.w, rect.centerY - 0.5 * gui.h)
     }
 
-    fun stretchToFit(gui : Gui, padding : Double) {
+    fun stretchToFit(gui : Gui, spacingMult : Double = 0.0) {
         if(gui !is IParent)
             return
+
+        val sp = spacingMult * min(gui.w, gui.h)
 
         var x1 = Double.MAX_VALUE
         var y1 = Double.MAX_VALUE
@@ -119,10 +120,10 @@ object LayoutUtils {
             y2 = max(y2, child.y + child.h)
         }
 
-        gui.x = x1 - padding
-        gui.y = y1 - padding
-        gui.w = (x2 - x1) + padding
-        gui.h = (y2 - y1) + padding
+        gui.x = x1 - sp
+        gui.y = y1 - sp
+        gui.w = (x2 - x1) + sp
+        gui.h = (y2 - y1) + sp
     }
 
     fun stretchToFit(gui : Gui, rows : List<String>, scaleMult : Double = 1.0) {
