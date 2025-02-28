@@ -6,19 +6,26 @@ import com.github.freedownloadhere.blocknodes2.util.ColorHelper
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
 
-open class GuiText(str : String)
+open class GuiText(s : String)
     : Gui(), IDrawable
 {
-    var str : String
-        private set
+    var str : String = ""
+        set(value) {
+            field = value
+            val fr = Minecraft.getMinecraft().fontRendererObj
+            w = fr.getStringWidth(field).toDouble() * Manager.config.textScale
+            h = fr.FONT_HEIGHT.toDouble() * Manager.config.textScale
+        }
 
     init {
-        this.str = str
-        updateText(str)
+        str = s
     }
 
     override var baseColor = ColorHelper.White
     override fun draw() {
+        if(str.isEmpty())
+            return
+
         Manager.renderer.beginTextState()
 
         val fr = Minecraft.getMinecraft().fontRendererObj
@@ -29,12 +36,5 @@ open class GuiText(str : String)
         fr.drawStringWithShadow(str, 0.0f, 0.0f, baseColor.toPackedARGB())
 
         Manager.renderer.endTextState()
-    }
-
-    private fun updateText(newStr : String) {
-        str = newStr
-        val fr = Minecraft.getMinecraft().fontRendererObj
-        w = fr.getStringWidth(str).toDouble() * Manager.config.textScale
-        h = fr.FONT_HEIGHT.toDouble() * Manager.config.textScale
     }
 }

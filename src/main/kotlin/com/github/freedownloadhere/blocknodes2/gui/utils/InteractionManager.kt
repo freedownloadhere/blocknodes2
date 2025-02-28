@@ -18,8 +18,8 @@ class InteractionManager(private val inputManager: InputManager, private val roo
     }
 
     fun handleKeyTyped(typedChar : Char, keyCode : Int) {
-        if(focused != null && focused is IGuiTypable)
-            (focused as IGuiTypable).onKeyTyped(typedChar, keyCode)
+        if(focused != null && focused is ITypable)
+            (focused as ITypable).onKeyTyped(typedChar, keyCode)
     }
 
     private fun onHover() {

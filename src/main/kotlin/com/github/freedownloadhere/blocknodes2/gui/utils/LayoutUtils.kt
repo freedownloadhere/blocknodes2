@@ -3,7 +3,6 @@ package com.github.freedownloadhere.blocknodes2.gui.utils
 import com.github.freedownloadhere.blocknodes2.gui.Gui
 import com.github.freedownloadhere.blocknodes2.gui.interfaces.IParent
 import com.github.freedownloadhere.blocknodes2.gui.interfaces.ISpecialTranslate
-import net.minecraft.client.Minecraft
 import kotlin.math.max
 import kotlin.math.min
 
@@ -64,10 +63,8 @@ object LayoutUtils {
      * @param ySscale Spacing between elements on Y axis when multiplied by `gui.h`;
      * @return The added height of all the elements (plus spacing).
      */
-    fun list(gui : Gui, xSscale : Double, ySscale : Double, startH : Double = gui.y) : Double {
-        if(gui !is IParent)
-            return Double.NaN
-
+    fun <T> list(gui : T, xSscale : Double, ySscale : Double, startH : Double = gui.y) : Double
+    where T : Gui, T : IParent {
         val xS = xSscale * gui.w
         val yS = ySscale * gui.h
 
@@ -102,38 +99,48 @@ object LayoutUtils {
         setPosition(gui, rect.centerX - 0.5 * gui.w, rect.centerY - 0.5 * gui.h)
     }
 
-    fun stretchToFit(gui : Gui, spacingMult : Double = 0.0) {
-        if(gui !is IParent)
-            return
+    fun <T> stretchToFit(gui : T, spacingMult : Double = 0.0)
+    where T : Gui, T : IParent {
+        stretchToFitWidth(gui, spacingMult)
+        stretchToFitHeight(gui, spacingMult)
+    }
 
-        val sp = spacingMult * min(gui.w, gui.h)
-
+    fun <T> stretchToFitWidth(gui : T, spacingMult: Double = 0.0)
+    where T : Gui, T : IParent {
         var x1 = Double.MAX_VALUE
-        var y1 = Double.MAX_VALUE
         var x2 = Double.MIN_VALUE
-        var y2 = Double.MIN_VALUE
 
         for(child in gui.children) {
             x1 = min(x1, child.x)
-            y1 = min(y1, child.y)
             x2 = max(x2, child.x + child.w)
+        }
+
+        gui.x = x1
+        gui.w = (x2 - x1)
+
+        val spacing = spacingMult * min(gui.w, gui.h)
+
+        gui.x -= spacing
+        gui.w += spacing
+    }
+
+    fun <T> stretchToFitHeight(gui : T, spacingMult : Double = 0.0)
+    where T : Gui, T : IParent {
+        var y1 = Double.MAX_VALUE
+        var y2 = Double.MIN_VALUE
+
+        for(child in gui.children) {
+            y1 = min(y1, child.y)
             y2 = max(y2, child.y + child.h)
         }
 
-        gui.x = x1 - sp
-        gui.y = y1 - sp
-        gui.w = (x2 - x1) + sp
-        gui.h = (y2 - y1) + sp
-    }
+        gui.y = y1
+        gui.h = (y2 - y1)
 
-    fun stretchToFit(gui : Gui, rows : List<String>, scaleMult : Double = 1.0) {
-        val fr = Minecraft.getMinecraft().fontRendererObj
-        gui.w = 0.0
-        gui.h = 0.0
-        for(row in rows) {
-            gui.w = max(gui.w, fr.getStringWidth(row).toDouble() * scaleMult)
-            gui.h += fr.FONT_HEIGHT * scaleMult
-        }
+        val spacing = spacingMult * min(gui.w, gui.h)
+
+        gui.y -= spacing
+        gui.h += spacing
     }
 
     fun scale(gui : Gui, scaleMult : Double) {

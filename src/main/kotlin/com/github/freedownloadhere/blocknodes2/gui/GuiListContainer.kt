@@ -23,9 +23,8 @@ class GuiListContainer
                     LayoutUtils.setAspectRatio(child, 2.0)
                     LayoutUtils.scaleIn(child, LayoutUtils.Rectangle(this).scaleCentered(Manager.config.listSpacingScale))
                 }
-                GuiButton::class -> {
-                    LayoutUtils.setAspectRatio(child, 2.0)
-                    LayoutUtils.scaleHeightTo(child, 0.1 * h)
+                GuiTextBox::class -> {
+                    child.w = 0.33 * w
                 }
             }
     }

@@ -46,6 +46,13 @@ class WindowBuilder(title : String) {
         return this
     }
 
+    fun newTextBox(placeholder : String) : WindowBuilder {
+        val top = editStack.peek()
+        val gui = GuiTextBox(placeholder)
+        top.addChild(gui)
+        return this
+    }
+
     fun finish() : GuiWindow {
         assert(editStack.size == 1)
         editStack.pop()

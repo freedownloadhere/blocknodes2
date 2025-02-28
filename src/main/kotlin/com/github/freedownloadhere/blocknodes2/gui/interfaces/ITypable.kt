@@ -1,5 +1,5 @@
 package com.github.freedownloadhere.blocknodes2.gui.interfaces
 
-interface IGuiTypable : IInteractable {
+interface ITypable : IInteractable {
     fun onKeyTyped(typedChar : Char, keyCode : Int)
 }

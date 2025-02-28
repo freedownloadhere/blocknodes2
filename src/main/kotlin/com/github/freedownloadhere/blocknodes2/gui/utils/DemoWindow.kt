@@ -9,6 +9,7 @@ class DemoWindow {
         WindowBuilder("Demo Window Test")
             .newHeader("This is the window list")
             .newButton("A test button") { ChatHelper.send("A test button was pressed") }
+            .newTextBox("This is a textbox")
             .beginList()
                 .newHeader("This is a sublist")
                 .newParagraph(testParagraph())
@@ -29,5 +30,6 @@ class DemoWindow {
                 .endList()
                 .newParagraph(testParagraph())
             .endList()
+            .newTextBox("This is another textbox")
             .finish()
 }

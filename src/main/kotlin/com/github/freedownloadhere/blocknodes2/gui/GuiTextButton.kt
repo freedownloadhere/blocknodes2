@@ -11,7 +11,7 @@ class GuiTextButton(str : String, callback : () -> Unit) : GuiButton(callback), 
         get() = children[0]
 
     override fun applyLayoutPre() {
-        LayoutUtils.stretchToFit(this, 0.5)
+        LayoutUtils.stretchToFit(this, 1.0)
         LayoutUtils.centerIn(textGui, LayoutUtils.Rectangle(this))
     }
 }
