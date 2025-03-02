@@ -25,28 +25,28 @@ class WindowBuilder(title : String) {
         return this
     }
 
-    fun newHeader(str : String) : WindowBuilder {
+    fun header(str : String) : WindowBuilder {
         val top = editStack.peek()
         val gui = GuiHeader(str, top)
         top.addChild(gui)
         return this
     }
 
-    fun newParagraph(str : String) : WindowBuilder {
+    fun paragraph(str : String) : WindowBuilder {
         val top = editStack.peek()
         val gui = GuiParagraph(str, top)
         top.addChild(gui)
         return this
     }
 
-    fun newButton(str : String, callback : () -> Unit) : WindowBuilder {
+    fun button(str : String, callback : () -> Unit) : WindowBuilder {
         val top = editStack.peek()
         val gui = GuiTextButton(str, callback)
         top.addChild(gui)
         return this
     }
 
-    fun newTextBox(placeholder : String) : WindowBuilder {
+    fun textBox(placeholder : String) : WindowBuilder {
         val top = editStack.peek()
         val gui = GuiTextBox(placeholder)
         top.addChild(gui)

@@ -1,7 +1,7 @@
 package com.github.freedownloadhere.blocknodes2.gui
 
 import com.github.freedownloadhere.blocknodes2.gui.interfaces.IDrawable
-import com.github.freedownloadhere.blocknodes2.gui.interfaces.ILayoutPre
+import com.github.freedownloadhere.blocknodes2.gui.interfaces.ILayoutPost
 import com.github.freedownloadhere.blocknodes2.gui.interfaces.IParent
 import com.github.freedownloadhere.blocknodes2.gui.interfaces.ITypable
 import com.github.freedownloadhere.blocknodes2.gui.utils.LayoutUtils
@@ -10,11 +10,15 @@ import com.github.freedownloadhere.blocknodes2.util.ColorHelper
 import org.lwjgl.input.Keyboard
 
 class GuiTextBox(private val placeholder : String)
-    : Gui(), ITypable, IDrawable, ILayoutPre, IParent
+    : Gui(), ITypable, IDrawable, ILayoutPost, IParent
 {
+    override var baseColor = ColorHelper.GuiNeutralDark
+    override val children = listOf(GuiText(placeholder))
     private val textGui : GuiText
         get() = children[0]
     private val builder = StringBuilder()
+
+    init { textGui.baseColor = ColorHelper.GuiNeutralLight }
 
     override fun onKeyTyped(typedChar: Char, keyCode: Int) {
         if(specialKeyMap.containsKey(keyCode))
@@ -41,15 +45,8 @@ class GuiTextBox(private val placeholder : String)
         )
     }
 
-    override var baseColor = ColorHelper.GuiNeutralDark
-    override val children = listOf(GuiText(placeholder))
-
-    init {
-        textGui.baseColor = ColorHelper.GuiNeutralLight
-    }
-
-    override fun applyLayoutPre() {
-        LayoutUtils.stretchToFitHeight(this, 1.0)
+    override fun applyLayoutPost() {
+        LayoutUtils.stretchToFitHeight(this)
         LayoutUtils.centerIn(textGui, LayoutUtils.Rectangle(this))
     }
 

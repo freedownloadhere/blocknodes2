@@ -21,10 +21,15 @@ class GuiListContainer
             when(child::class) {
                 GuiListContainer::class -> {
                     LayoutUtils.setAspectRatio(child, 2.0)
-                    LayoutUtils.scaleIn(child, LayoutUtils.Rectangle(this).scaleCentered(Manager.config.listSpacingScale))
+                    LayoutUtils.scaleIn(child, LayoutUtils.Rectangle(this).scale(Manager.config.listSpacingScale))
                 }
                 GuiTextBox::class -> {
-                    child.w = 0.33 * w
+                    LayoutUtils.setAspectRatio(child, 3.0)
+                    LayoutUtils.scaleHeightTo(child, 0.1 * h)
+                }
+                GuiTextButton::class -> {
+                    LayoutUtils.setAspectRatio(child, 2.0)
+                    LayoutUtils.scaleHeightTo(child, 0.1 * h)
                 }
             }
     }

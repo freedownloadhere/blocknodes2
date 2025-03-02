@@ -7,29 +7,31 @@ class DemoWindow {
 
     val base =
         WindowBuilder("Demo Window Test")
-            .newHeader("This is the window list")
-            .newButton("A test button") { ChatHelper.send("A test button was pressed") }
-            .newTextBox("This is a textbox")
+            .header("This is the window list")
+            .button("A test button") { ChatHelper.send("A test button was pressed") }
+            .textBox("This is a textbox")
             .beginList()
-                .newHeader("This is a sublist")
-                .newParagraph(testParagraph())
+                .header("This is a sublist")
+                .paragraph(testParagraph())
                 .beginList()
-                    .newHeader("Another sublist of the sublist")
-                    .newButton("Another test button") { ChatHelper.send("A test button was pressed") }
-                    .newParagraph(testParagraph())
-                    .newButton("yet another test button") { ChatHelper.send("A test button was pressed") }
+                    .textBox("This is a textbox")
+                    .header("Another sublist of the sublist")
+                    .button("Another test button") { ChatHelper.send("A test button was pressed") }
+                    .paragraph(testParagraph())
+                    .button("yet another test button") { ChatHelper.send("A test button was pressed") }
                 .endList()
-                .newParagraph(testParagraph())
+                .paragraph(testParagraph())
             .endList()
             .beginList()
-                .newHeader("Second sublist")
-                .newParagraph(testParagraph())
+                .header("Second sublist")
+                .paragraph(testParagraph())
                 .beginList()
-                    .newHeader("Another sublist of the sublist")
-                    .newParagraph(testParagraph())
+                    .header("Another sublist of the sublist")
+                    .paragraph(testParagraph())
+                    .textBox("This is a textbox")
                 .endList()
-                .newParagraph(testParagraph())
+                .paragraph(testParagraph())
             .endList()
-            .newTextBox("This is another textbox")
+            .textBox("This is a textbox")
             .finish()
 }

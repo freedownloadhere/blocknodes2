@@ -34,7 +34,7 @@ object LayoutUtils {
                 get() = Rectangle(0.0, 0.0, Manager.width.toDouble(), Manager.height.toDouble())
         }
 
-        fun scaleCentered(scaleMult : Double) : Rectangle {
+        fun scale(scaleMult : Double) : Rectangle {
             val cx = centerX
             val cy = centerY
             val dx = 0.5 * (x2 - x1)
@@ -44,14 +44,6 @@ object LayoutUtils {
             x2 = cx + dx * sm
             y1 = cy - dy * sm
             y2 = cy + dy * sm
-            return this
-        }
-
-        fun shrink(eachSideBy : Double) : Rectangle {
-            x1 += eachSideBy
-            y1 += eachSideBy
-            x2 -= eachSideBy
-            y2 -= eachSideBy
             return this
         }
     }
@@ -99,13 +91,13 @@ object LayoutUtils {
         setPosition(gui, rect.centerX - 0.5 * gui.w, rect.centerY - 0.5 * gui.h)
     }
 
-    fun <T> stretchToFit(gui : T, spacingMult : Double = 0.0)
+    fun <T> stretchToFit(gui : T)
     where T : Gui, T : IParent {
-        stretchToFitWidth(gui, spacingMult)
-        stretchToFitHeight(gui, spacingMult)
+        stretchToFitWidth(gui)
+        stretchToFitHeight(gui)
     }
 
-    fun <T> stretchToFitWidth(gui : T, spacingMult: Double = 0.0)
+    private fun <T> stretchToFitWidth(gui : T)
     where T : Gui, T : IParent {
         var x1 = Double.MAX_VALUE
         var x2 = Double.MIN_VALUE
@@ -117,14 +109,9 @@ object LayoutUtils {
 
         gui.x = x1
         gui.w = (x2 - x1)
-
-        val spacing = spacingMult * min(gui.w, gui.h)
-
-        gui.x -= spacing
-        gui.w += spacing
     }
 
-    fun <T> stretchToFitHeight(gui : T, spacingMult : Double = 0.0)
+    fun <T> stretchToFitHeight(gui : T)
     where T : Gui, T : IParent {
         var y1 = Double.MAX_VALUE
         var y2 = Double.MIN_VALUE
@@ -136,14 +123,9 @@ object LayoutUtils {
 
         gui.y = y1
         gui.h = (y2 - y1)
-
-        val spacing = spacingMult * min(gui.w, gui.h)
-
-        gui.y -= spacing
-        gui.h += spacing
     }
 
-    fun scale(gui : Gui, scaleMult : Double) {
+    private fun scale(gui : Gui, scaleMult : Double) {
         gui.w *= scaleMult
         gui.h *= scaleMult
     }
