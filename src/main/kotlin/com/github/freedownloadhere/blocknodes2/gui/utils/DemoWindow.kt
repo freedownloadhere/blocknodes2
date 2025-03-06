@@ -32,18 +32,5 @@ class DemoWindow {
                 .endList()
                 .paragraph(testParagraph())
             .endList()
-            .beginList()
-            .header("This is a sublist")
-            .paragraph(testParagraph())
-            .beginList()
-            .textBox("This is a textbox")
-            .header("Another sublist of the sublist")
-            .button("Another test button") { ChatHelper.send("A test button was pressed") }
-            .paragraph(testParagraph())
-            .button("yet another test button") { ChatHelper.send("A test button was pressed") }
-            .endList()
-            .paragraph(testParagraph())
-            .endList()
-            .textBox("This is a textbox")
             .finish()
 }

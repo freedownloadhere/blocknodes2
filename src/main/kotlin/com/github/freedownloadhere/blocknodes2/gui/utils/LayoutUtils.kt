@@ -12,11 +12,12 @@ import kotlin.math.min
  * This is the GUI that will be affected (or whose children will be affected) in the operation.
  */
 object LayoutUtils {
+
     class Rectangle(
-        private var x1 : Double,
-        private var y1 : Double,
-        private var x2 : Double,
-        private var y2 : Double
+        var x1 : Double = 0.0,
+        var y1 : Double = 0.0,
+        var x2 : Double = 0.0,
+        var y2 : Double = 0.0
     ) {
         constructor(gui : Gui) : this(gui.x, gui.y, gui.x + gui.w, gui.y + gui.h)
 
@@ -45,6 +46,15 @@ object LayoutUtils {
             y1 = cy - dy * sm
             y2 = cy + dy * sm
             return this
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if(other !is Rectangle) return false
+            return x1 == other.x1 && x2 == other.x2 && y1 == other.y1 && y2 == other.y2
+        }
+
+        override fun hashCode(): Int {
+            return javaClass.hashCode()
         }
     }
 
@@ -84,38 +94,46 @@ object LayoutUtils {
         setPosition(gui, rect.centerX - 0.5 * gui.w, rect.centerY - 0.5 * gui.h)
     }
 
-    fun <T> stretchToFit(gui : T)
+    fun <T> stretchToFit(gui : T, scaleMult : Double = 1.0)
     where T : Gui, T : IParent {
-        stretchToFitWidth(gui)
-        stretchToFitHeight(gui)
+        stretchToFitWidth(gui, scaleMult)
+        stretchToFitHeight(gui, scaleMult)
     }
 
-    private fun <T> stretchToFitWidth(gui : T)
+    private fun <T> stretchToFitWidth(gui : T, scaleMult : Double = 1.0)
     where T : Gui, T : IParent {
-        var x1 = Double.POSITIVE_INFINITY
-        var x2 = Double.NEGATIVE_INFINITY
+        val rect = Rectangle(
+            x1 = Double.POSITIVE_INFINITY,
+            x2 = Double.NEGATIVE_INFINITY
+        )
 
         for(child in gui.children) {
-            x1 = min(x1, child.x)
-            x2 = max(x2, child.x + child.w)
+            rect.x1 = min(rect.x1, child.x)
+            rect.x2 = max(rect.x2, child.x + child.w)
         }
 
-        gui.x = x1
-        gui.w = (x2 - x1)
+        rect.scale(scaleMult)
+
+        gui.x = rect.x1
+        gui.w = rect.x2 - rect.x1
     }
 
-    fun <T> stretchToFitHeight(gui : T)
+    fun <T> stretchToFitHeight(gui : T, scaleMult : Double = 1.0)
     where T : Gui, T : IParent {
-        var y1 = Double.POSITIVE_INFINITY
-        var y2 = Double.NEGATIVE_INFINITY
+        val rect = Rectangle(
+            y1 = Double.POSITIVE_INFINITY,
+            y2 = Double.NEGATIVE_INFINITY
+        )
 
         for(child in gui.children) {
-            y1 = min(y1, child.y)
-            y2 = max(y2, child.y + child.h)
+            rect.y1 = min(rect.y1, child.y)
+            rect.y2 = max(rect.y2, child.y + child.h)
         }
 
-        gui.y = y1
-        gui.h = (y2 - y1)
+        rect.scale(scaleMult)
+
+        gui.y = rect.y1
+        gui.h = rect.y2 - rect.y1
     }
 
     private fun scale(gui : Gui, scaleMult : Double) {
