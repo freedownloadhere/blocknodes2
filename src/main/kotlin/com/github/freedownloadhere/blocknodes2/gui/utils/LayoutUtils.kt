@@ -47,15 +47,6 @@ object LayoutUtils {
             y2 = cy + dy * sm
             return this
         }
-
-        override fun equals(other: Any?): Boolean {
-            if(other !is Rectangle) return false
-            return x1 == other.x1 && x2 == other.x2 && y1 == other.y1 && y2 == other.y2
-        }
-
-        override fun hashCode(): Int {
-            return javaClass.hashCode()
-        }
     }
 
     fun <T> list(gui : T, xSscale : Double, ySscale : Double, startH : Double = gui.y) : Double

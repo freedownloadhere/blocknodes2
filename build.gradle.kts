@@ -6,7 +6,7 @@ plugins {
     id("gg.essential.loom") version "0.10.0.+"
     id("dev.architectury.architectury-pack200") version "0.1.3"
     id("com.github.johnrengelman.shadow") version "8.1.1"
-    kotlin("jvm") version "2.1.10"
+    kotlin("jvm") version "2.1.0"
 }
 
 val baseGroup: String by project
@@ -71,6 +71,8 @@ val shadowImpl: Configuration by configurations.creating {
 }
 
 dependencies {
+    testImplementation(kotlin("test"))
+
     minecraft("com.mojang:minecraft:1.8.9")
     mappings("de.oceanlabs.mcp:mcp_stable:22-1.8.9")
     forge("net.minecraftforge:forge:1.8.9-11.15.1.2318-1.8.9")
@@ -83,8 +85,6 @@ dependencies {
     annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT")
 
     runtimeOnly("me.djtheredstoner:DevAuth-forge-legacy:1.2.1")
-
-    testImplementation(kotlin("test"))
 }
 
 tasks.test {
