@@ -17,7 +17,9 @@ open class GuiButton(private val callback: () -> Unit)
 
     override var baseColor = ColorHelper.GuiNeutral
 
-    override fun draw() { Manager.renderer.drawBasicBG(this) }
+    override fun draw() {
+        Manager.renderer.drawBasicBG(this)
+    }
 
     override fun onClick(button: Int) {
         if(button == 0 && clickCooldown == 0L) {

@@ -48,13 +48,6 @@ object LayoutUtils {
         }
     }
 
-    /**
-     * Places all the elements in the GUI in a list-like fashion.
-     * @param gui The GUI whose children are to be ordered;
-     * @param xSscale Spacing between elements on X axis when multiplied by `gui.w`;
-     * @param ySscale Spacing between elements on Y axis when multiplied by `gui.h`;
-     * @return The added height of all the elements (plus spacing).
-     */
     fun <T> list(gui : T, xSscale : Double, ySscale : Double, startH : Double = gui.y) : Double
     where T : Gui, T : IParent {
         val xS = xSscale * gui.w
@@ -99,8 +92,8 @@ object LayoutUtils {
 
     private fun <T> stretchToFitWidth(gui : T)
     where T : Gui, T : IParent {
-        var x1 = Double.MAX_VALUE
-        var x2 = Double.MIN_VALUE
+        var x1 = Double.POSITIVE_INFINITY
+        var x2 = Double.NEGATIVE_INFINITY
 
         for(child in gui.children) {
             x1 = min(x1, child.x)
@@ -113,8 +106,8 @@ object LayoutUtils {
 
     fun <T> stretchToFitHeight(gui : T)
     where T : Gui, T : IParent {
-        var y1 = Double.MAX_VALUE
-        var y2 = Double.MIN_VALUE
+        var y1 = Double.POSITIVE_INFINITY
+        var y2 = Double.NEGATIVE_INFINITY
 
         for(child in gui.children) {
             y1 = min(y1, child.y)
