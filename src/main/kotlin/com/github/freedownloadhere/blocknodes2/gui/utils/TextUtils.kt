@@ -11,7 +11,7 @@ object TextUtils {
         val strList = mutableListOf<String>()
         val rect = LayoutUtils.Rectangle(parent)
         if(parent is GuiListContainer)
-            rect.scale(Manager.config.listSpacingScale)
+            rect.scale(1.0 - 2.0 * Manager.config.listSpacingScale)
 
         var width = 0.0
         val buffer = StringBuilder()

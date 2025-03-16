@@ -36,15 +36,12 @@ object LayoutUtils {
         }
 
         fun scale(scaleMult : Double) : Rectangle {
-            val cx = centerX
-            val cy = centerY
-            val dx = 0.5 * (x2 - x1)
-            val dy = 0.5 * (y2 - y1)
-            val sm = 1.0 - 2.0 * scaleMult
-            x1 = cx - dx * sm
-            x2 = cx + dx * sm
-            y1 = cy - dy * sm
-            y2 = cy + dy * sm
+            val dx = (centerX - x1) * (scaleMult - 1.0)
+            val dy = (centerY - y1) * (scaleMult - 1.0)
+            x1 -= dx
+            y1 -= dy
+            x2 += dx
+            y2 += dy
             return this
         }
     }
